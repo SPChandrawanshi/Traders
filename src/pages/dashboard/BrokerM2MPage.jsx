@@ -22,82 +22,61 @@ const BrokerM2MPage = () => {
       </div>
 
       {/* Main Table */}
-      <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden shadow-xl">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="text-slate-400 text-[11px] font-semibold border-b border-[#2d3748] uppercase tracking-wider bg-[#1c2638]">
-              <th className="px-6 py-4">User ID</th>
-              <th className="px-6 py-4 text-right">Ledger Balance</th>
-              <th className="px-6 py-4 text-right">M2M</th>
-              <th className="px-6 py-4 text-right">Active Profit/Loss</th>
-              <th className="px-6 py-4 text-center">Active Trades</th>
-              <th className="px-6 py-4 text-right">Margin Used</th>
-              <th className="px-6 py-4 text-right">Holding Margin</th>
-            </tr>
-          </thead>
-          <tbody className="text-[12px] text-slate-100 font-medium">
-            {brokerMetrics.map((row, idx) => (
-              <tr key={idx} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
-                <td className="px-6 py-3 font-semibold text-green-400 cursor-pointer hover:underline uppercase">
-                  {row.id}
-                </td>
-                <td className="px-6 py-3 text-right text-slate-300 font-mono">
-                  {row.ledger}
-                </td>
-                <td className="px-6 py-3 text-right text-slate-300 font-mono">
-                  {row.m2m}
-                </td>
-                <td className={`px-6 py-3 text-right font-mono ${parseFloat(row.pl) >= 0 ? 'text-green-400' : 'text-slate-100'}`}>
-                  {row.pl}
-                </td>
-                <td className="px-6 py-3 text-center text-slate-300 font-semibold">
-                  {row.trades}
-                </td>
-                <td className="px-6 py-3 text-right text-slate-300 font-mono">
-                  {row.margin}
-                </td>
-                <td className="px-6 py-3 text-right text-slate-300 font-mono">
-                  {row.holding}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden shadow-xl flex-1 flex flex-col">
+          <div className="overflow-x-auto flex-1">
+            <table className="w-full text-left border-collapse whitespace-nowrap">
+            <thead>
+                <tr className="text-slate-300 text-[13px] font-normal border-b border-[#2d3748] bg-[#151c2c]">
+                <th className="px-6 py-4">User ID</th>
+                <th className="px-6 py-4">Ledger Balance</th>
+                <th className="px-6 py-4">M2M</th>
+                <th className="px-6 py-4">Active Profit/Loss</th>
+                <th className="px-6 py-4">Active Trades</th>
+                <th className="px-6 py-4">Margin Used</th>
+                <th className="px-6 py-4">Holding Margin</th>
+                </tr>
+            </thead>
+            <tbody className="text-[13px] text-slate-300">
+                {brokerMetrics.map((row, idx) => (
+                <tr key={idx} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
+                    <td className="px-6 py-4 text-green-400 font-medium">
+                    {row.id}
+                    </td>
+                    <td className="px-6 py-4">
+                    {row.ledger}
+                    </td>
+                    <td className="px-6 py-4">
+                    {row.m2m}
+                    </td>
+                    <td className={`px-6 py-4 ${parseFloat(row.pl) >= 0 ? 'text-slate-300' : 'text-slate-300'}`}>
+                    {row.pl}
+                    </td>
+                    <td className="px-6 py-4">
+                    {row.trades}
+                    </td>
+                    <td className="px-6 py-4">
+                    {row.margin}
+                    </td>
+                    <td className="px-6 py-4">
+                    {row.holding}
+                    </td>
+                </tr>
+                ))}
+            </tbody>
+            </table>
+        </div>
       </div>
 
       {/* Turnover Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-        <div className="bg-[#151c2c] p-1 rounded-md border border-[#2d3748] overflow-hidden shadow-lg group">
-          <div className="bg-slate-800/50 p-4 border-b border-[#2d3748]">
-            <h3 className="text-[#01B4EA] text-lg font-bold tracking-tight">Buy Turnover</h3>
-          </div>
-          <div className="p-6">
-            <div className="text-3xl font-extrabold text-white font-mono tracking-tighter">
-              0
-            </div>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-[#4CAF50] p-6 rounded shadow-lg text-white">
+          <h3 className="text-xl font-normal">Buy Turnover</h3>
         </div>
-
-        <div className="bg-[#151c2c] p-1 rounded-md border border-[#2d3748] overflow-hidden shadow-lg group">
-          <div className="bg-[#4CAF50]/10 p-4 border-b border-[#2d3748]">
-            <h3 className="text-[#4CAF50] text-lg font-bold tracking-tight">Sell Turnover</h3>
-          </div>
-          <div className="p-6">
-            <div className="text-3xl font-extrabold text-white font-mono tracking-tighter">
-              0
-            </div>
-          </div>
+        <div className="bg-[#4CAF50] p-6 rounded shadow-lg text-white">
+          <h3 className="text-xl font-normal">Sell Turnover</h3>
         </div>
-
-        <div className="bg-[#151c2c] p-1 rounded-md border border-[#2d3748] overflow-hidden shadow-lg group">
-          <div className="bg-slate-800/50 p-4 border-b border-[#2d3748]">
-            <h3 className="text-[#01B4EA] text-lg font-bold tracking-tight">Total Turnover</h3>
-          </div>
-          <div className="p-6">
-            <div className="text-3xl font-extrabold text-white font-mono tracking-tighter">
-              0
-            </div>
-          </div>
+        <div className="bg-[#4CAF50] p-6 rounded shadow-lg text-white">
+            <h3 className="text-xl font-normal">Total Turnover</h3>
         </div>
       </div>
     </div>

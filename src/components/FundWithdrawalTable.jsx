@@ -11,8 +11,8 @@ const FundWithdrawalTable = () => {
   return (
     <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden mb-6">
       <div className="px-6 py-4 border-b border-[#2d3748]">
-        <h2 className="text-xl font-semibold text-slate-100 italic">Fund - Withdrawal & Deposits</h2>
-        <p className="text-xs text-slate-400 mt-1">Showing 4 of 4 items.</p>
+        <h2 className="text-xl font-normal text-slate-300 tracking-wide">Fund - Withdrawal & Deposits</h2>
+        <p className="text-xs text-slate-500 mt-1">Showing 4 of 4 items.</p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left">

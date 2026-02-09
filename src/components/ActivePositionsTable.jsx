@@ -1,0 +1,83 @@
+import React from 'react';
+
+const ActivePositionsTable = () => {
+    // Data matching Screenshot 2/3
+    const positions = [
+        { 
+            scrip: 'CRUDEOIL26FEBFUT', 
+            activeBuy: '0 (0)', 
+            activeSell: '2 (200)', 
+            avgBuyRate: '0', 
+            avgSellRate: '5624.5', 
+            total: '2', 
+            net: '-2', 
+            m2m: '700', 
+            marginUsed: '40000', 
+            cmp: '5621' 
+        },
+    ];
+
+    return (
+        <div className="bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden mb-6 shadow-xl">
+             <div className="px-6 py-4 border-b border-[#2d3748] flex justify-between items-center">
+                <h2 className="text-2xl font-normal text-slate-300 tracking-wide">SHRE072's Active Positions</h2>
+            </div>
+            
+            <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse whitespace-nowrap">
+                    <thead>
+                        <tr className="text-slate-300 text-[13px] font-normal border-b border-[#2d3748] bg-[#151c2c]">
+                            <th className="px-6 py-4">Scrip</th>
+                            <th className="px-6 py-4">Active Buy</th>
+                            <th className="px-6 py-4">Active Sell</th>
+                            <th className="px-6 py-4">Avg buy rate</th>
+                            <th className="px-6 py-4">Avg sell rate</th>
+                            <th className="px-6 py-4">Total</th>
+                            <th className="px-6 py-4">Net</th>
+                            <th className="px-6 py-4">M2m</th>
+                            <th className="px-6 py-4">Margin Used</th>
+                            <th className="px-6 py-4">CMP</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-[13px] text-slate-300">
+                        {positions.map((pos, idx) => (
+                            <tr key={idx} className="border-b border-[#2d3748] bg-[#1a2333]/50">
+                                <td className="px-6 py-4 text-slate-300 uppercase">{pos.scrip}</td>
+                                <td className="px-6 py-4">{pos.activeBuy}</td>
+                                <td className="px-6 py-4">{pos.activeSell}</td>
+                                <td className="px-6 py-4">{pos.avgBuyRate}</td>
+                                <td className="px-6 py-4">{pos.avgSellRate}</td>
+                                <td className="px-6 py-4">{pos.total}</td>
+                                <td className="px-6 py-4">{pos.net}</td>
+                                <td className="px-6 py-4 font-bold text-white">{pos.m2m}</td>
+                                <td className="px-6 py-4">{pos.marginUsed}</td>
+                                <td className="px-6 py-4">{pos.cmp}</td>
+                            </tr>
+                        ))}
+                         {/* Total Row */}
+                         <tr className="bg-[#151c2c] border-t border-[#2d3748] font-bold text-slate-200">
+                            <td className="px-6 py-4">Total</td>
+                            <td className="px-6 py-4">0</td>
+                            <td className="px-6 py-4">2</td>
+                            <td className="px-6 py-4"></td>
+                            <td className="px-6 py-4"></td>
+                            <td className="px-6 py-4">2</td>
+                            <td className="px-6 py-4">2</td>
+                            <td className="px-6 py-4 text-white">700</td>
+                            <td className="px-6 py-4">40000</td>
+                            <td className="px-6 py-4"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="p-4">
+                 <button className="bg-[#4CAF50] hover:bg-[#43a047] text-white text-[11px] font-bold py-3 px-6 rounded shadow uppercase tracking-wider transition-colors">
+                    GO TO SHRE072'S ACCOUNT
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default ActivePositionsTable;
