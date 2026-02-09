@@ -10,6 +10,19 @@ import LoginPage from './pages/LoginPage';
 import AccountsPage from './pages/accounts/AccountsPage';
 import BannedLimitOrdersPage from './pages/banned/BannedLimitOrdersPage';
 import BankDetailsPage from './pages/bank/BankDetailsPage';
+import TradesPage from './pages/trades/TradesPage';
+import TickersPage from './pages/tickers/TickersPage';
+import LiveM2MPage from './pages/dashboard/LiveM2MPage';
+import BrokerM2MPage from './pages/dashboard/BrokerM2MPage';
+import ActivePositionsPage from './pages/positions/ActivePositionsPage';
+import TraderFundsPage from './pages/funds/TraderFundsPage';
+import ActiveTradesPage from './pages/trades/ActiveTradesPage';
+import ClosedTradesPage from './pages/trades/ClosedTradesPage';
+import MarketWatchPage from './pages/market/MarketWatchPage';
+import ActionLedgerPage from './pages/logs/ActionLedgerPage';
+import NotificationsPage from './pages/notifications/NotificationsPage';
+import ClosedPositionsPage from './pages/positions/ClosedPositionsPage';
+import TradingClientsPage from './pages/clients/TradingClientsPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -34,6 +47,32 @@ function App() {
         return <BannedLimitOrdersPage />;
       case 'bank':
         return <BankDetailsPage />;
+      case 'trades':
+        return <TradesPage />;
+      case 'tickers':
+        return <TickersPage />;
+      case 'live-m2m':
+        return <LiveM2MPage />;
+      case 'broker-m2m':
+        return <BrokerM2MPage />;
+      case 'active-positions':
+        return <ActivePositionsPage />;
+      case 'funds':
+        return <TraderFundsPage />;
+      case 'active-trades':
+        return <ActiveTradesPage />;
+      case 'closed-trades':
+        return <ClosedTradesPage />;
+      case 'market-watch':
+        return <MarketWatchPage />;
+      case 'action-ledger':
+        return <ActionLedgerPage />;
+      case 'notifications':
+        return <NotificationsPage />;
+      case 'closed-positions':
+        return <ClosedPositionsPage />;
+      case 'trading-clients':
+        return <TradingClientsPage />;
       default:
         return (
           <>
