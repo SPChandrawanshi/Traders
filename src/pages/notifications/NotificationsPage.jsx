@@ -40,17 +40,92 @@ const NotificationsPage = () => {
         }
     ];
 
+    const MobileNotificationCard = ({ notif }) => (
+        <div className="bg-[#151c2c] p-4 rounded-lg border border-[#2d3748] shadow-md mb-3 active:scale-[0.98] transition-transform">
+            <div className="flex justify-between items-start mb-2">
+                <h3 className="text-white font-bold text-sm uppercase">{notif.title}</h3>
+                <span className="text-[10px] text-slate-500 font-mono text-right ml-2 shrink-0">{notif.deliveredAt}</span>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed font-normal">{notif.message}</p>
+        </div>
+    );
+
+    const [showModal, setShowModal] = React.useState(false);
+    const [title, setTitle] = React.useState('');
+    const [message, setMessage] = React.useState('');
+
+    const handleSend = (e) => {
+        e.preventDefault();
+        if (!title || !message) {
+            alert('Please fill in all fields');
+            return;
+        }
+        // Logic to send notification would go here
+        alert(`Notification Sent!\nTitle: ${title}\nMessage: ${message}`);
+        setShowModal(false);
+        setTitle('');
+        setMessage('');
+    };
+
     return (
-        <div className="flex flex-col h-full bg-[#0b111e] p-6 space-y-6 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#0b111e] p-4 md:p-6 space-y-6 overflow-y-auto custom-scrollbar relative">
             {/* Header Action */}
             <div>
-                <button className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded shadow-lg uppercase text-sm tracking-wide transition-all">
+                <button 
+                    onClick={() => setShowModal(true)}
+                    className="w-full md:w-auto bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded shadow-lg uppercase text-sm tracking-wide transition-all"
+                >
                     SEND NOTIFICATION
                 </button>
             </div>
 
-            {/* Table */}
-            <div className="bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden shadow-xl">
+            {/* Send Notification Modal */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+                    <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] shadow-2xl w-full max-w-md p-6">
+                        <h2 className="text-white text-xl font-bold mb-6">Send Notification</h2>
+                        <form onSubmit={handleSend} className="space-y-4">
+                            <div>
+                                <label className="block text-slate-400 text-sm mb-1">Title</label>
+                                <input 
+                                    type="text" 
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    className="w-full bg-[#0b111e] border border-[#2d3748] rounded p-2 text-white text-sm focus:border-[#4CAF50] outline-none"
+                                    placeholder="Enter notification title"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-slate-400 text-sm mb-1">Message</label>
+                                <textarea 
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    className="w-full bg-[#0b111e] border border-[#2d3748] rounded p-2 text-white text-sm focus:border-[#4CAF50] outline-none h-32 resize-none"
+                                    placeholder="Enter notification message"
+                                ></textarea>
+                            </div>
+                            <div className="flex justify-end gap-3 pt-2">
+                                <button 
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                    className="px-4 py-2 text-slate-400 hover:text-white transition-colors text-sm font-bold uppercase"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit"
+                                    className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded shadow uppercase text-sm tracking-wide transition-all"
+                                >
+                                    Send
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden shadow-xl">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="text-white text-sm font-semibold border-b border-[#2d3748] bg-[#151c2c]">
@@ -77,6 +152,13 @@ const NotificationsPage = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Mobile Card List View */}
+            <div className="md:hidden space-y-3 pb-20">
+                {notifications.map((notif) => (
+                    <MobileNotificationCard key={notif.id} notif={notif} />
+                ))}
             </div>
         </div>
     );

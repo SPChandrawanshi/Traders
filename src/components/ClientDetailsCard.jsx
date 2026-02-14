@@ -1,12 +1,27 @@
 import React from 'react';
 
-const ClientDetailsCard = () => {
-    // Data from Image 3
+const ClientDetailsCard = ({ client }) => {
+    // Parse client ID and name if they are combined in the string "ID : Name"
+    // e.g., "3274 : Sweta namdev"
+    let id = '4395';
+    let name = 'Jitu0';
+    
+    if (client && client.id) {
+        if (client.id.includes(':')) {
+            const parts = client.id.split(':');
+            id = parts[0].trim();
+            name = parts[1].trim();
+        } else {
+            id = client.id;
+            name = client.name || 'Unknown';
+        }
+    }
+
   const details = [
-    { label: 'ID', value: '4395' },
-    { label: 'Name', value: 'Jitu0' },
+    { label: 'ID', value: id },
+    { label: 'Name', value: name },
     { label: 'Mobile', value: ' ' }, // Empty in screenshot
-    { label: 'Username', value: 'SHRE072' },
+    { label: 'Username', value: 'SHRE072' }, // Hardcoded as per screenshot/request or could be dynamic
     { label: 'City', value: ' ' }, // Empty
     { label: 'Account Status', value: 'Active' },
     { label: 'Allow Orders between High - Low?', value: 'Yes' },
@@ -20,7 +35,7 @@ const ClientDetailsCard = () => {
       {/* Table-like structure for details */}
       <div className="divide-y divide-[#2d3748]">
         {details.map((item, index) => (
-          <div key={index} className="flex text-sm hover:bg-slate-800/30 transition-colors">
+          <div key={item.label} className="flex text-sm hover:bg-slate-800/30 transition-colors">
             <div className="w-1/2 p-4 text-slate-100 font-bold border-r border-[#2d3748]">
               {item.label}
             </div>

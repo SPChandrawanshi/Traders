@@ -1,8 +1,8 @@
-import React from 'react';
-import { Plus, Search } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Search, X } from 'lucide-react';
 
 const BankDetailsPage = () => {
-  const bankData = [
+  const [bankData, setBankData] = useState([
     { 
       id: 1, 
       bankName: "HDFC Bank", 
@@ -30,14 +30,44 @@ const BankDetailsPage = () => {
       branch: "Ahmedabad Corporate Branch", 
       status: "Inactive" 
     },
-  ];
+  ]);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newBank, setNewBank] = useState({
+      bankName: '',
+      accountHolder: '',
+      accountNumber: '',
+      ifsc: '',
+      branch: ''
+  });
+
+  const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setNewBank(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+      e.preventDefault();
+      const newEntry = {
+          id: bankData.length + 1,
+          ...newBank,
+          status: 'Active'
+      };
+      setBankData([...bankData, newEntry]);
+      setShowAddModal(false);
+      setNewBank({ bankName: '', accountHolder: '', accountNumber: '', ifsc: '', branch: '' });
+      alert('New Bank Account Added Successfully!');
+  };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden relative">
       {/* Header Actions */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-white tracking-tight italic">Bank Details Management</h2>
-        <button className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-all uppercase tracking-wider text-xs flex items-center gap-2">
+        <button 
+            onClick={() => setShowAddModal(true)}
+            className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-all uppercase tracking-wider text-xs flex items-center gap-2"
+        >
           <Plus className="w-4 h-4" /> Add New Bank
         </button>
       </div>
@@ -108,6 +138,93 @@ const BankDetailsPage = () => {
           </div>
         </div>
       </div>
+
+       {/* Add Bank Modal */}
+       {showAddModal && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-[#151c2c] w-full max-w-md rounded-lg border border-[#2d3748] shadow-2xl flex flex-col max-h-[90vh]">
+                <div className="flex justify-between items-center p-4 border-b border-[#2d3748]">
+                    <h3 className="text-white font-bold text-lg">Add New Bank Account</h3>
+                    <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-white transition-colors">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+                <form onSubmit={handleSubmit} className="p-4 space-y-4 overflow-y-auto custom-scrollbar">
+                    <div>
+                        <label className="block text-slate-400 text-xs uppercase font-bold mb-1">Bank Name</label>
+                        <input 
+                            name="bankName"
+                            value={newBank.bankName}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full bg-[#0b111e] border border-[#2d3748] rounded px-3 py-2 text-white focus:outline-none focus:border-[#01B4EA]"
+                            placeholder="e.g. HDFC Bank"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-slate-400 text-xs uppercase font-bold mb-1">Account Holder Name</label>
+                        <input 
+                            name="accountHolder"
+                            value={newBank.accountHolder}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full bg-[#0b111e] border border-[#2d3748] rounded px-3 py-2 text-white focus:outline-none focus:border-[#01B4EA]"
+                            placeholder="e.g. SHRISHREENATHJI TRADERS"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-slate-400 text-xs uppercase font-bold mb-1">Account Number</label>
+                        <input 
+                            name="accountNumber"
+                            value={newBank.accountNumber}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full bg-[#0b111e] border border-[#2d3748] rounded px-3 py-2 text-white focus:outline-none focus:border-[#01B4EA]"
+                            placeholder="Enter Account Number"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-slate-400 text-xs uppercase font-bold mb-1">IFSC Code</label>
+                        <input 
+                            name="ifsc"
+                            value={newBank.ifsc}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full bg-[#0b111e] border border-[#2d3748] rounded px-3 py-2 text-white focus:outline-none focus:border-[#01B4EA]"
+                            placeholder="Enter IFSC Code"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-slate-400 text-xs uppercase font-bold mb-1">Branch Name</label>
+                        <input 
+                            name="branch"
+                            value={newBank.branch}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full bg-[#0b111e] border border-[#2d3748] rounded px-3 py-2 text-white focus:outline-none focus:border-[#01B4EA]"
+                            placeholder="Enter Branch Name"
+                        />
+                    </div>
+
+                    <div className="pt-2 flex gap-3">
+                         <button 
+                            type="button"
+                            onClick={() => setShowAddModal(false)}
+                            className="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded transition-colors"
+                        >
+                            CANCEL
+                        </button>
+                        <button 
+                            type="submit"
+                            className="flex-1 bg-[#01B4EA] hover:bg-cyan-600 text-white font-bold py-2 rounded transition-colors shadow-lg"
+                        >
+                            SAVE BANK
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      )}
     </div>
   );
 };

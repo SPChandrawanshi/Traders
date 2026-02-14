@@ -6,8 +6,9 @@ import ActiveTradesTable from './ActiveTradesTable';
 import ActivePositionsTable from './ActivePositionsTable';
 import { ChevronDown, ArrowLeft } from 'lucide-react';
 
-const ClientDashboard = ({ onBack }) => {
-    const [showDetails, setShowDetails] = useState(true);
+const ClientDashboard = ({ onBack, client }) => {
+    const [showDetails, setShowDetails] = useState(false);
+    const [showActions, setShowActions] = useState(false);
 
   return (
     <div className="flex flex-col h-full bg-[#0b111e] p-6 space-y-6 overflow-y-auto custom-scrollbar">
@@ -25,38 +26,50 @@ const ClientDashboard = ({ onBack }) => {
 
       {/* Actions & View Details Bar */}
       <div className="space-y-4">
-         <div className="flex">
-            <button className="bg-[#8e24aa] hover:bg-[#7b1fa2] text-white text-[11px] font-bold py-2.5 px-6 rounded-l shadow-lg uppercase tracking-wider flex items-center justify-between min-w-[140px]">
+         <div className="flex relative">
+            <button 
+                onClick={() => setShowActions(!showActions)}
+                className="bg-[#8e24aa] hover:bg-[#7b1fa2] text-white text-[11px] font-bold py-2.5 px-6 rounded shadow-lg uppercase tracking-wider flex items-center justify-between min-w-[140px] transition-colors"
+            >
                 ACTIONS
-                <ChevronDown className="w-4 h-4 ml-2" />
+                <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${showActions ? 'rotate-180' : ''}`} />
             </button>
+            
+            {showActions && (
+                <div className="absolute top-full left-0 mt-2 w-48 bg-[#151c2c] border border-[#2d3748] rounded shadow-xl z-10 py-1">
+                    <button className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-[#2d3748] hover:text-white transition-colors">
+                        Edit Client
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-[#2d3748] hover:text-white transition-colors">
+                        Ban Client
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-[#2d3748] hover:text-white transition-colors">
+                        Add Funds
+                    </button>
+                    <button className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-[#2d3748] hover:text-white transition-colors text-red-400">
+                        Delete Client
+                    </button>
+                </div>
+            )}
         </div>
 
         <button 
             onClick={() => setShowDetails(!showDetails)}
             className="w-full bg-[#4CAF50] hover:bg-[#43a047] text-white text-[13px] font-bold py-3 px-4 rounded shadow-lg uppercase tracking-wider transition-colors"
         >
-            VIEW DETAILS
+            {showDetails ? 'HIDE DETAILS' : 'VIEW DETAILS'}
         </button>
       </div>
 
       {/* Content Sections */}
       <div className="space-y-8">
-        {showDetails && <ClientDetailsCard />}
+        {showDetails && <ClientDetailsCard client={client} />}
         
-        {/* Screenshot 2/3 shows Active Positions at the top for the client view often, 
-            but Screenshot 4 shows Fund Withdrawal above Active Trades. 
-            Let's place Active Positions first as it's a key trading view, then Funds, then Trades. 
-            Actually, let's follow a logical flow or user preference. 
-            The user said "dash bord", usually implies the main view. 
-            If I look at Screenshot 2, it shows "SHRE072's Active Positions". 
-            I will put ActivePositionsTable first.
-        */}
-        <ActivePositionsTable />
-
         <FundWithdrawalTable />
         
         <ActiveTradesTable />
+
+        <ActivePositionsTable />
       </div>
     </div>
   );

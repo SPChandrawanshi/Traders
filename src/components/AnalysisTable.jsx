@@ -39,7 +39,7 @@ const AnalysisTable = () => {
       </div>
       <div className="overflow-y-auto max-h-[500px] custom-scrollbar">
         {data.map((item, index) => (
-          <AnalysisRow key={index} label={item.label} value={item.value} />
+          <AnalysisRow key={item.label} label={item.label} value={item.value} />
         ))}
       </div>
     </div>

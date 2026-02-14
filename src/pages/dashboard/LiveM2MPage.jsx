@@ -1,89 +1,347 @@
+// import React, { useState } from 'react';
+// import ClientDashboard from '../../components/ClientDashboard';
+
+// const LiveM2MPage = () => {
+//   const [selectedClient, setSelectedClient] = useState(null);
+
+//   const clients = [
+//     { id: '323 : rk002', activePL: '-22678.11', activeTrades: '50', margin: '47999.42' },
+//     { id: '324 : rr001', activePL: '9018', activeTrades: '11', margin: '2157.13' },
+//     { id: '337 : gg001', activePL: '-320', activeTrades: '1', margin: '3883.6' },
+//     { id: '339 : sp001', activePL: '-74600', activeTrades: '1', margin: '10000' },
+//     { id: '352 : rus001', activePL: '100740.1', activeTrades: '19', margin: '34474.41' },
+//     { id: '390 : jp001', activePL: '181794.05', activeTrades: '18', margin: '50409.66' },
+//     { id: '399 : ar001', activePL: '-5105', activeTrades: '2', margin: '2500' },
+//     { id: '410 : rs001', activePL: '311.5', activeTrades: '1', margin: '124.19' },
+//     { id: '423 : nh001', activePL: '58239.9', activeTrades: '1', margin: '82471.01' },
+//   ];
+
+//   if (selectedClient) {
+//     return <ClientDashboard client={selectedClient} onBack={() => setSelectedClient(null)} />;
+//   }
+
+//   const InfoCard = ({ title, data }) => (
+//     <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] shadow-xl overflow-hidden flex flex-col h-full">
+//       <div className="bg-[#4CAF50] px-4 py-2 border-b border-[#2d3748]">
+//         <h3 className="text-white text-sm font-bold tracking-wide">{title}</h3>
+//       </div>
+//       <div className="p-4 flex-1 flex flex-col justify-center space-y-3">
+//         {data.map((item, index) => (
+//           <div key={index} className="flex justify-between items-center text-xs">
+//             <span className="text-slate-400 font-medium uppercase tracking-wider">{item.label}</span>
+//             <span className="text-white font-bold tracking-wide">{item.value}</span>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+
+//   return (
+//     <div className="flex flex-col h-full bg-[#0b111e] p-4 space-y-4 overflow-y-auto custom-scrollbar">
+      
+//       {/* 1. Live M2M Table (Top) */}
+//       <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] shadow-xl overflow-hidden">
+//         <div className="bg-[#4CAF50] px-6 py-3 border-b border-[#2d3748]">
+//             <h2 className="text-white text-sm font-bold tracking-wide">
+//             Live M2M under: Demo pannel
+//             </h2>
+//         </div>
+//         <div className="overflow-x-auto">
+//           <table className="w-full text-left border-collapse whitespace-nowrap">
+//             <thead>
+//               <tr className="text-slate-400 text-[10px] font-bold border-b border-[#2d3748] bg-[#1a2333] uppercase tracking-wider">
+//                 <th className="px-6 py-3">User ID</th>
+//                 <th className="px-6 py-3">Active Profit/Loss</th>
+//                 <th className="px-6 py-3">Active Trades</th>
+//                 <th className="px-6 py-3">Margin Used</th>
+//               </tr>
+//             </thead>
+//             <tbody className="text-[11px] text-slate-300">
+//                 {clients.map((client, index) => (
+//                   <tr key={index} className="border-b border-[#2d3748] hover:bg-[#1a2333]/50 transition-colors">
+//                     <td className="px-6 py-3 cursor-pointer text-[#01B4EA] hover:underline" onClick={() => setSelectedClient(client)}>{client.id}</td>
+//                     <td className={`px-6 py-3 ${parseFloat(client.activePL) >= 0 ? 'text-green-500' : 'text-red-500'}`}>{client.activePL}</td>
+//                     <td className="px-6 py-3">{client.activeTrades}</td>
+//                     <td className="px-6 py-3">{client.margin}</td>
+//                   </tr>
+//                 ))}
+//                <tr className="border-b border-[#2d3748] bg-[#1a2333] font-bold text-white">
+//                   <td className="px-6 py-3 text-slate-400">Total</td>
+//                   <td className="px-6 py-3">0</td>
+//                   <td className="px-6 py-3">0</td>
+//                   <td className="px-6 py-3">0</td>
+//                 </tr>
+//             </tbody>
+//           </table>
+//         </div>
+//       </div>
+
+//       {/* 2. Turnover Row */}
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//         <InfoCard 
+//             title="Buy Turnover" 
+//             data={[
+//                 { label: "Mix:", value: "0 Lakhs" },
+//                 { label: "NSE Fut:", value: "0 Lakhs" },
+//                 { label: "NSE Opt:", value: "0 Lakhs" },
+//                 { label: "Options:", value: "0 Lakhs" },
+//                 { label: "COMX:", value: "0 Lakhs" },
+//             ]} 
+//         />
+//         <InfoCard 
+//             title="Sell Turnover" 
+//             data={[
+//                 { label: "Mix:", value: "0 Lakhs" },
+//                 { label: "NSE Fut:", value: "0 Lakhs" },
+//                 { label: "NSE Opt:", value: "0 Lakhs" },
+//                 { label: "Options:", value: "0 Lakhs" },
+//                 { label: "COMX:", value: "0 Lakhs" },
+//             ]} 
+//         />
+//         <InfoCard 
+//             title="Total Turnover" 
+//             data={[
+//                 { label: "Mix:", value: "0 Lakhs" },
+//                 { label: "NSE Fut:", value: "0 Lakhs" },
+//                 { label: "NSE Opt:", value: "0 Lakhs" },
+//                 { label: "Options:", value: "0 Lakhs" },
+//                 { label: "COMX:", value: "0 Lakhs" },
+//             ]} 
+//         />
+//       </div>
+
+//       {/* 3. Stats Row: Active Users, P/L, Brokerage */}
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//         <InfoCard 
+//             title="Active Users" 
+//             data={[
+//                 { label: "Mix:", value: "1" },
+//                 { label: "NSE Fut:", value: "1" },
+//                 { label: "NSE Opt:", value: "1" },
+//                 { label: "Options:", value: "1" },
+//                 { label: "COMX:", value: "0" },
+//             ]} 
+//         />
+//         <InfoCard 
+//             title="Profit / Loss" 
+//             data={[
+//                 { label: "Mix:", value: "0" },
+//                 { label: "NSE Fut:", value: "0" },
+//                 { label: "NSE Opt:", value: "0" },
+//                 { label: "Options:", value: "0" },
+//                 { label: "COMX:", value: "0" },
+//             ]} 
+//         />
+//         <InfoCard 
+//             title="Brokerage" 
+//             data={[
+//                 { label: "Mix:", value: "0" },
+//                 { label: "NSE Fut:", value: "0" },
+//                 { label: "NSE Opt:", value: "0" },
+//                 { label: "Options:", value: "0" },
+//                 { label: "COMX:", value: "0" },
+//             ]} 
+//         />
+//       </div>
+
+//       {/* 4. Active Orders Row */}
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//         <InfoCard 
+//             title="Active Buy" 
+//             data={[
+//                 { label: "Mix:", value: "0" },
+//                 { label: "NSE Fut:", value: "0" },
+//                 { label: "NSE Opt:", value: "0" },
+//             ]} 
+//         />
+//         <InfoCard 
+//             title="Active Sell" 
+//             data={[
+//                 { label: "Mix:", value: "0" },
+//                 { label: "NSE Fut:", value: "0" },
+//                 { label: "NSE Opt:", value: "0" },
+//             ]} 
+//         />
+//       </div>
+
+//     </div>
+//   );
+// };
+
+// export default LiveM2MPage;
+ 
+
+
 import React, { useState } from 'react';
-import ClientDashboard from '../../components/ClientDashboard';
+// Agar tumhara ClientDashboard component exist karta hai toh rahne do, nahi toh error nahi aayega dashboard view ke liye.
+// import ClientDashboard from '../../components/ClientDashboard'; 
 
 const LiveM2MPage = () => {
   const [selectedClient, setSelectedClient] = useState(null);
 
   const clients = [
-    { id: '3274 : Sweta namdev', ledger: '30134.88', m2m: '30234.53', activePL: '99.65', activeTrades: '24', margin: '32.77', holding: '97.76' },
-    { id: '3343 : Ar0', ledger: '14000', m2m: '6925', activePL: '-7075', activeTrades: '1', margin: '500', holding: '2500' },
-    { id: '3725 : Namdevji', ledger: '2398.8', m2m: '2481.04', activePL: '82.24', activeTrades: '17', margin: '18.72', holding: '55.85' },
-    { id: '4249 : Sajjan', ledger: '13216.93', m2m: '12616.93', activePL: '-600', activeTrades: '2', margin: '1447.95', holding: '4322.24' },
-    { id: '4334 : Subhash bhavar', ledger: '131679.63', m2m: '124899.63', activePL: '-6780', activeTrades: '1', margin: '2000', holding: '8000' },
-    { id: '4372 : Pardeep kumar', ledger: '58118.96', m2m: '54538.96', activePL: '-3580', activeTrades: '1', margin: '1000', holding: '5000' },
-    { id: '4378 : Arjun jain', ledger: '282153.54', m2m: '276628.54', activePL: '-5525', activeTrades: '2', margin: '3000', holding: '15000' },
-    { id: '4395 : Jitu0', ledger: '132489.06', m2m: '133189.06', activePL: '700', activeTrades: '2', margin: '40000', holding: '80000' },
+    { id: '323 : rk002', activePL: '-22678.11', activeTrades: '50', margin: '47999.42' },
+    { id: '324 : rr001', activePL: '9018', activeTrades: '11', margin: '2157.13' },
+    { id: '337 : gg001', activePL: '-320', activeTrades: '1', margin: '3883.6' },
+    { id: '339 : sp001', activePL: '-74600', activeTrades: '1', margin: '10000' },
+    { id: '352 : rus001', activePL: '100740.1', activeTrades: '19', margin: '34474.41' },
+    { id: '390 : jp001', activePL: '181794.05', activeTrades: '18', margin: '50409.66' },
+    { id: '399 : ar001', activePL: '-5105', activeTrades: '2', margin: '2500' },
+    { id: '410 : rs001', activePL: '311.5', activeTrades: '1', margin: '124.19' },
+    { id: '423 : nh001', activePL: '58239.9', activeTrades: '1', margin: '82471.01' },
   ];
 
-  if (selectedClient) {
-    return <ClientDashboard onBack={() => setSelectedClient(null)} />;
-  }
+  // Agar Client select kiya gaya hai toh wahan redirect karega (Dashboard functionality)
+  // if (selectedClient) {
+  //   return <ClientDashboard client={selectedClient} onBack={() => setSelectedClient(null)} />;
+  // }
+
+  const InfoCard = ({ title, data }) => (
+    <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] shadow-xl overflow-hidden flex flex-col h-full">
+      <div className="bg-[#4CAF50] px-4 py-2 border-b border-[#2d3748]">
+        <h3 className="text-white text-sm font-bold tracking-wide">{title}</h3>
+      </div>
+      <div className="p-4 flex-1 flex flex-col justify-center space-y-3">
+        {data.map((item, index) => (
+          <div key={index} className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 font-medium uppercase tracking-wider">{item.label}</span>
+            <span className="text-white font-bold tracking-wide">{item.value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
-    <div className="flex flex-col h-full bg-[#0b111e] p-4 space-y-6 overflow-y-auto custom-scrollbar">
-      {/* Header */}
-      <div className="bg-[#4CAF50] p-4 rounded shadow-md">
-        <h2 className="text-white text-xl font-normal tracking-wide">
-          Live M2M under: rk002
-        </h2>
-      </div>
-
-      {/* Main Table */}
-      <div className="flex-1 bg-[#151c2c] rounded border border-[#2d3748] shadow-xl overflow-hidden flex flex-col">
-        <div className="overflow-x-auto flex-1">
+    <div className="flex flex-col h-full bg-[#0b111e] p-4 space-y-4 overflow-y-auto custom-scrollbar">
+      
+      {/* 1. Live M2M Table (Top) */}
+      <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] shadow-xl overflow-hidden">
+        <div className="bg-[#4CAF50] px-6 py-3 border-b border-[#2d3748]">
+            <h2 className="text-white text-sm font-bold tracking-wide">
+            Live M2M under: Demo panel
+            </h2>
+        </div>
+        <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse whitespace-nowrap">
             <thead>
-              <tr className="text-slate-300 text-[13px] font-normal border-b border-[#2d3748] bg-[#151c2c]">
-                <th className="px-6 py-4">User ID</th>
-                <th className="px-6 py-4">Ledger Balance</th>
-                <th className="px-6 py-4">M2M</th>
-                <th className="px-6 py-4">Active Profit/Loss</th>
-                <th className="px-6 py-4">Active Trades</th>
-                <th className="px-6 py-4">Margin Used</th>
-                <th className="px-6 py-4">Holding Margin</th>
+              <tr className="text-slate-400 text-[10px] font-bold border-b border-[#2d3748] bg-[#1a2333] uppercase tracking-wider">
+                <th className="px-6 py-3">User ID</th>
+                <th className="px-6 py-3">Active Profit/Loss</th>
+                <th className="px-6 py-3">Active Trades</th>
+                <th className="px-6 py-3">Margin Used</th>
               </tr>
             </thead>
-            <tbody className="text-[13px] text-slate-300">
-              {clients.map((client, idx) => (
-                <tr 
-                  key={idx} 
-                  onClick={() => setSelectedClient(client)}
-                  className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors cursor-pointer"
-                >
-                  <td className="px-6 py-4 text-green-400 font-medium">{client.id}</td>
-                  <td className="px-6 py-4">{client.ledger}</td>
-                  <td className="px-6 py-4">{client.m2m}</td>
-                  <td className={`px-6 py-4 ${parseFloat(client.activePL) >= 0 ? 'text-slate-300' : 'text-slate-300'}`}>
-                    {/* The screenshot shows straight white/grey text for PL, unlike previous views where it was colored. 
-                        Wait, Image 4 had colored M2M. Image 5 shows white text for most columns. 
-                        Let's keep it clean slate-300 as per image for now, maybe only User ID is green. */}
-                    {client.activePL}
-                  </td>
-                  <td className="px-6 py-4">{client.activeTrades}</td>
-                  <td className="px-6 py-4">{client.margin}</td>
-                  <td className="px-6 py-4">{client.holding}</td>
-                  {/* Note: Screenshot shows '4322.24' in yellow for Sajjan? 
-                      'Holding Margin' col has one yellow value. I'll stick to slate for consistency unless logic known.
-                   */}
+            <tbody className="text-[11px] text-slate-300">
+                {clients.map((client, index) => (
+                  <tr key={index} className="border-b border-[#2d3748] hover:bg-[#1a2333]/50 transition-colors cursor-pointer" onClick={() => setSelectedClient(client)}>
+                    <td className="px-6 py-3 text-[#01B4EA] hover:underline font-bold">{client.id}</td>
+                    <td className={`px-6 py-3 font-bold ${parseFloat(client.activePL) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {client.activePL}
+                    </td>
+                    <td className="px-6 py-3">{client.activeTrades}</td>
+                    <td className="px-6 py-3">{client.margin}</td>
+                  </tr>
+                ))}
+               <tr className="border-b border-[#2d3748] bg-[#1a2333] font-bold text-white">
+                  <td className="px-6 py-3 text-slate-400">Total</td>
+                  <td className="px-6 py-3">0</td>
+                  <td className="px-6 py-3">0</td>
+                  <td className="px-6 py-3">0</td>
                 </tr>
-              ))}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Turnover Cards */}
+      {/* 2. Turnover Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#4CAF50] p-6 rounded shadow-lg text-white">
-          <h3 className="text-xl font-normal">Buy Turnover</h3>
-        </div>
-        <div className="bg-[#4CAF50] p-6 rounded shadow-lg text-white">
-          <h3 className="text-xl font-normal">Sell Turnover</h3>
-        </div>
-        <div className="bg-[#4CAF50] p-6 rounded shadow-lg text-white">
-            <h3 className="text-xl font-normal">Total Turnover</h3>
-        </div>
+        <InfoCard 
+            title="Buy Turnover" 
+            data={[
+                { label: "Mix:", value: "0 Lakhs" },
+                { label: "NSE Fut:", value: "0 Lakhs" },
+                { label: "NSE Opt:", value: "0 Lakhs" },
+                { label: "Options:", value: "0 Lakhs" },
+                { label: "COMX:", value: "0 Lakhs" },
+            ]} 
+        />
+        <InfoCard 
+            title="Sell Turnover" 
+            data={[
+                { label: "Mix:", value: "0 Lakhs" },
+                { label: "NSE Fut:", value: "0 Lakhs" },
+                { label: "NSE Opt:", value: "0 Lakhs" },
+                { label: "Options:", value: "0 Lakhs" },
+                { label: "COMX:", value: "0 Lakhs" },
+            ]} 
+        />
+        <InfoCard 
+            title="Total Turnover" 
+            data={[
+                { label: "Mix:", value: "0 Lakhs" },
+                { label: "NSE Fut:", value: "0 Lakhs" },
+                { label: "NSE Opt:", value: "0 Lakhs" },
+                { label: "Options:", value: "0 Lakhs" },
+                { label: "COMX:", value: "0 Lakhs" },
+            ]} 
+        />
       </div>
+
+      {/* 3. Stats Row: Active Users, P/L, Brokerage */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <InfoCard 
+            title="Active Users" 
+            data={[
+                { label: "Mix:", value: "1" },
+                { label: "NSE Fut:", value: "1" },
+                { label: "NSE Opt:", value: "1" },
+                { label: "Options:", value: "1" },
+                { label: "COMX:", value: "0" },
+            ]} 
+        />
+        <InfoCard 
+            title="Profit / Loss" 
+            data={[
+                { label: "Mix:", value: "0" },
+                { label: "NSE Fut:", value: "0" },
+                { label: "NSE Opt:", value: "0" },
+                { label: "Options:", value: "0" },
+                { label: "COMX:", value: "0" },
+            ]} 
+        />
+        <InfoCard 
+            title="Brokerage" 
+            data={[
+                { label: "Mix:", value: "0" },
+                { label: "NSE Fut:", value: "0" },
+                { label: "NSE Opt:", value: "0" },
+                { label: "Options:", value: "0" },
+                { label: "COMX:", value: "0" },
+            ]} 
+        />
+      </div>
+
+      {/* 4. Active Orders Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <InfoCard 
+            title="Active Buy" 
+            data={[
+                { label: "Mix:", value: "0" },
+                { label: "NSE Fut:", value: "0" },
+                { label: "NSE Opt:", value: "0" },
+            ]} 
+        />
+        <InfoCard 
+            title="Active Sell" 
+            data={[
+                { label: "Mix:", value: "0" },
+                { label: "NSE Fut:", value: "0" },
+                { label: "NSE Opt:", value: "0" },
+            ]} 
+        />
+      </div>
+
     </div>
   );
 };

@@ -8,7 +8,7 @@ const TopBar = () => {
       <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
         <User className="w-5 h-5" />
         <span className="text-sm font-semibold uppercase tracking-wide">
-          SHRISHREENATHJI TRADERS
+          DEMO PANNEL
         </span>
       </div>
     </div>

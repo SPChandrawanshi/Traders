@@ -33,6 +33,9 @@ import DepositRequestsPage from './pages/requests/DepositRequestsPage';
 import NegativeBalanceTxnsPage from './pages/transactions/NegativeBalanceTxnsPage';
 import PendingOrdersPage from './pages/orders/PendingOrdersPage';
 import ScripDataPage from './pages/data/ScripDataPage';
+import CreateFundForm from './components/CreateFundForm';
+import AddBrokerForm from './components/AddBrokerForm';
+import CreateTradeForm from './components/CreateTradeForm';
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -55,6 +58,11 @@ function App() {
     localStorage.setItem('traders_view', view);
   }, [view]);
 
+  // Dummy Data for Clients (Lifted from TradingClientsPage)
+  const [clients, setClients] = useState([
+    { id: '3705377', fullName: 'Demo ji', username: 'Demo0174', ledgerBalance: '500000000', grossPL: '0.0000', brokerage: '0.0000', swapCharges: '0.0000', netPL: '0', admin: 'demo001', demoAccount: 'Yes', status: 'Active' },
+  ]);
+
   const handleLogin = (username) => {
     setUser({ name: username });
   };
@@ -66,10 +74,65 @@ function App() {
     localStorage.removeItem('traders_view');
   };
 
+  const handleAddClient = (newClientData) => {
+      // Basic ID generation and default values for simplicity
+      const newClient = {
+          id: Math.floor(Math.random() * 10000000).toString(),
+          fullName: newClientData.name || 'New User',
+          username: newClientData.username || 'user' + Math.floor(Math.random() * 1000),
+          ledgerBalance: newClientData.creditLimit || '0',
+          grossPL: '0.0000',
+          brokerage: '0.0000',
+          swapCharges: '0.0000',
+          netPL: '0',
+          admin: 'demo001', // Default
+          demoAccount: newClientData.demoAccount ? 'Yes' : 'No',
+          status: newClientData.accountStatus ? 'Active' : 'Suspended',
+          ...newClientData
+      };
+      setClients([...clients, newClient]);
+      setView('users');
+  };
+
+  // Dummy Data for Trades (Lifted from TradesPage)
+  const [trades, setTrades] = useState([
+    { id: '4238782', scrip: 'GOLD26APRFUT', segment: 'MCX', userId: '4424 SHRE043 : Lv', buyRate: '144696.00000000', sellRate: '145201.00000000', lots: '0.2 lots', pl: '10100', timeDiff: '-1577 secs', boughtAt: '2026-02-02 10:29:42' },
+  ]);
+
+  const handleAddTrade = (newTradeData) => {
+      const newTrade = {
+          id: Math.floor(Math.random() * 10000000).toString(),
+          scrip: newTradeData.scrip,
+          segment: 'MCX', // Default
+          userId: newTradeData.userId,
+          buyRate: newTradeData.buyRate || '0',
+          sellRate: newTradeData.sellRate || '0',
+          lots: (newTradeData.lots || '0') + ' lots',
+          pl: '0',
+          timeDiff: '0 secs',
+          boughtAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+          ...newTradeData
+      };
+      setTrades([...trades, newTrade]);
+      setView('trades');
+  };
+
+  const [selectedClient, setSelectedClient] = useState(null);
+
+  const handleDeposit = (client) => {
+    setSelectedClient(client);
+    setView('create-fund-deposit');
+  };
+
+  const handleWithdraw = (client) => {
+    setSelectedClient(client);
+    setView('create-fund-withdraw');
+  };
+
   const renderContent = () => {
     switch (view) {
       case 'edit':
-        return <ClientDetailsForm onBack={() => setView('overview')} />;
+        return <ClientDetailsForm onBack={() => setView('users')} />;
       case 'accounts':
         return <AccountsPage />;
       case 'banned':
@@ -77,7 +140,7 @@ function App() {
       case 'bank':
         return <BankDetailsPage />;
       case 'trades':
-        return <TradesPage />;
+        return <TradesPage trades={trades} onCreateClick={() => setView('create-trade')} />;
       case 'tickers':
         return <TickersPage />;
       case 'live-m2m':
@@ -85,9 +148,11 @@ function App() {
       case 'broker-m2m':
         return <BrokerM2MPage />;
       case 'active-positions':
-        return <ActivePositionsPage />;
+        return <ActivePositionsPage onNavigate={setView} />;
       case 'funds':
-        return <TraderFundsPage />;
+        return <TraderFundsPage onNavigate={setView} />;
+      case 'create-fund':
+        return <CreateFundForm onBack={() => setView('funds')} onSave={(data) => { console.log('Fund Saved:', data); setView('funds'); }} />;
       case 'active-trades':
         return <ActiveTradesPage />;
       case 'closed-trades':
@@ -101,13 +166,23 @@ function App() {
       case 'closed-positions':
         return <ClosedPositionsPage />;
       case 'users':
-        return <TradingClientsPage onClientClick={() => setView('client-details')} />;
+        return <TradingClientsPage clients={clients} onClientClick={() => setView('client-details')} onAddBrokerClick={() => setView('create-broker')} onDepositClick={handleDeposit} onWithdrawClick={handleWithdraw} onViewClick={() => setView('client-details')} />;
+      case 'create-client':
+        return <ClientDetailsForm onBack={() => setView('users')} onSave={handleAddClient} mode="create" />;
+      case 'create-broker':
+         return <AddBrokerForm onBack={() => setView('users')} onSave={(data) => { console.log('Broker Saved:', data); setView('users'); }} />;
+      case 'create-fund-deposit':
+        return <CreateFundForm onBack={() => setView('users')} onSave={(data) => { console.log('Deposit Saved:', data); setView('users'); }} mode="deposit" initialUser={selectedClient} />;
+      case 'create-fund-withdraw':
+        return <CreateFundForm onBack={() => setView('users')} onSave={(data) => { console.log('Withdraw Saved:', data); setView('users'); }} mode="withdraw" initialUser={selectedClient} />;
       case 'client-details':
-        return <ClientDetailsPage onBack={() => setView('users')} />;
+        return <ClientDetailsForm onBack={() => setView('users')} mode="edit" />;
       case 'trading-clients':
-        return <TradingClientsPage onClientClick={() => setView('client-details')} />;
+         return <TradingClientsPage clients={clients} onClientClick={() => setView('client-details')} onCreateClick={() => setView('create-client')} onAddBrokerClick={() => setView('create-broker')} onDepositClick={handleDeposit} onWithdrawClick={handleWithdraw} onViewClick={() => setView('client-details')} />;
       case 'new-client-bank':
         return <NewClientBankDetailsPage />;
+      case 'create-trade':
+        return <CreateTradeForm onSave={handleAddTrade} />;
       case 'change-password':
         return <ChangePasswordPage />;
       case 'change-transaction-password':

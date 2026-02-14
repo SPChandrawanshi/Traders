@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const DepositRequestsPage = () => {
-    const depositRequests = [
+    const [depositRequests, setDepositRequests] = useState([
         {
             id: 758,
             name: "Priyadarshini",
@@ -52,7 +52,13 @@ const DepositRequestsPage = () => {
             time: "23-Jul-2025 02:30 pm",
             proofImage: "https://via.placeholder.com/60x100?text=Proof"
         }
-    ];
+    ]);
+
+    const handleRemove = (id) => {
+        if (window.confirm('Are you sure you want to remove this request?')) {
+            setDepositRequests(prev => prev.filter(req => req.id !== id));
+        }
+    };
 
     return (
         <div className="flex flex-col h-full text-[#a0aec0]">
@@ -113,7 +119,10 @@ const DepositRequestsPage = () => {
                                         {req.time}
                                     </td>
                                     <td className="px-6 py-8 align-middle text-right">
-                                        <button className="bg-[#E53935] hover:bg-red-600 text-white font-bold py-2 px-6 rounded text-[11px] uppercase tracking-wider transition-all">
+                                        <button 
+                                            onClick={() => handleRemove(req.id)}
+                                            className="bg-[#E53935] hover:bg-red-600 text-white font-bold py-2 px-6 rounded text-[11px] uppercase tracking-wider transition-all"
+                                        >
                                             REMOVE
                                         </button>
                                     </td>

@@ -1,74 +1,102 @@
 import React from 'react';
 import { 
-  LayoutDashboard, TrendingUp, Bell, Radio, Sun, Hexagon, Smile, Tag, 
-  LayoutList, Banknote, FileText, Calculator, Ban, Grid, Grid2X2, BookOpen, 
-  Briefcase, UserCog, ShieldCheck, ArrowDownRight, ArrowUpLeft, AlertCircle, LogOut, Users 
+  LayoutDashboard, 
+  TrendingUp, 
+  Bell, 
+  Radio, 
+  Sun, 
+  UserCircle, 
+  Tag, 
+  Package, 
+  CircleDollarSign, 
+  Users, 
+  Calculator, 
+  User, 
+  Settings, 
+  LogOut,
+  Layout
 } from 'lucide-react';
 
-const SidebarItem = ({ icon: Icon, label, onClick, isActive }) => (
-  <div 
-    onClick={onClick}
-    className={`flex items-center gap-3 px-6 py-3 cursor-pointer transition-colors group ${
-      isActive 
-        ? 'bg-[#2d3748] text-white border-r-4 border-green-500' // Added border to simulate "active" marker often seen, and matched bg color
-        : 'hover:bg-slate-300/10 text-slate-400 hover:text-blue-400'
-    }`}
-  >
-    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-blue-400'}`} />
-    <span className={`text-sm font-medium ${isActive ? 'text-white' : 'text-slate-200'}`}>{label}</span>
-  </div>
-);
-
-const Sidebar = ({ onLogout, onNavigate, currentView }) => {
-  const items = [
-    { icon: LayoutDashboard, label: 'Dashboard', view: 'live-m2m' }, // Capitalization fix
-    { icon: TrendingUp, label: 'Market Watch', view: 'market-watch' },
-    { icon: Bell, label: 'Notifications', view: 'notifications' },
-    { icon: Radio, label: 'Action Ledger', view: 'action-ledger' }, // Icon change
-    { icon: Sun, label: 'Active Positions', view: 'active-positions' },
-    { icon: Hexagon, label: 'Closed Positions', view: 'closed-positions' }, // Keeping Hexagon as distinct from active
-    { icon: Smile, label: 'Trading Clients', view: 'trading-clients' }, // Icon change
-    { icon: Tag, label: 'Trades', view: 'active-trades' },
-    { icon: Tag, label: 'Group Trades', view: 'group-trades' },
-    { icon: Tag, label: 'Closed Trades', view: 'closed-trades' },
-    { icon: Tag, label: 'Deleted Trades', view: 'deleted-trades' },
-    
-    { icon: LayoutList, label: 'Pending Orders', view: 'pending-orders' },
-    { icon: Banknote, label: 'Trader Funds', view: 'funds' },
-    { icon: Users, label: 'Users', view: 'users' },
-    { icon: FileText, label: 'Scrip Data', view: 'scrip-data' },
-    { icon: Calculator, label: 'Tickers', view: 'tickers' },
-    { icon: Ban, label: 'Banned Limit Orders', view: 'banned' },
-    { icon: Grid, label: 'Bank Details', view: 'bank' },
-    { icon: Grid2X2, label: 'Bank Details For New Clients', view: 'new-client-bank' },
-    { icon: BookOpen, label: 'Accounts', view: 'accounts' },
-    { icon: Briefcase, label: 'Broker Accounts', view: 'broker-m2m' },
-    { icon: UserCog, label: 'Change Login Password', view: 'change-password' },
-    { icon: ShieldCheck, label: 'Change Transaction Password', view: 'change-transaction-password' },
-    { icon: ArrowDownRight, label: 'Withdrawal Requests', view: 'withdrawal-requests' },
-    { icon: ArrowUpLeft, label: 'Deposit Requests', view: 'deposit-requests' },
-    { icon: AlertCircle, label: 'Negative Balance Txns', view: 'negative-balance' },
+const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
+  const menuItems = [
+    { id: 'live-m2m', label: 'DashBoard', icon: <Layout className="w-5 h-5" /> },
+    { id: 'market-watch', label: 'Market Watch', icon: <TrendingUp className="w-5 h-5" /> },
+    { id: 'notifications', label: 'Notifications', icon: <Bell className="w-5 h-5" /> },
+    { id: 'action-ledger', label: 'Action Ledger', icon: <Radio className="w-5 h-5" /> },
+    { id: 'active-positions', label: 'Active Positions', icon: <Sun className="w-5 h-5" /> },
+    { id: 'closed-positions', label: 'Closed Positions', icon: <Sun className="w-5 h-5" /> },
+    { id: 'users', label: 'Trading Clients', icon: <UserCircle className="w-5 h-5" /> },
+    { id: 'trades', label: 'Trades', icon: <Tag className="w-5 h-5" /> },
+    { id: 'group-trades', label: 'Group Trades', icon: <Tag className="w-5 h-5" /> },
+    { id: 'closed-trades', label: 'Closed Trades', icon: <Tag className="w-5 h-5" /> },
+    { id: 'deleted-trades', label: 'Deleted Trades', icon: <Tag className="w-5 h-5" /> },
+    { id: 'pending-orders', label: 'Pending Orders', icon: <Layout className="w-5 h-5" /> }, // Close to screenshot icon
+    { id: 'funds', label: 'Trader Funds', icon: <CircleDollarSign className="w-5 h-5" /> },
+    { id: 'trading-clients', label: 'Users', icon: <Users className="w-5 h-5" /> },
+    { id: 'tickers', label: 'Tickers', icon: <Calculator className="w-5 h-5" /> },
+    { id: 'banned', label: 'Banned Limit Orders', icon: <Calculator className="w-5 h-5" /> },
+    { id: 'bank', label: 'Bank Details', icon: <Calculator className="w-5 h-5" /> },
+    { id: 'new-client-bank', label: 'Bank Details For New Client', icon: <Calculator className="w-5 h-5" /> },
+    { id: 'accounts', label: 'Accounts', icon: <Calculator className="w-5 h-5" /> },
+    { id: 'create-broker', label: 'Broker Accounts', icon: <Calculator className="w-5 h-5" /> },
+    { id: 'change-password', label: 'Change Login Password', icon: <User className="w-5 h-5" /> },
+    { id: 'change-transaction-password', label: 'Change Transaction Password', icon: <Settings className="w-5 h-5" /> },
+    { id: 'withdrawal-requests', label: 'Withdrawal Requests', icon: <Settings className="w-5 h-5" /> },
+    { id: 'deposit-requests', label: 'Deposit Requests', icon: <Settings className="w-5 h-5" /> },
+    { id: 'negative-balance', label: 'Negative Balance Txns', icon: <Bell className="w-5 h-5" /> },
   ];
 
   return (
-    <div className="w-64 bg-[#151c2c] h-full flex flex-col border-r border-[#2d3748] overflow-y-auto custom-scrollbar">
-      <div className="flex-1 py-4">
-        {items.map((item, index) => (
-          <SidebarItem 
-            key={index} 
-            icon={item.icon} 
-            label={item.label} 
-            isActive={currentView === item.view}
-            onClick={() => onNavigate(item.view || '#')}
-          />
-        ))}
-         <SidebarItem 
-            icon={LogOut} 
-            label="Log Out" 
-            onClick={onLogout}
-          />
+    <aside className={`
+      h-full bg-[#1e293b] text-white transition-all duration-300 ease-in-out flex-shrink-0 z-50
+      fixed inset-y-0 left-0 w-64
+      md:relative md:translate-x-0
+      ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+    `}>
+      <div className="flex flex-col h-full border-r border-white/10 overflow-hidden">
+        {/* Sidebar Header - Hidden if not needed, but keeping for structure */}
+        <div className="p-4 bg-[#0f172a] border-b border-white/5">
+          <h2 className="text-lg font-bold text-[#4CAF50]">TRADERS</h2>
+        </div>
+
+        {/* Navigation Items */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar py-2">
+          <div className="space-y-0.5">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                    onNavigate(item.id);
+                    if (window.innerWidth < 768) onClose();
+                }}
+                className={`
+                  w-full flex items-center px-6 py-4 text-[15px] font-medium transition-all duration-150
+                  ${currentView === item.id 
+                    ? 'bg-slate-700/50 text-white border-r-4 border-[#4CAF50]' 
+                    : 'text-slate-300 hover:bg-slate-700/30 hover:text-white'}
+                `}
+              >
+                <span className="mr-5 text-slate-400 group-hover:text-white transition-colors">
+                  {item.icon}
+                </span>
+                <span className="truncate">{item.label}</span>
+              </button>
+            ))}
+            
+            {/* Logout Button */}
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center px-6 py-4 text-[15px] font-medium text-slate-300 hover:bg-slate-700/30 hover:text-white transition-all duration-150 mt-4 border-t border-white/5"
+            >
+              <span className="mr-5 text-slate-400">
+                <LogOut className="w-5 h-5" />
+              </span>
+              Log Out
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

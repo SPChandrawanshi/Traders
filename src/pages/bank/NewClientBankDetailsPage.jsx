@@ -20,6 +20,11 @@ const NewClientBankDetailsPage = () => {
     }));
   };
 
+  const handleUpdate = () => {
+    alert('Bank Details Updated Successfully!');
+    console.log('Updated Form Data:', formData);
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -131,7 +136,10 @@ const NewClientBankDetailsPage = () => {
 
         {/* Update Button */}
         <div className="mt-12">
-          <button className="bg-[#4CAF50] hover:bg-green-600 text-white font-medium py-2 px-6 rounded transition-all uppercase text-xs tracking-wider">
+          <button 
+            onClick={handleUpdate}
+            className="bg-[#4CAF50] hover:bg-green-600 text-white font-medium py-2 px-6 rounded transition-all uppercase text-xs tracking-wider"
+          >
             UPDATE DETAILS
           </button>
         </div>

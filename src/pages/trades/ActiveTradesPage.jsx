@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ArrowUpDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ArrowUpDown, ChevronUp, MoreHorizontal } from 'lucide-react';
 
 const ActiveTradesPage = () => {
     // view: 'list' | 'detail' | 'delete_confirm'
@@ -53,69 +53,123 @@ const ActiveTradesPage = () => {
         setView('delete_confirm');
     };
 
+    // Mobile Card Component for Trades
+    const MobileTradeCard = ({ trade, onClick }) => (
+        <div 
+            onClick={() => onClick(trade)}
+            className="bg-[#151c2c] p-4 rounded-lg border border-[#2d3748] shadow-md mb-3 active:scale-[0.98] transition-transform"
+        >
+            <div className="flex justify-between items-start mb-2">
+                <div>
+                    <span className="text-xs text-slate-400 font-mono">#{trade.id}</span>
+                    <h3 className="text-white font-bold text-sm uppercase mt-0.5">{trade.scrip}</h3>
+                </div>
+                <div className={`text-sm font-bold ${parseFloat(trade.pl) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {trade.pl}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+                <div className="flex flex-col">
+                    <span className="text-slate-500">Buy Rate</span>
+                    <span className="text-white font-medium">{trade.buyRate}</span>
+                </div>
+                <div className="flex flex-col text-right">
+                    <span className="text-slate-500">Sell Rate</span>
+                    <span className="text-white font-medium">{trade.sellRate}</span>
+                </div>
+                <div className="flex flex-col">
+                    <span className="text-slate-500">Lots</span>
+                    <span className="text-white font-medium">{trade.lots}</span>
+                </div>
+                <div className="flex flex-col text-right">
+                    <span className="text-[#01B4EA]">CMP</span>
+                    <span className="text-white font-bold">{trade.cmp}</span>
+                </div>
+            </div>
+
+            <div className="flex justify-between items-center border-t border-[#2d3748] pt-2">
+                <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                        {trade.user.charAt(0)}
+                    </div>
+                    <span className="text-xs text-slate-300">{trade.user}</span>
+                </div>
+                <MoreHorizontal className="w-5 h-5 text-slate-500" />
+            </div>
+        </div>
+    );
+
     const ListView = () => (
         <div className="flex flex-col h-full space-y-4">
              {/* Header */}
-             <h2 className="text-2xl font-normal text-slate-300 tracking-tight">Active Trades</h2>
-             <div className="text-xs text-slate-400">
-                Showing <span className="font-bold text-slate-200">{trades.length}</span> of <span className="font-bold text-slate-200">{trades.length}</span> items.
+             <div className="flex justify-between items-center">
+                <h2 className="text-xl md:text-2xl font-normal text-slate-300 tracking-tight">Active Trades</h2>
+                <div className="text-xs text-slate-400">
+                    <span className="font-bold text-slate-200">{trades.length}</span> items
+                </div>
+             </div>
+
+             {/* Desktop Table */}
+             <div className="hidden md:flex bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden shadow-xl flex-col flex-1">
+                <div className="overflow-x-auto flex-1 custom-scrollbar">
+                    <table className="w-full text-left border-collapse min-w-[1200px]">
+                        <thead>
+                            <tr className="text-slate-200 text-[12px] font-semibold border-b border-[#2d3748] bg-[#151c2c]">
+                                <th className="px-6 py-4 w-12 text-center text-slate-400">X</th>
+                                <th className="px-6 py-4 cursor-pointer flex items-center gap-1 group whitespace-nowrap">
+                                    ID <ArrowUpDown className="w-3 h-3 text-slate-500 group-hover:text-white" />
+                                </th>
+                                <th className="px-6 py-4 whitespace-nowrap">Scrip</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Buy Rate</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Sell Rate</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Lots / Units</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Buy Turnover</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Sell Turnover</th>
+                                <th className="px-6 py-4 whitespace-nowrap">CMP</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Active P/L</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Margin Used</th>
+                                <th className="px-6 py-4 whitespace-nowrap">Bough</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-[12px] text-slate-300 font-medium">
+                            {trades.map((trade) => (
+                                <tr key={trade.id} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
+                                    <td className="px-6 py-4 text-center text-slate-400 cursor-pointer hover:text-white font-bold">X</td>
+                                    <td 
+                                        onClick={() => handleTradeClick(trade)}
+                                        className="px-6 py-4 font-bold text-white cursor-pointer hover:underline"
+                                    >
+                                        {trade.id}
+                                    </td>
+                                    <td className="px-6 py-4 uppercase font-bold text-slate-300">{trade.scrip}</td>
+                                    <td className="px-6 py-4">{trade.buyRate}</td>
+                                    <td className="px-6 py-4">{trade.sellRate}</td>
+                                    <td className="px-6 py-4">{trade.lots}</td>
+                                    <td className="px-6 py-4">{trade.buyTurnover}</td>
+                                    <td className="px-6 py-4">{trade.sellTurnover}</td>
+                                    <td className="px-6 py-4">{trade.cmp}</td>
+                                    <td className={`px-6 py-4 font-bold ${parseFloat(trade.pl) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                        {trade.pl}
+                                    </td>
+                                    <td className="px-6 py-4">{trade.margin}</td>
+                                    <td className="px-6 py-4 text-slate-500 italic">(not set)</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-             {/* Table */}
-             <div className="bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden shadow-xl">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="text-slate-200 text-[12px] font-semibold border-b border-[#2d3748] bg-[#151c2c]">
-                            <th className="px-6 py-4 w-12 text-center text-slate-400">X</th>
-                            <th className="px-6 py-4 cursor-pointer flex items-center gap-1 group">
-                                ID <ArrowUpDown className="w-3 h-3 text-slate-500 group-hover:text-white" />
-                            </th>
-                            <th className="px-6 py-4">Scrip</th>
-                            <th className="px-6 py-4">Buy Rate</th>
-                            <th className="px-6 py-4">Sell Rate</th>
-                            <th className="px-6 py-4">Lots / Units</th>
-                            <th className="px-6 py-4">Buy Turnover</th>
-                            <th className="px-6 py-4">Sell Turnover</th>
-                            <th className="px-6 py-4">CMP</th>
-                            <th className="px-6 py-4">Active P/L</th>
-                            <th className="px-6 py-4">Margin Used</th>
-                            <th className="px-6 py-4">Bough</th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-[12px] text-slate-300 font-medium">
-                        {trades.map((trade) => (
-                            <tr key={trade.id} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
-                                <td className="px-6 py-4 text-center text-slate-400 cursor-pointer hover:text-white font-bold">X</td>
-                                <td 
-                                    onClick={() => handleTradeClick(trade)}
-                                    className="px-6 py-4 font-bold text-white cursor-pointer hover:underline"
-                                >
-                                    {trade.id}
-                                </td>
-                                <td className="px-6 py-4 uppercase font-bold text-slate-300">{trade.scrip}</td>
-                                <td className="px-6 py-4">{trade.buyRate}</td>
-                                <td className="px-6 py-4">{trade.sellRate}</td>
-                                <td className="px-6 py-4">{trade.lots}</td>
-                                <td className="px-6 py-4">{trade.buyTurnover}</td>
-                                <td className="px-6 py-4">{trade.sellTurnover}</td>
-                                <td className="px-6 py-4">{trade.cmp}</td>
-                                <td className={`px-6 py-4 font-bold ${parseFloat(trade.pl) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                    {trade.pl}
-                                </td>
-                                <td className="px-6 py-4">{trade.margin}</td>
-                                <td className="px-6 py-4 text-slate-500 italic">(not set)</td>
-                            </tr>
-                        ))}
-                         {/* Pagination / Footer placeholder */}
-                         <tr className="bg-[#1c2638]">
-                            <td colSpan="12" className="px-6 py-3">
-                                <div className="flex gap-2 text-xs text-slate-400">
-                                    <span className="font-bold text-white">1</span>
-                                </div>
-                            </td>
-                         </tr>
-                    </tbody>
-                </table>
+            {/* Mobile Card List */}
+            <div className="md:hidden space-y-3 pb-20">
+                {trades.map((trade) => (
+                    <MobileTradeCard 
+                        key={trade.id} 
+                        trade={trade} 
+                        onClick={handleTradeClick}
+                    />
+                ))}
             </div>
         </div>
     );
@@ -130,7 +184,12 @@ const ActiveTradesPage = () => {
     };
 
     const EditView = () => (
-        <div className="flex flex-col h-full bg-[#0b111e] p-6 space-y-6 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#0b111e] p-4 md:p-6 space-y-6 overflow-y-auto custom-scrollbar">
+            <div className="flex items-center gap-4 mb-2">
+                 <button onClick={() => setView('detail')} className="text-slate-400 text-xs hover:text-white">
+                    ← Back
+                 </button>
+            </div>
             <div className="bg-[#4CAF50] p-3 px-4 rounded-sm shadow-md w-fit mb-4">
                 <h2 className="text-white font-medium text-sm tracking-wide uppercase">Update Trades</h2>
             </div>
@@ -203,10 +262,10 @@ const ActiveTradesPage = () => {
                     />
                 </div>
 
-                <div className="col-span-1 md:col-span-2 mt-4">
+                <div className="col-span-1 md:col-span-2 mt-4 pb-12">
                      <button 
                         onClick={handleSaveUpdate}
-                        className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-8 rounded text-xs uppercase shadow-lg shadow-green-900/20 transition-all"
+                        className="w-full md:w-auto bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-3 md:py-2 px-8 rounded text-xs uppercase shadow-lg shadow-green-900/20 transition-all"
                     >
                         SAVE
                     </button>
@@ -216,72 +275,79 @@ const ActiveTradesPage = () => {
     );
 
     const DetailView = () => (
-        <div className="flex flex-col h-full space-y-6 max-w-4xl">
-            {/* Header Actions */}
-            <div className="flex gap-4">
-                 <button 
-                    onClick={handleUpdateInit}
-                    className="bg-[#9C27B0] hover:bg-purple-700 text-white font-bold py-2 px-6 rounded text-xs uppercase shadow-lg"
-                >
-                    UPDATE
-                </button>
-                <button 
-                    onClick={handleDeleteInit}
-                    className="bg-[#F44336] hover:bg-red-700 text-white font-bold py-2 px-6 rounded text-xs uppercase shadow-lg"
-                >
-                    DELETE
-                </button>
+        <div className="flex flex-col h-full space-y-6 max-w-4xl pb-12">
+             <div className="flex items-center gap-4">
+                 <button onClick={() => setView('list')} className="text-slate-400 text-xs hover:text-white">
+                    ← Back to List
+                 </button>
             </div>
 
-            <div className="flex gap-4">
-                 <button className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded text-xs uppercase shadow-lg shadow-green-900/20">
-                    RESTORE BUY
-                </button>
+            {/* Header Actions */}
+            <div className="flex flex-col md:flex-row gap-4">
+                 <div className="flex gap-4">
+                    <button 
+                        onClick={handleUpdateInit}
+                        className="flex-1 md:flex-none bg-[#9C27B0] hover:bg-purple-700 text-white font-bold py-3 md:py-2 px-6 rounded text-xs uppercase shadow-lg"
+                    >
+                        UPDATE
+                    </button>
+                    <button 
+                        onClick={handleDeleteInit}
+                        className="flex-1 md:flex-none bg-[#F44336] hover:bg-red-700 text-white font-bold py-3 md:py-2 px-6 rounded text-xs uppercase shadow-lg"
+                    >
+                        DELETE
+                    </button>
+                 </div>
+                 <div className="flex gap-4">
+                     <button className="flex-1 md:flex-none bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-3 md:py-2 px-6 rounded text-xs uppercase shadow-lg shadow-green-900/20">
+                        RESTORE BUY
+                    </button>
+                 </div>
             </div>
 
             {/* Details Table */}
             <div className="bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden">
                 <table className="w-full text-left text-sm text-slate-300">
                     <tbody>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400 w-48">ID</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.id}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 w-full md:w-48 bg-slate-800/30 md:bg-transparent">ID</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.id}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Script</th>
-                            <td className="px-6 py-4 text-white uppercase">{selectedTrade.scrip}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Script</th>
+                            <td className="px-6 py-3 md:py-4 text-white uppercase">{selectedTrade.scrip}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Segment</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.segment}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Segment</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.segment}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">User ID</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.userId}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">User ID</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.userId}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Buy Rate</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.buyRate}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Buy Rate</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.buyRate}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Sell Rate</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.sellRate}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Sell Rate</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.sellRate}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Buy IP</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.buyIp}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Buy IP</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.buyIp}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Sell IP</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.sellIp}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Sell IP</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.sellIp}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Lots / Units</th>
-                            <td className="px-6 py-4 text-white">{selectedTrade.lots}</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Lots / Units</th>
+                            <td className="px-6 py-3 md:py-4 text-white">{selectedTrade.lots}</td>
                         </tr>
-                        <tr className="border-b border-[#2d3748]">
-                            <th className="px-6 py-4 font-semibold text-slate-400">Profit / Loss</th>
-                            <td className="px-6 py-4 text-slate-400 italic">Not booked yet</td>
+                        <tr className="border-b border-[#2d3748] flex flex-col md:table-row">
+                            <th className="px-6 py-2 md:py-4 font-semibold text-slate-400 bg-slate-800/30 md:bg-transparent">Profit / Loss</th>
+                            <td className="px-6 py-3 md:py-4 text-slate-400 italic">Not booked yet</td>
                         </tr>
                     </tbody>
                 </table>
@@ -327,7 +393,7 @@ const ActiveTradesPage = () => {
     );
 
     return (
-        <div className="flex flex-col h-full bg-[#0b111e] p-6 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#0b111e] p-4 md:p-6 overflow-y-auto custom-scrollbar">
             {view === 'list' && <ListView />}
             {view === 'detail' && selectedTrade && <DetailView />}
             {view === 'edit' && selectedTrade && <EditView />}

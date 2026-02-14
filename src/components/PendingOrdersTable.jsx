@@ -15,8 +15,8 @@ const PendingOrdersTable = ({ title }) => {
         <table className="w-full text-left whitespace-nowrap">
           <thead>
             <tr className="text-slate-100 text-xs font-semibold border-b border-[#2d3748]">
-              {headers.map((h, i) => (
-                <th key={i} className="px-6 py-3">{h}</th>
+              {headers.map((h) => (
+                <th key={h} className="px-6 py-3">{h}</th>
               ))}
             </tr>
           </thead>

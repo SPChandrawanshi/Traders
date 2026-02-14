@@ -123,7 +123,7 @@ const AccountsPage = () => {
               </tr>
               {/* Data Rows */}
               {dummyData.map((row, idx) => (
-                <tr key={idx} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
+                <tr key={row.broker} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
                   <td className="px-4 py-4 text-slate-400 italic">{row.label}</td>
                   <td className="px-4 py-4">{row.broker}</td>
                   <td className={`px-4 py-4 text-right ${parseFloat(row.clientPL) < 0 ? 'text-red-400' : parseFloat(row.clientPL) > 0 ? 'text-green-400' : ''}`}>
