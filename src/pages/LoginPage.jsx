@@ -14,60 +14,62 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat relative"
+      className="min-h-screen w-full flex items-center justify-center bg-cover bg-top bg-no-repeat relative font-sans"
       style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2070')`
+        backgroundImage: `url('https://shrishreenathjitraders.in/admin/images/cover.jpg')`,
+        backgroundPosition: 'center top'
       }}
     >
-      {/* Darkened Overlay */}
-      <div className="absolute inset-0 bg-black/40" />
+      {/* Dark Overlay for contrast - Matching screenshot depth */}
+      <div className="absolute inset-0 bg-black/25" />
 
-      <div className="relative w-full max-w-[400px] mx-4">
+      <div className="relative w-full max-w-[450px] mx-4 mt-12">
         <form onSubmit={handleSubmit} autoComplete="off">
-          <div className="bg-[#1f283e] rounded-md shadow-2xl relative mt-16 pb-6">
+          {/* Material Card Container */}
+          <div className="bg-[#1f283e] rounded-md shadow-[0_10px_30px_-12px_rgba(0,0,0,0.42),0_4px_25px_0px_rgba(0,0,0,0.12),0_8px_10px_-5px_rgba(0,0,0,0.2)] relative pb-4 pt-20">
 
-            {/* Material Card Header - Success */}
-            <div className="mx-4 -mt-10 bg-[#4CAF50] p-6 rounded-md shadow-lg flex justify-center items-center mb-8">
-              <Contact className="w-10 h-10 text-white" />
+            {/* Wide Green Header Card Overlay - Exactly as in Screenshot */}
+            <div className="absolute -top-10 left-5 right-5 h-[90px] bg-gradient-to-tr from-[#43a047] to-[#66bb6a] rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] flex items-center justify-center z-10">
+              <Contact className="w-10 h-10 text-white opacity-100" />
             </div>
 
-            <div className="px-8 space-y-8">
-              {/* Username Row */}
-              <div className="flex items-end gap-4 group">
-                <label className="text-slate-200 text-sm font-medium w-24 pb-2">Username</label>
-                <div className="flex-1 relative">
+            <div className="px-8 pb-4 space-y-12">
+              <div style={{ color: 'red' }}></div>
+
+              {/* Username Input Row */}
+              <div className="flex items-center gap-4">
+                <label className="text-slate-200 text-sm font-normal w-28">Username</label>
+                <div className="flex-1">
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
-                    className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors"
+                    className="w-full bg-transparent border-b border-white/20 text-white pb-1 focus:outline-none focus:border-[#4caf50] transition-colors text-[14px]"
                   />
-                  <div className="help-block h-4"></div>
                 </div>
               </div>
 
-              {/* Password Row */}
-              <div className="flex items-end gap-4 group">
-                <label className="text-slate-200 text-sm font-medium w-24 pb-2">Password</label>
-                <div className="flex-1 relative">
+              {/* Password Input Row */}
+              <div className="flex items-center gap-4">
+                <label className="text-slate-200 text-sm font-normal w-28">Password</label>
+                <div className="flex-1">
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
-                    className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors"
+                    className="w-full bg-transparent border-b border-white/20 text-white pb-1 focus:outline-none focus:border-[#4caf50] transition-colors text-[14px]"
                   />
-                  <div className="help-block h-4"></div>
                 </div>
               </div>
 
-              {/* Login Button Section */}
-              <div className="flex justify-start pt-4">
+              {/* Card Footer with Sign In Button */}
+              <div className="pt-2 pb-2">
                 <button
                   type="submit"
-                  className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2.5 px-8 rounded shadow-lg uppercase text-[11px] tracking-widest transition-all active:scale-95"
+                  className="bg-[#5cb85c] hover:bg-[#4caf50] text-white font-bold py-3 px-8 rounded shadow-lg uppercase text-[11px] tracking-widest transition-all active:scale-95"
                 >
                   Sign in
                 </button>
@@ -81,4 +83,3 @@ const LoginPage = ({ onLogin }) => {
 };
 
 export default LoginPage;
-

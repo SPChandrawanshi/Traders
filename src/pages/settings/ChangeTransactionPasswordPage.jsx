@@ -16,7 +16,8 @@ const ChangeTransactionPasswordPage = () => {
         }));
     };
 
-    const handleUpdate = () => {
+    const handleUpdate = (e) => {
+        e.preventDefault();
         if (!formData.oldPassword || !formData.newPassword || !formData.repeatNewPassword) {
             setMessage({ type: 'error', text: 'All fields are required.' });
             return;
@@ -39,75 +40,87 @@ const ChangeTransactionPasswordPage = () => {
     };
 
     return (
-        <div className="flex flex-col h-full">
-            {/* Header */}
-            <div className="mb-8">
-                <div className="inline-block bg-[#4CAF50] text-white px-4 py-2 rounded-md shadow-sm">
-                    <h2 className="text-base font-semibold">Change Transaction Password</h2>
-                </div>
-            </div>
+        <div className="flex flex-col h-full bg-[#1a2035] space-y-6 pt-10">
+            <div className="relative">
+                {/* Material Card Container */}
+                <div className="bg-[#1f283e] rounded-md shadow-2xl relative pt-16 pb-6">
 
-            {/* Form Section */}
-            <div className="flex-1 bg-[#151c2c] p-8 rounded-lg border border-[#2d3748] shadow-xl">
-                <div className="max-w-4xl space-y-10">
-                    {/* Old Password - Full Width Row (limited in UI) */}
-                    <div className="space-y-2">
-                        <label className="block text-slate-400 text-sm font-medium">Old Password</label>
-                        <input
-                            type="password"
-                            name="oldPassword"
-                            value={formData.oldPassword}
-                            onChange={handleChange}
-                            className="w-full md:w-1/2 bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors"
-                        />
+                    {/* Floating Green Header Card */}
+                    <div className="absolute -top-6 left-5 bg-gradient-to-tr from-[#43a047] to-[#66bb6a] rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] px-8 py-5 z-10">
+                        <h4 className="text-white text-[15px] font-bold tracking-tight">Change Transaction Password</h4>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                        {/* New Password */}
-                        <div className="space-y-2">
-                            <label className="block text-slate-400 text-sm font-medium">New Password</label>
-                            <input
-                                type="password"
-                                name="newPassword"
-                                value={formData.newPassword}
-                                onChange={handleChange}
-                                className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors"
-                            />
+                    <div className="px-8 space-y-10">
+                        {/* Error/Success Message Area */}
+                        <div className="min-h-[20px]">
+                            {message.text && (
+                                <div className={`text-sm ${message.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                                    {message.text}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Repeat New Password */}
-                        <div className="space-y-2">
-                            <label className="block text-slate-400 text-sm font-medium">Repeat New Password</label>
-                            <input
-                                type="password"
-                                name="repeatNewPassword"
-                                value={formData.repeatNewPassword}
-                                onChange={handleChange}
-                                className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors"
-                            />
-                        </div>
+                        <form onSubmit={handleUpdate} autoComplete="off">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+                                {/* Old Password */}
+                                <div className="space-y-2 group">
+                                    <label className="block text-slate-300 text-[14px] font-normal">Old Password</label>
+                                    <input
+                                        type="password"
+                                        name="oldPassword"
+                                        value={formData.oldPassword}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-transparent border-b border-white/10 text-white pb-1.5 focus:outline-none focus:border-[#4caf50] transition-colors text-[14px]"
+                                    />
+                                </div>
+
+                                <div className="hidden md:block"></div>
+
+                                {/* New Password */}
+                                <div className="space-y-2 group">
+                                    <label className="block text-slate-300 text-[14px] font-normal">New Password</label>
+                                    <input
+                                        type="password"
+                                        name="newPassword"
+                                        value={formData.newPassword}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-transparent border-b border-white/10 text-white pb-1.5 focus:outline-none focus:border-[#4caf50] transition-colors text-[14px]"
+                                    />
+                                </div>
+
+                                {/* Repeat New Password */}
+                                <div className="space-y-2 group">
+                                    <label className="block text-slate-300 text-[14px] font-normal">Repeat New Password</label>
+                                    <input
+                                        type="password"
+                                        name="repeatNewPassword"
+                                        value={formData.repeatNewPassword}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-transparent border-b border-white/10 text-white pb-1.5 focus:outline-none focus:border-[#4caf50] transition-colors text-[14px]"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Actions Group */}
+                            <div className="mt-12 space-y-4">
+                                <button
+                                    type="submit"
+                                    className="bg-[#5cb85c] hover:bg-[#4caf50] text-white font-bold py-2.5 px-8 rounded shadow-lg transition-all active:scale-95 uppercase text-[11px] tracking-widest"
+                                >
+                                    UPDATE
+                                </button>
+
+                                <div className="block pt-2">
+                                    <button type="button" className="text-slate-400 hover:text-white text-[12px] font-medium transition-colors">
+                                        Forgot Transaction Password?
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-
-                {/* Message */}
-                {message.text && (
-                    <div className={`mt-6 text-sm ${message.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                        {message.text}
-                    </div>
-                )}
-
-                {/* Update Button */}
-                <div className="mt-12 flex flex-col items-start gap-4">
-                    <button
-                        onClick={handleUpdate}
-                        className="bg-[#4CAF50] hover:bg-green-600 text-white font-medium py-2 px-8 rounded transition-all uppercase text-xs tracking-wider"
-                    >
-                        UPDATE
-                    </button>
-
-                    <button className="text-slate-200 hover:text-white text-xs font-medium bg-transparent border-none p-0">
-                        Forgot Transaction Password?
-                    </button>
                 </div>
             </div>
         </div>
