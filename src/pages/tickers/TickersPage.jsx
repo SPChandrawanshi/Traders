@@ -155,7 +155,7 @@ const TickersPage = () => {
             </div>
 
             {/* Tickers Table */}
-            <div className="flex-1 bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col shadow-xl min-h-[100px]">
+            <div className="flex-1 bg-[#202940] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col shadow-xl min-h-[100px]">
                 <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
                     <table className="w-full text-left border-collapse">
                         <thead>

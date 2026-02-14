@@ -7,77 +7,78 @@ const LoginPage = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Allow any email/password as per requirement
-    onLogin(username);
+    if (username.trim()) {
+      onLogin(username);
+    }
   };
 
   return (
-    <div 
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat"
-      style={{ 
-        backgroundImage: `url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2070')` 
+    <div
+      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat relative"
+      style={{
+        backgroundImage: `url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2070')`
       }}
     >
-      <div className="absolute inset-0 bg-black/20" /> {/* Subtle overlay */}
+      {/* Darkened Overlay */}
+      <div className="absolute inset-0 bg-black/40" />
 
-      <div className="relative w-full max-w-sm mx-4 overflow-hidden rounded shadow-2xl">
-        {/* Card Header */}
-        <div className="bg-[#4CAF50] p-6 flex justify-center">
-          <div className="p-3 bg-[#4CAF50]/20 rounded">
-            <Contact className="w-8 h-8 text-white" />
+      <div className="relative w-full max-w-[400px] mx-4">
+        <form onSubmit={handleSubmit} autoComplete="off">
+          <div className="bg-[#1f283e] rounded-md shadow-2xl relative mt-16 pb-6">
+
+            {/* Material Card Header - Success */}
+            <div className="mx-4 -mt-10 bg-[#4CAF50] p-6 rounded-md shadow-lg flex justify-center items-center mb-8">
+              <Contact className="w-10 h-10 text-white" />
+            </div>
+
+            <div className="px-8 space-y-8">
+              {/* Username Row */}
+              <div className="flex items-end gap-4 group">
+                <label className="text-slate-200 text-sm font-medium w-24 pb-2">Username</label>
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                    className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors"
+                  />
+                  <div className="help-block h-4"></div>
+                </div>
+              </div>
+
+              {/* Password Row */}
+              <div className="flex items-end gap-4 group">
+                <label className="text-slate-200 text-sm font-medium w-24 pb-2">Password</label>
+                <div className="flex-1 relative">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="new-password"
+                    className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors"
+                  />
+                  <div className="help-block h-4"></div>
+                </div>
+              </div>
+
+              {/* Login Button Section */}
+              <div className="flex justify-start pt-4">
+                <button
+                  type="submit"
+                  className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2.5 px-8 rounded shadow-lg uppercase text-[11px] tracking-widest transition-all active:scale-95"
+                >
+                  Sign in
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* Card Body */}
-        <div className="bg-[#151c2c] p-8 space-y-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="relative">
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                className="w-full bg-transparent border-b border-slate-600 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors peer placeholder-transparent"
-                placeholder="Username"
-                id="username"
-              />
-              <label 
-                htmlFor="username"
-                className="absolute left-0 -top-3.5 text-slate-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-500 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-slate-400 peer-focus:text-sm"
-              >
-                Username
-              </label>
-            </div>
-
-            <div className="relative">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full bg-transparent border-b border-slate-600 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors peer placeholder-transparent"
-                placeholder="Password"
-                id="password"
-              />
-              <label 
-                htmlFor="password"
-                className="absolute left-0 -top-3.5 text-slate-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-500 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-slate-400 peer-focus:text-sm"
-              >
-                Password
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              className="w-24 bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-all uppercase text-xs shadow-lg"
-            >
-              Sign In
-            </button>
-          </form>
-        </div>
+        </form>
       </div>
     </div>
   );
 };
 
 export default LoginPage;
+

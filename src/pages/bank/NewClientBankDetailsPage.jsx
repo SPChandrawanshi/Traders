@@ -35,7 +35,7 @@ const NewClientBankDetailsPage = () => {
       </div>
 
       {/* Form Section */}
-      <div className="flex-1 bg-[#151c2c] p-8 rounded-lg border border-[#2d3748] shadow-xl">
+      <div className="flex-1 bg-[#202940] p-8 rounded-lg border border-[#2d3748] shadow-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
           {/* Account Holder */}
           <div className="space-y-2">
@@ -136,7 +136,7 @@ const NewClientBankDetailsPage = () => {
 
         {/* Update Button */}
         <div className="mt-12">
-          <button 
+          <button
             onClick={handleUpdate}
             className="bg-[#4CAF50] hover:bg-green-600 text-white font-medium py-2 px-6 rounded transition-all uppercase text-xs tracking-wider"
           >

@@ -5,6 +5,7 @@ const MarketWatchPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [selectedScrips, setSelectedScrips] = useState([]);
+    const [bannedScrips, setBannedScrips] = useState([]); // Track banned scrips
 
 
 
@@ -32,7 +33,7 @@ const MarketWatchPage = () => {
     const [successMessage, setSuccessMessage] = useState('');
 
     const toggleScripSelection = (id) => {
-        setSelectedScrips(prev => 
+        setSelectedScrips(prev =>
             prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
         );
     };
@@ -42,10 +43,17 @@ const MarketWatchPage = () => {
         setShowSuggestions(true);
     };
 
-    const handleAddToBan = (id) => {
-        setScrips(prev => prev.filter(s => s.id !== id));
-        setSuccessMessage('Scrip added to ban list');
-        setSelectedScrips(prev => prev.filter(item => item !== id));
+    const toggleBanStatus = (id) => {
+        setBannedScrips(prev =>
+            prev.includes(id)
+                ? prev.filter(item => item !== id)
+                : [...prev, id]
+        );
+        setSuccessMessage(
+            bannedScrips.includes(id)
+                ? 'Scrip removed from ban list'
+                : 'Scrip added to ban list'
+        );
         setTimeout(() => setSuccessMessage(''), 3000);
     };
 
@@ -62,7 +70,7 @@ const MarketWatchPage = () => {
     };
 
     const handleBulkRemoveFromBan = () => {
-         if (selectedScrips.length === 0) {
+        if (selectedScrips.length === 0) {
             setSuccessMessage('Please select scrips to remove from ban');
             setTimeout(() => setSuccessMessage(''), 3000);
             return;
@@ -72,16 +80,16 @@ const MarketWatchPage = () => {
         setTimeout(() => setSuccessMessage(''), 3000);
     };
 
-    const filteredScrips = scrips.filter(scrip => 
+    const filteredScrips = scrips.filter(scrip =>
         scrip.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Mobile Card Component
-    const MobileScripCard = ({ scrip, isSelected, onToggle }) => (
-        <div className={`bg-[#151c2c] p-4 rounded-lg border ${isSelected ? 'border-[#01B4EA]' : 'border-[#2d3748]'} shadow-md mb-3`}>
+    const MobileScripCard = ({ scrip, isSelected, onToggle, isBanned, onToggleBan }) => (
+        <div className={`bg-[#202940] p-4 rounded-lg border ${isSelected ? 'border-[#01B4EA]' : 'border-[#2d3748]'} shadow-md mb-3`}>
             <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-3">
-                    <div 
+                    <div
                         onClick={() => onToggle(scrip.id)}
                         className={`w-5 h-5 rounded-sm cursor-pointer flex items-center justify-center transition-colors border border-slate-600 ${isSelected ? 'bg-[#01B4EA] border-[#01B4EA]' : 'bg-transparent'}`}
                     >
@@ -98,15 +106,15 @@ const MarketWatchPage = () => {
             </div>
 
             <div className="grid grid-cols-3 gap-2 mb-3">
-                <div className="flex flex-col items-center bg-[#0b111e] p-2 rounded">
+                <div className="flex flex-col items-center bg-[#202940] p-2 rounded">
                     <span className="text-[10px] text-slate-500 uppercase">Bid</span>
                     <span className="text-white font-bold">{scrip.bid}</span>
                 </div>
-                <div className="flex flex-col items-center bg-[#0b111e] p-2 rounded border border-[#01B4EA]/30">
+                <div className="flex flex-col items-center bg-[#202940] p-2 rounded border border-[#01B4EA]/30">
                     <span className="text-[10px] text-[#01B4EA] uppercase">LTP</span>
                     <span className="text-white font-bold text-lg">{scrip.ltp}</span>
                 </div>
-                <div className="flex flex-col items-center bg-[#0b111e] p-2 rounded">
+                <div className="flex flex-col items-center bg-[#202940] p-2 rounded">
                     <span className="text-[10px] text-slate-500 uppercase">Ask</span>
                     <span className="text-white font-bold">{scrip.ask}</span>
                 </div>
@@ -117,43 +125,43 @@ const MarketWatchPage = () => {
                     <span>H: <span className="text-white">{scrip.high}</span></span>
                     <span>L: <span className="text-white">{scrip.low}</span></span>
                 </div>
-                <button 
-                    onClick={() => handleAddToBan(scrip.id)}
-                    className="text-[#F44336] font-bold text-[10px] uppercase border border-[#F44336] px-2 py-1 rounded hover:bg-[#F44336] hover:text-white transition-colors"
+                <button
+                    onClick={() => onToggleBan(scrip.id)}
+                    className={`${isBanned ? 'bg-white text-slate-900 border-white' : 'text-[#F44336] border-[#F44336]'} font-bold text-[10px] uppercase border px-2 py-1 rounded hover:opacity-80 transition-all`}
                 >
-                    Ban
+                    {isBanned ? 'Remove' : 'Ban'}
                 </button>
             </div>
         </div>
     );
 
     return (
-        <div className="flex flex-col h-full bg-[#0b111e] overflow-hidden relative">
-            <div className={`flex-1 overflow-y-auto custom-scrollbar pb-24 ${selectedScrips.length > 0 ? 'mb-16' : ''}`}> {/* Adjusted padding for bottom bar */}
+        <div className="flex flex-col h-full bg-[#202940] overflow-hidden relative">
+            <div className="flex-1 overflow-y-auto custom-scrollbar pb-20">
                 {/* Header / Search Area */}
                 <div className="p-4 md:p-6 pb-2">
-                     <div className="bg-[#4CAF50] p-3 px-4 rounded-sm shadow-md mb-6 flex justify-between items-center">
+                    <div className="bg-[#4CAF50] p-3 px-4 rounded-sm shadow-md mb-6 flex justify-between items-center">
                         <h2 className="text-white font-medium text-lg tracking-wide">Market Watch</h2>
                     </div>
 
                     {successMessage && (
-                         <div className="text-white text-center font-bold text-sm mb-4">
+                        <div className="text-white text-center font-bold text-sm mb-4">
                             {successMessage}
                         </div>
                     )}
 
                     <div className="relative max-w-sm mb-2">
                         <div className="relative">
-                            <input 
-                                type="text" 
-                                placeholder="search" 
+                            <input
+                                type="text"
+                                placeholder="search"
                                 value={searchTerm}
                                 onChange={handleSearchCheck}
                                 onFocus={() => setShowSuggestions(true)}
                                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                                 className="w-full bg-white text-slate-900 px-4 py-2 rounded-sm text-sm focus:outline-none shadow-sm"
                             />
-                             {/* Cursor indicator from screenshot */}
+                            {/* Cursor indicator from screenshot */}
                             <div className="absolute right-3 top-2.5 w-[1px] h-5 bg-black animate-pulse opacity-0"></div>
                         </div>
 
@@ -175,28 +183,27 @@ const MarketWatchPage = () => {
 
                 {/* Desktop Table View */}
                 <div className="hidden md:flex flex-1 px-6 pb-4 overflow-hidden flex-col">
-                     <div className="bg-transparent overflow-x-auto flex-1 custom-scrollbar">
+                    <div className="bg-transparent overflow-x-auto flex-1 custom-scrollbar">
                         <table className="w-full text-left border-collapse min-w-[800px]">
                             <thead>
                                 <tr className="text-slate-400 text-sm font-medium border-b border-[#2d3748]">
                                     <th className="py-4 w-12 text-center">
-                                         <div className="w-5 h-5 bg-white rounded-sm cursor-pointer mx-auto"></div>
+                                        <div className="w-5 h-5 bg-white rounded-sm cursor-pointer mx-auto"></div>
                                     </th>
-                                    <th className="py-4 px-4">Script</th>
+                                    <th className="py-4 px-4">Scrip</th>
                                     <th className="py-4 text-center">Bid</th>
                                     <th className="py-4 text-center">Ask</th>
                                     <th className="py-4 text-center">Ltp</th>
                                     <th className="py-4 text-center">Change</th>
                                     <th className="py-4 text-center">High</th>
                                     <th className="py-4 text-center">Low</th>
-                                    <th className="py-4 text-right px-4">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="text-sm font-bold">
                                 {filteredScrips.map((scrip) => (
-                                    <tr key={scrip.id} className="border-b border-[#2d3748] hover:bg-slate-800/30 transition-colors group">
-                                         <td className="py-4 text-center">
-                                            <div 
+                                    <tr key={scrip.id} className="border-b border-[#2d3748] hover:bg-slate-800/30 active:bg-slate-800/50 transition-all group cursor-pointer active:scale-[0.99]">
+                                        <td className="py-4 text-center">
+                                            <div
                                                 onClick={() => toggleScripSelection(scrip.id)}
                                                 className={`w-5 h-5 rounded-sm cursor-pointer flex items-center justify-center transition-colors mx-auto ${selectedScrips.includes(scrip.id) ? 'bg-[#01B4EA]' : 'bg-white'}`}
                                             >
@@ -218,11 +225,11 @@ const MarketWatchPage = () => {
                                         <td className="py-4 text-center text-white text-lg">{scrip.high}</td>
                                         <td className="py-4 text-center text-white text-lg">{scrip.low}</td>
                                         <td className="py-4 text-right px-4">
-                                            <button 
-                                                onClick={() => handleAddToBan(scrip.id)}
-                                                className="bg-[#F44336] hover:bg-red-600 text-white text-[10px] font-bold py-1.5 px-3 rounded uppercase transition-colors whitespace-nowrap"
+                                            <button
+                                                onClick={() => toggleBanStatus(scrip.id)}
+                                                className={`${bannedScrips.includes(scrip.id) ? 'bg-[#4CAF50] text-white' : 'bg-[#F44336] text-white'} hover:opacity-80 text-[10px] font-bold py-1.5 px-3 rounded uppercase transition-all whitespace-nowrap`}
                                             >
-                                                ADD TO BAN
+                                                {bannedScrips.includes(scrip.id) ? 'REMOVE BAN' : 'ADD TO BAN'}
                                             </button>
                                         </td>
                                     </tr>
@@ -235,33 +242,56 @@ const MarketWatchPage = () => {
                 {/* Mobile Card List View */}
                 <div className="md:hidden px-4 pb-4 space-y-3">
                     {filteredScrips.map((scrip) => (
-                        <MobileScripCard 
-                            key={scrip.id} 
-                            scrip={scrip} 
+                        <MobileScripCard
+                            key={scrip.id}
+                            scrip={scrip}
                             isSelected={selectedScrips.includes(scrip.id)}
                             onToggle={toggleScripSelection}
+                            isBanned={bannedScrips.includes(scrip.id)}
+                            onToggleBan={toggleBanStatus}
                         />
                     ))}
                 </div>
             </div>
 
-            {/* Bottom Floating Action Bar - Responsive */}
-            <div className="absolute bottom-0 left-0 right-0 bg-[#0b111e]/95 p-4 border-t border-[#2d3748] backdrop-blur-sm z-10 transition-transform">
-                <div className="flex flex-col md:flex-row gap-3 md:gap-4 md:pl-64 justify-center md:justify-start"> {/* Added responsive justification and padding */}
-                    <button 
-                        onClick={handleBulkAddToBan}
-                        className="flex-1 md:flex-none bg-[#9C27B0] hover:bg-purple-700 text-white font-bold py-3 md:py-2 px-6 rounded text-xs uppercase shadow-lg transition-all text-center"
+            {/* Bottom Floating Action Bar - Purple Buttons */}
+            <div className="absolute bottom-0 left-0 right-0 bg-[#202940] p-4 border-t border-[#2d3748] z-10">
+                <div className="flex gap-4 justify-start">
+                    <button
+                        onClick={() => {
+                            if (selectedScrips.length === 0) {
+                                setSuccessMessage('Please select scrips to ban');
+                                setTimeout(() => setSuccessMessage(''), 3000);
+                                return;
+                            }
+                            setBannedScrips(prev => [...new Set([...prev, ...selectedScrips])]);
+                            setSuccessMessage(`${selectedScrips.length} Scrip(s) added to ban list`);
+                            setSelectedScrips([]);
+                            setTimeout(() => setSuccessMessage(''), 3000);
+                        }}
+                        className="bg-[#9C27B0] hover:bg-purple-700 text-white font-bold py-2 px-6 rounded text-xs uppercase shadow-lg transition-all"
                     >
                         ADD TO BAN
                     </button>
-                    <button 
-                        onClick={handleBulkRemoveFromBan}
-                        className="flex-1 md:flex-none bg-[#9C27B0]/50 hover:bg-purple-700 text-white/50 font-bold py-3 md:py-2 px-6 rounded text-xs uppercase shadow-lg transition-all text-center"
+                    <button
+                        onClick={() => {
+                            if (selectedScrips.length === 0) {
+                                setSuccessMessage('Please select scrips to remove from ban');
+                                setTimeout(() => setSuccessMessage(''), 3000);
+                                return;
+                            }
+                            setBannedScrips(prev => prev.filter(id => !selectedScrips.includes(id)));
+                            setSuccessMessage(`${selectedScrips.length} Scrip(s) removed from ban list`);
+                            setSelectedScrips([]);
+                            setTimeout(() => setSuccessMessage(''), 3000);
+                        }}
+                        className="bg-[#9C27B0] hover:bg-purple-700 text-white font-bold py-2 px-6 rounded text-xs uppercase shadow-lg transition-all"
                     >
                         REMOVE FROM BAN
                     </button>
                 </div>
             </div>
+
         </div>
     );
 };

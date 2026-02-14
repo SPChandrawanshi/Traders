@@ -66,62 +66,67 @@ const DepositRequestsPage = () => {
                 <span className="text-sm font-medium">Showing <span className="text-white font-bold">5</span> of <span className="text-white font-bold">5</span> items.</span>
             </div>
 
-            <div className="flex-1 bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col shadow-xl">
+            <div className="flex-1 bg-[#202940] rounded-lg border border-white/5 overflow-hidden flex flex-col shadow-2xl">
                 <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
                     <table className="w-full text-left border-collapse min-w-[1000px]">
-                        <thead className="sticky top-0 bg-[#0b111e] z-10 border-b border-[#2d3748]">
-                            <tr className="text-white text-[13px] font-bold tracking-wider">
-                                <th className="px-6 py-5 w-24">ID <span className="inline-block align-middle cursor-pointer">↑↑</span></th>
-                                <th className="px-6 py-5">User Details</th>
-                                <th className="px-6 py-5">Broker</th>
-                                <th className="px-6 py-5">File</th>
-                                <th className="px-6 py-5">Time</th>
-                                <th className="px-6 py-5"></th>
+                        <thead className="sticky top-0 bg-[#202940] z-20 border-b border-white/5">
+                            <tr className="text-white text-[14px] font-bold tracking-tight">
+                                <th className="px-8 py-6 w-32">ID <span className="text-[10px] ml-1 opacity-50">↑↑</span></th>
+                                <th className="px-8 py-6">User Details</th>
+                                <th className="px-8 py-6">Broker</th>
+                                <th className="px-8 py-6">File</th>
+                                <th className="px-8 py-6">Time</th>
+                                <th className="px-8 py-6 text-right"></th>
                             </tr>
                         </thead>
-                        <tbody className="text-[13px]">
+                        <tbody className="text-[13px] bg-[#1a2035]">
                             {depositRequests.map((req, idx) => (
-                                <tr key={req.id} className="border-b border-[#2d3748] group hover:bg-[#1c2638] transition-colors">
-                                    <td className="px-6 py-8 align-middle text-white">{req.id}</td>
-                                    <td className="px-6 py-8">
+                                <tr key={req.id} className="border-b border-white/5 group hover:bg-white/[0.02] transition-all duration-200">
+                                    <td className="px-8 py-10 align-middle text-white font-bold">{req.id}</td>
+                                    <td className="px-8 py-10">
                                         <div className="space-y-4">
-                                            <div>
-                                                <span className="text-slate-400">Name: </span>
-                                                <span className="text-blue-400 font-medium">{req.name}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-slate-400 text-[11px] font-medium uppercase tracking-wider">Name: </span>
+                                                <span className="text-blue-400 font-bold">{req.name}</span>
                                             </div>
-                                            <div>
-                                                <span className="text-slate-400">Username: </span>
-                                                <span className="text-white">{req.username}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-slate-400 text-[11px] font-medium uppercase tracking-wider">Username: </span>
+                                                <span className="text-white font-bold">{req.username}</span>
                                             </div>
-                                            <div>
-                                                <span className="text-slate-400">Ledger Balance: </span>
-                                                <span className="text-white">{req.ledgerBalance}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-slate-400 text-[11px] font-medium uppercase tracking-wider">Ledger Balance: </span>
+                                                <span className="text-white font-bold">{req.ledgerBalance || ''}</span>
                                             </div>
-                                            <div>
-                                                <span className="text-slate-400">Available Balance: </span>
-                                                <span className="text-white">{req.availableBalance}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-slate-400 text-[11px] font-medium uppercase tracking-wider">Available Balance: </span>
+                                                <span className="text-white font-bold">{req.availableBalance || ''}</span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-8 align-middle">
-                                        <span className="text-blue-400">{req.broker}</span>
+                                    <td className="px-8 py-10 align-middle">
+                                        <span className="text-[#3b82f6] font-medium active:text-blue-300 cursor-pointer">{req.broker}</span>
                                     </td>
-                                    <td className="px-6 py-8 align-middle">
-                                        <div className="w-[80px] h-[120px] bg-black rounded shadow-lg overflow-hidden border border-[#2d3748] cursor-pointer hover:border-[#4CAF50] transition-all">
-                                            <img
-                                                src={req.proofImage}
-                                                alt="Deposit Proof"
-                                                className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
-                                            />
+                                    <td className="px-8 py-10 align-middle">
+                                        <div className="relative group/img">
+                                            <div className="w-[100px] h-[140px] bg-black/40 rounded flex flex-col items-center justify-center overflow-hidden border border-white/5 relative shadow-xl">
+                                                <img
+                                                    src={req.proofImage}
+                                                    alt="Deposit Proof"
+                                                    className="w-full h-full object-cover opacity-60 group-hover/img:opacity-100 transition-all duration-300"
+                                                />
+                                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest text-center px-2">Deposit Proof</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-8 align-middle text-white">
+                                    <td className="px-8 py-10 align-middle text-white font-medium opacity-90">
                                         {req.time}
                                     </td>
-                                    <td className="px-6 py-8 align-middle text-right">
-                                        <button 
+                                    <td className="px-8 py-10 align-middle text-right">
+                                        <button
                                             onClick={() => handleRemove(req.id)}
-                                            className="bg-[#E53935] hover:bg-red-600 text-white font-bold py-2 px-6 rounded text-[11px] uppercase tracking-wider transition-all"
+                                            className="bg-[#d32f2f] hover:bg-[#b71c1c] text-white font-bold py-2.5 px-8 rounded shadow-lg transition-all active:scale-95 text-[11px] tracking-widest"
                                         >
                                             REMOVE
                                         </button>

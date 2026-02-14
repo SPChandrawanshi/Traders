@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Calendar, Search, RotateCcw, ArrowUp, ArrowDown } from 'lucide-react';
 
 const TraderFundsPage = ({ onNavigate }) => {
     const [filters, setFilters] = useState({
@@ -9,132 +8,165 @@ const TraderFundsPage = ({ onNavigate }) => {
         amount: ''
     });
 
-    const fundsData = [
-        { id: '1', username: 'SHRE001', name: 'User One', amount: '5000', txnType: 'Deposit', notes: ' UPI Transfer', pgTxnId: 'PAY12345', createdAt: '2026-02-10 10:00:00' },
-        // Add more dummy data as needed
-    ];
+    const fundsData = [];
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         setFilters(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleSearch = () => {
+        console.log('Search with filters:', filters);
+    };
+
+    const handleReset = () => {
+        setFilters({
+            fromDate: '',
+            toDate: '',
+            userId: '',
+            amount: ''
+        });
+    };
+
+    const handleDownloadReport = () => {
+        console.log('Download report for dates:', filters.fromDate, filters.toDate);
+    };
+
     return (
-        <div className="flex flex-col h-full bg-[#0b111e] p-4 md:p-6 space-y-6 overflow-y-auto custom-scrollbar animate-fade-in">
-            {/* Top Bar with Date Filters and Report Button */}
-            <div className="flex flex-col md:flex-row gap-4 items-end bg-[#151c2c] p-4 rounded border border-[#2d3748] shadow-md">
-                <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto flex-1">
-                    <div className="flex flex-col w-full">
-                        <label className="text-[10px] text-slate-500 uppercase tracking-widest mb-1 ml-1">From Date</label>
-                        <input 
-                            type="date"
-                            name="fromDate"
-                            value={filters.fromDate}
-                            onChange={handleFilterChange}
-                            className="w-full bg-white text-slate-900 px-3 py-2 rounded text-sm focus:outline-none"
-                        />
-                    </div>
-                    <div className="flex flex-col w-full">
-                        <label className="text-[10px] text-slate-500 uppercase tracking-widest mb-1 ml-1">To Date</label>
-                        <input 
-                            type="date"
-                            name="toDate"
-                            value={filters.toDate}
-                            onChange={handleFilterChange}
-                            className="w-full bg-white text-slate-900 px-3 py-2 rounded text-sm focus:outline-none"
-                        />
-                    </div>
+        <div className="flex flex-col h-full bg-[#202940] p-4 md:p-6 space-y-4 overflow-y-auto">
+
+            {/* Top Bar - Date Filters and Download Button */}
+            <div className="flex flex-col md:flex-row gap-4 items-end">
+                <div className="flex flex-col md:flex-row gap-4 flex-1">
+                    <input
+                        type="text"
+                        name="fromDate"
+                        value={filters.fromDate}
+                        onChange={handleFilterChange}
+                        placeholder="From Date"
+                        className="bg-white text-slate-900 px-4 py-2.5 rounded text-sm outline-none border border-slate-300"
+                    />
+                    <input
+                        type="text"
+                        name="toDate"
+                        value={filters.toDate}
+                        onChange={handleFilterChange}
+                        placeholder="To Date"
+                        className="bg-white text-slate-900 px-4 py-2.5 rounded text-sm outline-none border border-slate-300"
+                    />
                 </div>
-                 <button className="w-full md:w-auto bg-[#00BCD4] hover:bg-cyan-600 text-white font-bold py-2 px-8 rounded text-xs uppercase tracking-wider shadow transition-all whitespace-nowrap">
+                <button
+                    onClick={handleDownloadReport}
+                    className="bg-[#00BCD4] hover:bg-[#00ACC1] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md whitespace-nowrap"
+                >
                     DOWNLOAD FUNDS REPORT
                 </button>
             </div>
 
             {/* Filter Section */}
-            <div className="bg-[#151c2c] p-6 rounded border border-[#2d3748] shadow-xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-                    <div className="border-b border-[#2d3748]">
-                         <label className="text-[10px] text-slate-500 uppercase tracking-widest block mb-1">User ID</label>
-                         <input 
-                            type="text" 
-                            name="userId" 
-                            value={filters.userId} 
-                            onChange={handleFilterChange} 
-                            className="bg-transparent w-full text-slate-200 text-sm py-1 outline-none"
-                        />
+            <div className="bg-[#1f283e] p-6 rounded-lg border border-white/10 shadow-xl">
+                <div className="flex flex-col md:flex-row gap-6 items-end">
+                    {/* Filter Fields */}
+                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="text-slate-500 text-xs block mb-2">User ID</label>
+                            <input
+                                type="text"
+                                name="userId"
+                                value={filters.userId}
+                                onChange={handleFilterChange}
+                                className="bg-transparent w-full text-white text-sm py-2 outline-none border-b border-slate-600 focus:border-[#4CAF50] transition-colors"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-slate-500 text-xs block mb-2">Amount</label>
+                            <input
+                                type="text"
+                                name="amount"
+                                value={filters.amount}
+                                onChange={handleFilterChange}
+                                className="bg-transparent w-full text-white text-sm py-2 outline-none border-b border-slate-600 focus:border-[#4CAF50] transition-colors"
+                            />
+                        </div>
                     </div>
-                    <div className="border-b border-[#2d3748]">
-                         <label className="text-[10px] text-slate-500 uppercase tracking-widest block mb-1">Amount</label>
-                         <input 
-                            type="number" 
-                            name="amount" 
-                            value={filters.amount} 
-                            onChange={handleFilterChange} 
-                            className="bg-transparent w-full text-slate-200 text-sm py-1 outline-none"
-                        />
+
+                    {/* Buttons */}
+                    <div className="flex gap-3 shrink-0">
+                        <button
+                            onClick={handleSearch}
+                            className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                        >
+                            SEARCH
+                        </button>
+                        <button
+                            onClick={handleReset}
+                            className="bg-[#607d8b] hover:bg-[#546e7a] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                        >
+                            RESET
+                        </button>
                     </div>
-                </div>
-                
-                <div className="flex gap-2">
-                    <button className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-8 rounded shadow uppercase tracking-wider text-[11px] transition-all">
-                        SEARCH
-                    </button>
-                    <button className="bg-[#607d8b] hover:bg-slate-500 text-white font-bold py-2 px-8 rounded shadow uppercase tracking-wider text-[11px] transition-all flex items-center gap-1">
-                        <RotateCcw className="w-3 h-3" /> RESET
-                    </button>
                 </div>
             </div>
 
             {/* Create Button */}
             <div>
-                 <button 
-                    onClick={() => onNavigate('create-fund')}
-                    className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2.5 px-6 rounded shadow-lg uppercase tracking-wider text-[11px] transition-all"
+                <button
+                    onClick={() => onNavigate?.('create-fund')}
+                    className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2.5 px-6 rounded uppercase tracking-wide text-xs transition-all shadow-md"
                 >
                     CREATE FUNDS WD
                 </button>
             </div>
 
-            {/* Funds Table */}
-            <div className="flex-1">
-                <div className="text-xs text-slate-400 mb-2">
-                    Showing <span className="font-bold text-slate-200">{fundsData.length}</span> of <span className="font-bold text-slate-200">0</span> items.
+            {/* Results Section */}
+            <div className="bg-[#1f283e] rounded-lg border border-white/10 shadow-xl overflow-hidden">
+                {/* Showing items count */}
+                <div className="px-6 py-4 bg-[#151c2c] border-b border-white/10">
+                    <span className="text-slate-400 text-sm">
+                        Showing <b className="text-white">{fundsData.length}</b> of <b className="text-white">{fundsData.length}</b> items.
+                    </span>
                 </div>
-                <div className="bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden shadow-xl">
-                    <div className="overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-left border-collapse min-w-[1000px]">
-                            <thead>
-                                <tr className="text-white text-[12px] font-bold border-b border-[#2d3748] bg-[#0b111e]">
-                                    <th className="px-6 py-4 whitespace-nowrap">
-                                        ID <ArrowUp className="w-3 h-3 inline ml-1 text-slate-500" />
-                                    </th>
-                                    <th className="px-6 py-4 whitespace-nowrap">username</th>
-                                    <th className="px-6 py-4 whitespace-nowrap">name</th>
-                                    <th className="px-6 py-4 whitespace-nowrap">Amount</th>
-                                    <th className="px-6 py-4 whitespace-nowrap">Txn Type</th>
-                                    <th className="px-6 py-4 whitespace-nowrap">Notes</th>
-                                    <th className="px-6 py-4 whitespace-nowrap">PG Txn ID</th>
-                                    <th className="px-6 py-4 whitespace-nowrap">Created At</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-[12px] text-slate-300">
-                                {fundsData.map((fund) => (
-                                    <tr key={fund.id} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
-                                        <td className="px-6 py-4">{fund.id}</td>
-                                        <td className="px-6 py-4 text-[#01B4EA]">{fund.username}</td>
-                                        <td className="px-6 py-4 text-[#01B4EA]">{fund.name}</td>
-                                        <td className={`px-6 py-4 font-bold ${parseFloat(fund.amount) < 0 ? 'text-red-400' : 'text-green-400'}`}>
+
+                {/* Table */}
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="text-white text-sm bg-[#151c2c] border-b border-white/10">
+                                <th className="px-4 py-4 font-bold">ID ↑</th>
+                                <th className="px-4 py-4 font-bold">username</th>
+                                <th className="px-4 py-4 font-bold">name</th>
+                                <th className="px-4 py-4 font-bold">Amount</th>
+                                <th className="px-4 py-4 font-bold">Txn Type</th>
+                                <th className="px-4 py-4 font-bold">Notes</th>
+                                <th className="px-4 py-4 font-bold">PG Txn ID</th>
+                                <th className="px-4 py-4 font-bold">Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-sm text-slate-300">
+                            {fundsData.length > 0 ? (
+                                fundsData.map((fund) => (
+                                    <tr key={fund.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                                        <td className="px-4 py-4 text-white">{fund.id}</td>
+                                        <td className="px-4 py-4 text-[#00BCD4]">{fund.username}</td>
+                                        <td className="px-4 py-4">{fund.name}</td>
+                                        <td className={`px-4 py-4 font-bold ${parseFloat(fund.amount || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                                             {fund.amount}
                                         </td>
-                                        <td className="px-6 py-4">{fund.txnType}</td>
-                                        <td className="px-6 py-4">{fund.notes}</td>
-                                        <td className="px-6 py-4">{fund.pgTxnId}</td>
-                                        <td className="px-6 py-4">{fund.createdAt}</td>
+                                        <td className="px-4 py-4">{fund.txnType}</td>
+                                        <td className="px-4 py-4">{fund.notes}</td>
+                                        <td className="px-4 py-4">{fund.pgTxnId}</td>
+                                        <td className="px-4 py-4">{fund.createdAt}</td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="8" className="px-6 py-8 text-center text-slate-500">
+                                        No funds found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

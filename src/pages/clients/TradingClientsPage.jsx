@@ -1,179 +1,222 @@
 import React, { useState } from 'react';
-import { Search, RotateCcw, Edit, Settings, ArrowUp, ArrowDown, Eye } from 'lucide-react';
+import { RotateCcw, Edit, ArrowUp, ArrowDown, Eye, Copy } from 'lucide-react';
+import ClientDetailPage from './ClientDetailPage';
+import UpdateClientPage from './UpdateClientPage';
+import CreateClientPage from './CreateClientPage';
 
-const TradingClientsPage = ({ clients, onClientClick, onCreateClick, onAddBrokerClick, onDepositClick, onWithdrawClick, onViewClick }) => {
-    
-    // Search and Filter State
+const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('All');
+    const [statusFilter, setStatusFilter] = useState('');
+    const [selectedClient, setSelectedClient] = useState(null);
+    const [showDetailPage, setShowDetailPage] = useState(false);
+    const [showUpdatePage, setShowUpdatePage] = useState(false);
+    const [showCreatePage, setShowCreatePage] = useState(false);
 
-    const handleSearch = () => {
-        // Implement search logic here if needed, or just let it be visual for now
-        console.log("Searching for:", searchTerm, statusFilter);
+    // Dummy client data matching screenshot
+    const dummyClient = {
+        id: '3705377',
+        fullName: 'Demo ji',
+        username: 'Demo0174',
+        balance: '500000000',
+        grossPL: '0.0000',
+        brokerage: '0.0000',
+        swap: '0.0000',
+        netPL: '0',
+        admin: 'demo001',
+        demo: 'Yes',
+        status: 'Active'
     };
 
-    const handleReset = () => {
-        setSearchTerm('');
-        setStatusFilter('All');
+    const handleView = (client) => {
+        setSelectedClient(client);
+        setShowDetailPage(true);
     };
 
-    const MobileClientCard = ({ client }) => (
-        <div className="bg-[#151c2c] p-4 rounded-lg border border-[#2d3748] shadow-md mb-3">
-            <div className="flex justify-between items-start mb-3">
-                <div>
-                     <h3 className="text-white font-bold text-sm">{client.fullName}</h3>
-                     <p className="text-[10px] text-slate-500 font-mono">{client.username}</p>
-                </div>
-                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${client.status === 'Active' ? 'text-green-400' : 'text-red-400'}`}>
-                    {client.status}
-                </span>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2 text-xs mb-3">
-                 <div className="flex flex-col">
-                    <span className="text-slate-500">Ledger Balance</span>
-                    <span className="text-white font-mono">{client.ledgerBalance}</span>
-                </div>
-                 <div className="flex flex-col text-right">
-                    <span className="text-slate-500">Net P/L</span>
-                    <span className="text-white font-mono">{client.netPL}</span>
-                </div>
-            </div>
+    const handleEdit = (client) => {
+        setSelectedClient(client);
+        setShowUpdatePage(true);
+    };
 
-             <div className="flex justify-end border-t border-[#2d3748] pt-2 gap-2">
-                 <button onClick={() => onClientClick && onClientClick(client)} className="p-2 bg-slate-700 rounded-full text-white hover:bg-slate-600 transition-colors">
-                    <Edit className="w-3 h-3" />
-                </button>
-            </div>
-        </div>
-    );
+    const handleCopy = (client) => {
+        setSelectedClient(client);
+        setShowCreatePage(true);
+    };
+
+    const handleSettings = (client) => {
+        alert(`Settings for: ${client.fullName}`);
+    };
+
+    const handleDeposit = (client) => {
+        if (onDepositClick) onDepositClick(client);
+    };
+
+    const handleWithdraw = (client) => {
+        if (onWithdrawClick) onWithdrawClick(client);
+    };
 
     return (
-        <div className="flex flex-col h-full bg-[#0b111e] p-4 md:p-6 space-y-6 overflow-y-auto custom-scrollbar animate-fade-in">
-             
-             {/* Search Bar Section */}
-             <div className="bg-[#151c2c] p-6 rounded-lg border border-[#2d3748] shadow-xl">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                    <div className="space-y-1 md:col-span-1">
-                        <label className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">Username</label>
-                         <input 
-                            type="text" 
-                            className="w-full bg-transparent border-b border-slate-700 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors text-sm" 
+        <div className="flex flex-col h-full bg-[#1a2035] p-2 md:p-6 space-y-6 overflow-y-auto custom-scrollbar shadow-inner">
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: #1a2035; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #4CAF50; border-radius: 4px; }
+            `}</style>
+
+            {/* Search Section */}
+            <div className="bg-[#1f283e] p-8 rounded shadow-2xl border border-white/5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-8">
+                    <div className="group">
+                        <label className="block text-sm text-slate-400 mb-2 font-medium">Username</label>
+                        <input
+                            type="text"
+                            className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-[#5cb85c] transition-colors"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <div className="space-y-1 md:col-span-1">
-                        <label className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">Account Status</label>
-                        <select 
-                            className="w-full bg-[#1a2333] border border-slate-700 text-white py-2 px-3 rounded focus:outline-none focus:border-[#4CAF50] transition-colors text-sm"
+                    <div className="group">
+                        <label className="block text-sm text-slate-400 mb-2 font-medium">Account Status</label>
+                        <select
+                            className="w-full bg-[#1f283e] border-b border-white/10 text-white py-2 focus:outline-none focus:border-[#5cb85c]"
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
                         >
-                            <option value="All">All</option>
-                            <option value="Active">Active</option>
-                            <option value="Suspended">Suspended</option>
-                            <option value="Closed">Closed</option>
+                            <option value="">All</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
                         </select>
                     </div>
-                    <div className="flex gap-2 col-span-1 md:col-span-2">
-                        <button 
-                            onClick={handleSearch}
-                            className="bg-[#4CAF50] hover:bg-green-600 text-white py-2 px-6 rounded text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg"
-                        >
-                             SEARCH
-                        </button>
-                        <button 
-                            onClick={handleReset}
-                            className="bg-slate-600 hover:bg-slate-500 text-white py-2 px-6 rounded text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg"
-                        >
-                            <RotateCcw className="w-3 h-3" /> RESET
-                        </button>
-                    </div>
+                </div>
+                <div className="flex gap-4">
+                    <button className="bg-[#5cb85c] hover:bg-[#4caf50] text-white px-8 py-2.5 rounded font-bold text-xs tracking-widest shadow-lg transition-all uppercase">SEARCH</button>
+                    <button onClick={() => { setSearchTerm(''); setStatusFilter(''); }} className="bg-[#808080] hover:bg-[#707070] text-white px-8 py-2.5 rounded font-bold text-xs tracking-widest flex items-center gap-2 shadow-lg transition-all uppercase"><RotateCcw className="w-4 h-4" /> RESET</button>
                 </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col md:flex-row gap-4">
-                 {onCreateClick && (
-                     <button 
-                        onClick={onCreateClick}
-                        className="bg-[#4CAF50] hover:bg-green-600 text-white py-3 px-6 rounded text-[11px] font-bold uppercase tracking-widest transition-all shadow-lg"
-                     >
-                        CREATE CLIENT
-                     </button>
-                 )}
-                 <button 
-                    onClick={onAddBrokerClick}
-                    className="bg-[#01B4EA] hover:bg-cyan-600 text-white py-3 px-6 rounded text-[11px] font-bold uppercase tracking-widest transition-all shadow-lg"
-                 >
-                    ADD SUB BROKER
-                 </button>
+            {/* Create Button */}
+            <div className="flex justify-start px-1">
+                <button
+                    onClick={() => {
+                        setSelectedClient(null);
+                        setShowCreatePage(true);
+                    }}
+                    className="bg-[#5cb85c] hover:bg-[#4caf50] text-white py-3 px-8 rounded font-bold text-[11px] uppercase tracking-widest shadow-lg transition-all"
+                >
+                    CREATE TRADING CLIENT
+                </button>
             </div>
-            
-            {/* Desktop Table View */}
-            <div className="hidden md:block bg-[#151c2c] rounded border border-[#2d3748] overflow-hidden shadow-xl">
-                 <div className="p-4 border-b border-[#2d3748]">
-                    <span className="text-slate-400 text-sm">Showing {clients.length} of {clients.length} items.</span>
+
+            {/* Table Container */}
+            <div className="bg-[#1f283e] overflow-hidden rounded-lg border border-white/5 shadow-2xl">
+                <div className="px-6 py-4 bg-[#1a2035] border-b border-white/5">
+                    <span className="text-slate-400 text-sm font-medium">Showing <b className="text-white">1</b> of <b className="text-white">1</b> items.</span>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse whitespace-nowrap">
-                        <thead>
-                            <tr className="text-slate-200 text-[13px] font-semibold border-b border-[#2d3748] bg-[#151c2c]">
-                                <th className="px-4 py-4">#</th>
-                                <th className="px-4 py-4 text-center">Actions</th>
-                                <th className="px-4 py-4">ID <ArrowUp className="w-3 h-3 inline ml-1" /></th>
-                                <th className="px-4 py-4">Full Name <ArrowUp className="w-3 h-3 inline ml-1" /></th>
-                                <th className="px-4 py-4">Username</th>
-                                <th className="px-4 py-4">Ledger Balance <ArrowUp className="w-3 h-3 inline ml-1" /></th>
-                                <th className="px-4 py-4">Gross P/L <ArrowUp className="w-3 h-3 inline ml-1" /></th>
-                                <th className="px-4 py-4">Brokerage <ArrowUp className="w-3 h-3 inline ml-1" /></th>
-                                <th className="px-4 py-4">Swap Charges <ArrowUp className="w-3 h-3 inline ml-1" /></th>
-                                <th className="px-4 py-4">Net P/L</th>
-                                <th className="px-4 py-4">Admin</th>
-                                <th className="px-4 py-4">Demo Account?</th>
-                                <th className="px-4 py-4">Account Status</th>
+
+                <div className="overflow-x-auto custom-scrollbar">
+                    <table className="w-full text-left border-collapse" style={{ minWidth: '1600px' }}>
+                        <thead className="bg-[#1a2035]/50">
+                            <tr className="text-white/90 text-[13px] uppercase tracking-wider">
+                                <th className="px-4 py-5 font-bold w-16">#</th>
+                                <th className="px-4 py-5 font-bold text-center w-40">Actions</th>
+                                <th className="px-4 py-5 font-bold">ID ↑</th>
+                                <th className="px-4 py-5 font-bold">Full Name ↑</th>
+                                <th className="px-4 py-5 font-bold">Username</th>
+                                <th className="px-4 py-5 font-bold">Ledger Balance ↑</th>
+                                <th className="px-4 py-5 font-bold">Gross P/L ↑</th>
+                                <th className="px-4 py-5 font-bold">Brokerage ↑</th>
+                                <th className="px-4 py-5 font-bold">Swap Charges ↑</th>
+                                <th className="px-4 py-5 font-bold">Net P/L</th>
+                                <th className="px-4 py-5 font-bold">Admin</th>
+                                <th className="px-4 py-5 font-bold">Demo Account?</th>
+                                <th className="px-4 py-5 font-bold">Account Status</th>
                             </tr>
                         </thead>
                         <tbody className="text-[13px] text-slate-300">
-                            {clients.map((client, idx) => (
-                                <tr key={client.id} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
-                                    <td className="px-4 py-4">{idx + 1}</td>
-                                    <td className="px-4 py-4 flex flex-col gap-1 items-center justify-center">
-                                       <div className="flex gap-2">
-                                            <button onClick={() => onClientClick && onClientClick(client)} className="text-white hover:text-blue-400" title="Edit"><Edit className="w-3 h-3" /></button>
-                                            <button onClick={() => onViewClick && onViewClick(client)} className="text-white hover:text-blue-400" title="View"><Eye className="w-3 h-3" /></button>
-                                            <button className="text-white hover:text-blue-400" title="Settings"><Settings className="w-3 h-3" /></button>
-                                       </div>
-                                       <div className="flex gap-2 mt-1">
-                                            <button onClick={() => onDepositClick && onDepositClick(client)} className="text-green-500 hover:text-green-400" title="Deposit"><ArrowDown className="w-3 h-3" /></button>
-                                            <button onClick={() => onWithdrawClick && onWithdrawClick(client)} className="text-red-500 hover:text-red-400" title="Withdraw"><ArrowUp className="w-3 h-3" /></button>
-                                       </div>
-                                    </td>
-                                    <td className="px-4 py-4">{client.id}</td>
-                                    <td className="px-4 py-4">{client.fullName}</td>
-                                    <td className="px-4 py-4">{client.username}</td>
-                                    <td className="px-4 py-4">{client.ledgerBalance}</td>
-                                    <td className="px-4 py-4">{client.grossPL}</td>
-                                    <td className="px-4 py-4">{client.brokerage}</td>
-                                    <td className="px-4 py-4">{client.swapCharges}</td>
-                                    <td className="px-4 py-4">{client.netPL}</td>
-                                    <td className="px-4 py-4">{client.admin}</td>
-                                    <td className="px-4 py-4">{client.demoAccount}</td>
-                                    <td className="px-4 py-4">{client.status}</td>
-                                </tr>
-                            ))}
+                            <tr className="border-t border-white/5 hover:bg-white/[0.02] transition-colors">
+                                <td className="px-4 py-6">1</td>
+                                <td className="px-4 py-6">
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Eye onClick={() => handleView(dummyClient)} className="w-[18px] h-[18px] cursor-pointer hover:text-blue-400 transition-colors" />
+                                            <Edit onClick={() => handleEdit(dummyClient)} className="w-[18px] h-[18px] cursor-pointer hover:text-yellow-400 transition-colors" />
+                                            <Copy onClick={() => handleCopy(dummyClient)} className="w-[18px] h-[18px] cursor-pointer hover:text-green-400 transition-colors" />
+                                        </div>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <div onClick={() => handleDeposit(dummyClient)} className="w-7 h-7 bg-[#5cb85c] hover:bg-[#4caf50] rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-all">
+                                                <ArrowDown className="w-4 h-4 text-white" />
+                                            </div>
+                                            <div onClick={() => handleWithdraw(dummyClient)} className="w-7 h-7 bg-[#d9534f] hover:bg-[#c9302c] rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-all">
+                                                <ArrowUp className="w-4 h-4 text-white" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-4 py-6">3705377</td>
+                                <td className="px-4 py-6 font-medium text-white">{dummyClient.fullName}</td>
+                                <td className="px-4 py-6 font-mono">{dummyClient.username}</td>
+                                <td className="px-4 py-6 font-mono text-white/80">{dummyClient.balance}</td>
+                                <td className="px-4 py-6">0.0000</td>
+                                <td className="px-4 py-6">0.0000</td>
+                                <td className="px-4 py-6">0.0000</td>
+                                <td className="px-4 py-6 font-bold text-white">0</td>
+                                <td className="px-4 py-6">demo001</td>
+                                <td className="px-4 py-6">Yes</td>
+                                <td className="px-4 py-6 text-[#5cb85c] font-bold">Active</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination */}
+                <div className="px-5 py-6 border-t border-white/5 flex items-center justify-between bg-[#1a2035]">
+                    <div className="w-8 h-8 flex items-center justify-center bg-[#5cb85c] text-white text-sm font-bold rounded shadow-lg">1</div>
+                </div>
             </div>
 
-            {/* Mobile Card List View */}
-            <div className="md:hidden space-y-3 pb-4">
-                {clients.map((client) => (
-                    <MobileClientCard key={client.id} client={client} />
-                ))}
-            </div>
+            {/* Client Detail Modal */}
+            {showDetailPage && selectedClient && (
+                <ClientDetailPage
+                    client={selectedClient}
+                    onClose={() => {
+                        setShowDetailPage(false);
+                        setSelectedClient(null);
+                    }}
+                />
+            )}
+
+            {/* Update Client Modal */}
+            {showUpdatePage && selectedClient && (
+                <UpdateClientPage
+                    client={selectedClient}
+                    onClose={() => {
+                        setShowUpdatePage(false);
+                        setSelectedClient(null);
+                    }}
+                    onSave={(updatedData) => {
+                        console.log('Updated Data:', updatedData);
+                        setShowUpdatePage(false);
+                        setSelectedClient(null);
+                        alert('Client updated successfully!');
+                    }}
+                />
+            )}
+
+            {/* Create/Copy Client Modal */}
+            {showCreatePage && (
+                <CreateClientPage
+                    client={selectedClient}
+                    onClose={() => {
+                        setShowCreatePage(false);
+                        setSelectedClient(null);
+                    }}
+                    onSave={(data) => {
+                        console.log('Create/Copy Data:', data);
+                        setShowCreatePage(false);
+                        setSelectedClient(null);
+                        alert(selectedClient ? 'Client copied successfully!' : 'Client created successfully!');
+                    }}
+                />
+            )}
         </div>
     );
 };

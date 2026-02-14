@@ -10,14 +10,14 @@ const BannedLimitOrdersPage = () => {
   const toggleView = () => setView(view === 'list' ? 'add' : 'list');
 
   const MobileBannedItemCard = ({ item }) => (
-    <div className="bg-[#151c2c] p-4 rounded-lg border border-[#2d3748] shadow-md mb-3">
+    <div className="bg-[#202940] p-4 rounded-lg border border-[#2d3748] shadow-md mb-3">
       <div className="flex justify-between items-start mb-3">
         <span className="text-[#01B4EA] font-bold text-sm">#{item.id}</span>
         <button className="text-slate-400 hover:text-red-400 transition-colors">
           <Trash2 className="w-4 h-4" />
         </button>
       </div>
-      
+
       <div className="space-y-2">
         <div className="flex justify-between">
           <span className="text-slate-500 text-xs uppercase">Scrip ID</span>
@@ -39,7 +39,7 @@ const BannedLimitOrdersPage = () => {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4">
         <p className="text-sm text-slate-400">Showing <span className="text-[#01B4EA] font-semibold">{bannedItems.length}</span> of <span className="text-[#01B4EA] font-semibold">{bannedItems.length}</span> items.</p>
-        <button 
+        <button
           onClick={toggleView}
           className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-all uppercase tracking-wider text-xs w-full md:w-fit active:scale-[0.98]"
         >
@@ -48,7 +48,7 @@ const BannedLimitOrdersPage = () => {
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden md:block bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden">
+      <div className="hidden md:block bg-[#202940] rounded-lg border border-[#2d3748] overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="text-slate-100 text-[11px] font-semibold border-b border-[#2d3748] uppercase tracking-wider">
@@ -88,80 +88,80 @@ const BannedLimitOrdersPage = () => {
           <MobileBannedItemCard key={item.id} item={item} />
         ))}
         {bannedItems.length === 0 && (
-           <div className="text-center text-slate-500 py-8">No banned limit orders found.</div>
+          <div className="text-center text-slate-500 py-8">No banned limit orders found.</div>
         )}
       </div>
     </div>
   );
 
   const AddFormView = () => (
-    <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden max-w-4xl mx-auto w-full">
+    <div className="bg-[#202940] rounded-lg border border-[#2d3748] overflow-hidden max-w-4xl mx-auto w-full">
       <div className="p-4 border-b border-[#2d3748] flex items-center justify-between">
-         <h3 className="text-white font-bold uppercase tracking-wider text-sm">Add New Ban</h3>
-         <button onClick={toggleView} className="text-slate-400 hover:text-white text-xs uppercase font-bold">Cancel</button>
+        <h3 className="text-white font-bold uppercase tracking-wider text-sm">Add New Ban</h3>
+        <button onClick={toggleView} className="text-slate-400 hover:text-white text-xs uppercase font-bold">Cancel</button>
       </div>
-      
+
       <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <div className="flex flex-col gap-2">
-            <label className="text-xs text-slate-400 uppercase font-bold">Start Time</label>
+          <label className="text-xs text-slate-400 uppercase font-bold">Start Time</label>
           <div className="flex items-center gap-2">
-            <input 
-              type="text" 
-              placeholder="Start Date" 
-              className="bg-transparent border-b border-slate-600 focus:border-[#01B4EA] text-white p-2 w-full text-sm focus:outline-none transition-colors" 
+            <input
+              type="text"
+              placeholder="Start Date"
+              className="bg-transparent border-b border-slate-600 focus:border-[#01B4EA] text-white p-2 w-full text-sm focus:outline-none transition-colors"
             />
             <div className="flex items-center gap-1">
-                <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
                 <option>00</option>
-                </select>
-                <span className="text-white font-bold">:</span>
-                <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              </select>
+              <span className="text-white font-bold">:</span>
+              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
                 <option>00</option>
-                </select>
+              </select>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col gap-2">
-            <label className="text-xs text-slate-400 uppercase font-bold">End Time</label>
+          <label className="text-xs text-slate-400 uppercase font-bold">End Time</label>
           <div className="flex items-center gap-2">
-            <input 
-              type="text" 
-              placeholder="End Date" 
-              className="bg-transparent border-b border-slate-600 focus:border-[#01B4EA] text-white p-2 w-full text-sm focus:outline-none transition-colors" 
+            <input
+              type="text"
+              placeholder="End Date"
+              className="bg-transparent border-b border-slate-600 focus:border-[#01B4EA] text-white p-2 w-full text-sm focus:outline-none transition-colors"
             />
             <div className="flex items-center gap-1">
-                <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
                 <option>00</option>
-                </select>
-                <span className="text-white font-bold">:</span>
-                <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              </select>
+              <span className="text-white font-bold">:</span>
+              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
                 <option>00</option>
-                </select>
+              </select>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col gap-2">
-           <label className="text-xs text-slate-400 uppercase font-bold">Scrip</label>
+          <label className="text-xs text-slate-400 uppercase font-bold">Scrip</label>
           <select className="bg-[#1c2638] border border-[#2d3748] text-slate-200 p-3 rounded text-sm focus:outline-none focus:border-[#01B4EA] w-full">
             <option>Select Scrip</option>
           </select>
         </div>
 
         <div className="flex flex-col gap-2">
-            <label className="text-xs text-slate-400 uppercase font-bold">Password</label>
+          <label className="text-xs text-slate-400 uppercase font-bold">Password</label>
           <div className="border-b border-[#2d3748] relative">
-            <input 
-              type="password" 
-              placeholder="Transaction Password" 
-              className="bg-transparent text-white p-2 w-full text-sm focus:outline-none focus:border-[#01B4EA] transition-colors" 
+            <input
+              type="password"
+              placeholder="Transaction Password"
+              className="bg-transparent text-white p-2 w-full text-sm focus:outline-none focus:border-[#01B4EA] transition-colors"
             />
           </div>
         </div>
 
         <div className="md:col-span-2 pt-4">
-          <button 
+          <button
             onClick={toggleView}
             className="bg-[#01B4EA] hover:bg-cyan-600 text-white font-bold py-3 px-12 rounded transition-all uppercase tracking-wider text-xs w-full active:scale-[0.98]"
           >
@@ -172,7 +172,7 @@ const BannedLimitOrdersPage = () => {
     </div>
   );
 
-  return ( view === 'list' ? <ListView /> : <AddFormView /> );
+  return (view === 'list' ? <ListView /> : <AddFormView />);
 };
 
 export default BannedLimitOrdersPage;
