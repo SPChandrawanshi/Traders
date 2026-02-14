@@ -20,25 +20,25 @@ const Layout = ({ children, onLogout, onNavigate, currentView }) => {
       <div className="hidden md:block">
         <TopBar />
       </div>
-      
+
       <div className="flex flex-1 overflow-hidden relative">
-        <Sidebar 
-            onLogout={onLogout} 
-            onNavigate={(view) => {
-                onNavigate(view);
-                setIsSidebarOpen(false);
-            }} 
-            currentView={currentView} 
-            isOpen={isSidebarOpen}
-            onClose={() => setIsSidebarOpen(false)}
+        <Sidebar
+          onLogout={onLogout}
+          onNavigate={(view) => {
+            onNavigate(view);
+            setIsSidebarOpen(false);
+          }}
+          currentView={currentView}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
-        
+
         {/* Backdrop for mobile */}
         {isSidebarOpen && (
-            <div 
-                className="fixed inset-0 bg-black/50 z-40 md:hidden"
-                onClick={() => setIsSidebarOpen(false)}
-            />
+          <div
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
         )}
 
         <main className="flex-1 overflow-x-hidden overflow-y-auto flex flex-col p-4 bg-[#0b111e]">

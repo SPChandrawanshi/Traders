@@ -50,9 +50,9 @@ const ChangeTransactionPasswordPage = () => {
             {/* Form Section */}
             <div className="flex-1 bg-[#151c2c] p-8 rounded-lg border border-[#2d3748] shadow-xl">
                 <div className="max-w-4xl space-y-10">
-                    {/* Old Password - Full Width Row (limited in UI) */}
+                    {/* Old Transaction Password - Full Width */}
                     <div className="space-y-2">
-                        <label className="block text-slate-400 text-sm font-medium">Old Password</label>
+                        <label className="block text-slate-400 text-sm font-medium">Old Transaction Password</label>
                         <input
                             type="password"
                             name="oldPassword"
@@ -63,9 +63,9 @@ const ChangeTransactionPasswordPage = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                        {/* New Password */}
+                        {/* New Transaction Password */}
                         <div className="space-y-2">
-                            <label className="block text-slate-400 text-sm font-medium">New Password</label>
+                            <label className="block text-slate-400 text-sm font-medium">New Transaction Password</label>
                             <input
                                 type="password"
                                 name="newPassword"
@@ -75,9 +75,9 @@ const ChangeTransactionPasswordPage = () => {
                             />
                         </div>
 
-                        {/* Repeat New Password */}
+                        {/* Repeat New Transaction Password */}
                         <div className="space-y-2">
-                            <label className="block text-slate-400 text-sm font-medium">Repeat New Password</label>
+                            <label className="block text-slate-400 text-sm font-medium">Repeat New Transaction Password</label>
                             <input
                                 type="password"
                                 name="repeatNewPassword"
@@ -97,16 +97,12 @@ const ChangeTransactionPasswordPage = () => {
                 )}
 
                 {/* Update Button */}
-                <div className="mt-12 flex flex-col items-start gap-4">
+                <div className="mt-12">
                     <button
                         onClick={handleUpdate}
                         className="bg-[#4CAF50] hover:bg-green-600 text-white font-medium py-2 px-8 rounded transition-all uppercase text-xs tracking-wider"
                     >
                         UPDATE
-                    </button>
-
-                    <button className="text-slate-200 hover:text-white text-xs font-medium bg-transparent border-none p-0">
-                        Forgot Transaction Password?
                     </button>
                 </div>
             </div>

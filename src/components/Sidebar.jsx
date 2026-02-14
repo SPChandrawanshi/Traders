@@ -1,18 +1,18 @@
 import React from 'react';
-import { 
-  LayoutDashboard, 
-  TrendingUp, 
-  Bell, 
-  Radio, 
-  Sun, 
-  UserCircle, 
-  Tag, 
-  Package, 
-  CircleDollarSign, 
-  Users, 
-  Calculator, 
-  User, 
-  Settings, 
+import {
+  LayoutDashboard,
+  TrendingUp,
+  Bell,
+  Radio,
+  Sun,
+  UserCircle,
+  Tag,
+  Package,
+  CircleDollarSign,
+  Users,
+  Calculator,
+  User,
+  Settings,
   LogOut,
   Layout
 } from 'lucide-react';
@@ -66,13 +66,13 @@ const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
               <button
                 key={item.id}
                 onClick={() => {
-                    onNavigate(item.id);
-                    if (window.innerWidth < 768) onClose();
+                  onNavigate(item.id);
+                  if (window.innerWidth < 768) onClose();
                 }}
                 className={`
                   w-full flex items-center px-6 py-4 text-[15px] font-medium transition-all duration-150
-                  ${currentView === item.id 
-                    ? 'bg-slate-700/50 text-white border-r-4 border-[#4CAF50]' 
+                  ${currentView === item.id
+                    ? 'bg-slate-700/50 text-white border-r-4 border-[#4CAF50]'
                     : 'text-slate-300 hover:bg-slate-700/30 hover:text-white'}
                 `}
               >
@@ -82,7 +82,7 @@ const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
                 <span className="truncate">{item.label}</span>
               </button>
             ))}
-            
+
             {/* Logout Button */}
             <button
               onClick={onLogout}

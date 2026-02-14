@@ -49,27 +49,27 @@ const NegativeBalanceTxnsPage = () => {
             <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 flex gap-4">
                     <div className="flex-1 bg-white rounded overflow-hidden">
-                        <input 
-                            type="date" 
+                        <input
+                            type="date"
                             name="fromDate"
                             value={filters.fromDate}
                             onChange={handleFilterChange}
-                            placeholder="From Date" 
-                            className="w-full px-4 py-3 text-slate-500 bg-white focus:outline-none text-sm font-medium" 
+                            placeholder="From Date"
+                            className="w-full px-4 py-3 text-slate-500 bg-white focus:outline-none text-sm font-medium"
                         />
                     </div>
                     <div className="flex-1 bg-white rounded overflow-hidden">
-                        <input 
-                            type="date" 
+                        <input
+                            type="date"
                             name="toDate"
                             value={filters.toDate}
                             onChange={handleFilterChange}
-                            placeholder="To Date" 
-                            className="w-full px-4 py-3 text-slate-500 bg-white focus:outline-none text-sm font-medium" 
+                            placeholder="To Date"
+                            className="w-full px-4 py-3 text-slate-500 bg-white focus:outline-none text-sm font-medium"
                         />
                     </div>
                 </div>
-                <button 
+                <button
                     onClick={handleDownload}
                     className="bg-[#17a2b8] hover:bg-[#138496] text-white font-bold py-3 px-8 rounded flex items-center justify-center gap-2 text-xs uppercase tracking-widest transition-all"
                 >
@@ -82,32 +82,32 @@ const NegativeBalanceTxnsPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                     <div className="space-y-1">
                         <label className="text-[10px] font-medium uppercase tracking-wider text-slate-500">User ID</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             name="userId"
                             value={filters.userId}
                             onChange={handleFilterChange}
-                            className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors text-sm" 
+                            className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors text-sm"
                         />
                     </div>
                     <div className="space-y-1">
                         <label className="text-[10px] font-medium uppercase tracking-wider text-slate-500">Amount</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             name="amount"
                             value={filters.amount}
                             onChange={handleFilterChange}
-                            className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors text-sm" 
+                            className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors text-sm"
                         />
                     </div>
                     <div className="flex gap-2 col-span-1 md:col-start-1">
-                        <button 
+                        <button
                             onClick={handleSearch}
                             className="flex-1 bg-[#4CAF50] hover:bg-green-600 text-white py-2 rounded text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
                         >
                             <Search className="w-3 h-3" /> SEARCH
                         </button>
-                        <button 
+                        <button
                             onClick={handleReset}
                             className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
                         >
