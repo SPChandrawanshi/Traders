@@ -58,7 +58,7 @@ const UsersPage = ({ onNavigate }) => {
                 <div className="flex gap-3">
                     <button
                         onClick={handleSearch}
-                        className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                        className="btn-success-gradient text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs"
                     >
                         SEARCH
                     </button>
@@ -75,7 +75,7 @@ const UsersPage = ({ onNavigate }) => {
             <div>
                 <button
                     onClick={() => onNavigate?.('add-broker')}
-                    className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2.5 px-6 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                    className="btn-success-gradient text-white font-bold py-2.5 px-6 rounded uppercase tracking-wide text-xs"
                 >
                     ADD SUB BROKER
                 </button>

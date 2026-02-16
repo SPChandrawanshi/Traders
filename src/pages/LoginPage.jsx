@@ -14,60 +14,74 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat relative"
+      className="page-header min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat relative"
       style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2070')`
+        backgroundImage: `url('https://shrishreenathjitraders.in/admin/images/cover.jpg')`,
+        fontFamily: 'Roboto, Helvetica, Arial, sans-serif'
       }}
     >
-      {/* Darkened Overlay */}
-      <div className="absolute inset-0 bg-black/40" />
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/25" />
 
-      <div className="relative w-full max-w-[400px] mx-4">
+      {/* Card Container */}
+      <div className="relative w-full max-w-[500px] mx-auto px-4">
         <form onSubmit={handleSubmit} autoComplete="off">
-          <div className="bg-[#1f283e] rounded-md shadow-2xl relative mt-16 pb-6">
+          {/* Material Design Card */}
+          <div className="card card-dark relative">
 
-            {/* Material Card Header - Success */}
-            <div className="mx-4 -mt-10 bg-[#4CAF50] p-6 rounded-md shadow-lg flex justify-center items-center mb-8">
-              <Contact className="w-10 h-10 text-white" />
+            {/* Card Header - Success Style - Centered with Icon on Left */}
+            <div className="card-header-success absolute left-1/2 -translate-x-1/2 w-[calc(100%-30px)] h-[70px] flex items-center justify-start px-6">
+              <Contact className="w-8 h-8 text-white" />
             </div>
 
-            <div className="px-8 space-y-8">
-              {/* Username Row */}
-              <div className="flex items-end gap-4 group">
-                <label className="text-slate-200 text-sm font-medium w-24 pb-2">Username</label>
-                <div className="flex-1 relative">
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                    className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors"
-                  />
-                  <div className="help-block h-4"></div>
+            {/* Card Body */}
+            <div className="px-8 pt-16 pb-5">
+
+              {/* Form Fields Container */}
+              <div className="space-y-5 mb-4">
+
+                {/* Username Field */}
+                <div className="flex items-center gap-4">
+                  <label className="text-slate-300 text-sm font-light w-24">
+                    Username
+                  </label>
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
+                      className="w-full bg-transparent border-b border-white/20 text-white pb-1.5 focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+                      style={{ fontFamily: 'Roboto, Helvetica, Arial, sans-serif' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Password Field */}
+                <div className="flex items-center gap-4">
+                  <label className="text-slate-300 text-sm font-light w-24">
+                    Password
+                  </label>
+                  <div className="flex-1">
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      autoComplete="new-password"
+                      className="w-full bg-transparent border-b border-white/20 text-white pb-1.5 focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+                      style={{ fontFamily: 'Roboto, Helvetica, Arial, sans-serif' }}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Password Row */}
-              <div className="flex items-end gap-4 group">
-                <label className="text-slate-200 text-sm font-medium w-24 pb-2">Password</label>
-                <div className="flex-1 relative">
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    autoComplete="new-password"
-                    className="w-full bg-transparent border-b border-white/20 text-white py-2 focus:outline-none focus:border-[#4CAF50] transition-colors"
-                  />
-                  <div className="help-block h-4"></div>
-                </div>
-              </div>
-
-              {/* Login Button Section */}
-              <div className="flex justify-start pt-4">
+              {/* Card Footer - Button */}
+              <div className="pt-3 flex justify-start pl-0">
                 <button
                   type="submit"
-                  className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2.5 px-8 rounded shadow-lg uppercase text-[11px] tracking-widest transition-all active:scale-95"
+                  className="btn-success-gradient text-white font-bold py-2.5 px-8 rounded uppercase text-[11px] tracking-widest"
+                  style={{ fontFamily: 'Roboto, Helvetica, Arial, sans-serif' }}
                 >
                   Sign in
                 </button>
@@ -79,6 +93,4 @@ const LoginPage = ({ onLogin }) => {
     </div>
   );
 };
-
 export default LoginPage;
-

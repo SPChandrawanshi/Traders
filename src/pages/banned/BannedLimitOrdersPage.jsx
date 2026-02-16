@@ -10,7 +10,7 @@ const BannedLimitOrdersPage = () => {
   const toggleView = () => setView(view === 'list' ? 'add' : 'list');
 
   const MobileBannedItemCard = ({ item }) => (
-    <div className="bg-[#202940] p-4 rounded-lg border border-[#2d3748] shadow-md mb-3">
+    <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-md mb-3">
       <div className="flex justify-between items-start mb-3">
         <span className="text-[#01B4EA] font-bold text-sm">#{item.id}</span>
         <button className="text-slate-400 hover:text-red-400 transition-colors">
@@ -21,15 +21,15 @@ const BannedLimitOrdersPage = () => {
       <div className="space-y-2">
         <div className="flex justify-between">
           <span className="text-slate-500 text-xs uppercase">Scrip ID</span>
-          <span className="text-white font-medium text-sm">{item.scripId}</span>
+          <span className="text-slate-800 font-medium text-sm">{item.scripId}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-slate-500 text-xs uppercase">Start Time</span>
-          <span className="text-slate-300 text-xs">{item.startTime}</span>
+          <span className="text-slate-600 text-xs">{item.startTime}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-slate-500 text-xs uppercase">End Time</span>
-          <span className="text-slate-300 text-xs">{item.endTime}</span>
+          <span className="text-slate-600 text-xs">{item.endTime}</span>
         </div>
       </div>
     </div>
@@ -37,21 +37,28 @@ const BannedLimitOrdersPage = () => {
 
   const ListView = () => (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
-        <p className="text-sm text-slate-400">Showing <span className="text-[#01B4EA] font-semibold">{bannedItems.length}</span> of <span className="text-[#01B4EA] font-semibold">{bannedItems.length}</span> items.</p>
-        <button
-          onClick={toggleView}
-          className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-all uppercase tracking-wider text-xs w-full md:w-fit active:scale-[0.98]"
-        >
-          Ban Scrip for Order
-        </button>
+      <div className="bg-white rounded-lg border border-slate-200 p-4 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <p className="text-sm text-slate-600">Showing <span className="text-[#01B4EA] font-semibold">{bannedItems.length}</span> of <span className="text-[#01B4EA] font-semibold">{bannedItems.length}</span> items.</p>
+        <div className="flex gap-3 w-full md:w-auto">
+          <button
+            onClick={toggleView}
+            className="btn-success-gradient text-white font-bold py-2 px-6 rounded uppercase tracking-wider text-xs flex-1 md:flex-initial"
+          >
+            Add to Ban
+          </button>
+          <button
+            className="btn-success-gradient text-white font-bold py-2 px-6 rounded uppercase tracking-wider text-xs flex-1 md:flex-initial"
+          >
+            Remove from Ban
+          </button>
+        </div>
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden md:block bg-[#202940] rounded-lg border border-[#2d3748] overflow-hidden">
+      <div className="hidden md:block bg-white rounded-lg border border-slate-200 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="text-slate-100 text-[11px] font-semibold border-b border-[#2d3748] uppercase tracking-wider">
+            <tr className="text-slate-700 text-[11px] font-semibold border-b border-slate-200 uppercase tracking-wider bg-slate-50">
               <th className="px-6 py-4 w-16"></th>
               <th className="px-6 py-4">
                 <div className="flex items-center gap-1 cursor-pointer">
@@ -63,9 +70,9 @@ const BannedLimitOrdersPage = () => {
               <th className="px-6 py-4">End Time</th>
             </tr>
           </thead>
-          <tbody className="text-[11px] text-slate-300">
+          <tbody className="text-[11px] text-slate-700">
             {bannedItems.map((item) => (
-              <tr key={item.id} className="border-b border-[#2d3748] hover:bg-slate-800/20 transition-colors">
+              <tr key={item.id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
                 <td className="px-6 py-4">
                   <Trash2 className="w-4 h-4 text-slate-500 cursor-pointer hover:text-red-400 transition-colors" />
                 </td>
@@ -77,7 +84,7 @@ const BannedLimitOrdersPage = () => {
             ))}
           </tbody>
         </table>
-        <div className="p-4 border-t border-[#2d3748]">
+        <div className="p-4 border-t border-slate-200 bg-slate-50">
           <span className="text-[#01B4EA] text-sm font-semibold">1</span>
         </div>
       </div>
@@ -95,10 +102,10 @@ const BannedLimitOrdersPage = () => {
   );
 
   const AddFormView = () => (
-    <div className="bg-[#202940] rounded-lg border border-[#2d3748] overflow-hidden max-w-4xl mx-auto w-full">
-      <div className="p-4 border-b border-[#2d3748] flex items-center justify-between">
-        <h3 className="text-white font-bold uppercase tracking-wider text-sm">Add New Ban</h3>
-        <button onClick={toggleView} className="text-slate-400 hover:text-white text-xs uppercase font-bold">Cancel</button>
+    <div className="bg-white rounded-lg border border-slate-200 overflow-hidden max-w-4xl mx-auto w-full">
+      <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <h3 className="text-slate-800 font-bold uppercase tracking-wider text-sm">Add New Ban</h3>
+        <button onClick={toggleView} className="text-slate-600 hover:text-slate-800 text-xs uppercase font-bold">Cancel</button>
       </div>
 
       <div className="p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -108,14 +115,14 @@ const BannedLimitOrdersPage = () => {
             <input
               type="text"
               placeholder="Start Date"
-              className="bg-transparent border-b border-slate-600 focus:border-[#01B4EA] text-white p-2 w-full text-sm focus:outline-none transition-colors"
+              className="bg-transparent border-b border-slate-300 focus:border-[#4caf50] text-slate-800 p-2 w-full text-sm focus:outline-none transition-colors"
             />
             <div className="flex items-center gap-1">
-              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              <select className="bg-white border border-slate-300 text-slate-800 p-2 rounded text-sm focus:outline-none focus:border-[#4caf50]">
                 <option>00</option>
               </select>
-              <span className="text-white font-bold">:</span>
-              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              <span className="text-slate-800 font-bold">:</span>
+              <select className="bg-white border border-slate-300 text-slate-800 p-2 rounded text-sm focus:outline-none focus:border-[#4caf50]">
                 <option>00</option>
               </select>
             </div>
@@ -128,14 +135,14 @@ const BannedLimitOrdersPage = () => {
             <input
               type="text"
               placeholder="End Date"
-              className="bg-transparent border-b border-slate-600 focus:border-[#01B4EA] text-white p-2 w-full text-sm focus:outline-none transition-colors"
+              className="bg-transparent border-b border-slate-300 focus:border-[#4caf50] text-slate-800 p-2 w-full text-sm focus:outline-none transition-colors"
             />
             <div className="flex items-center gap-1">
-              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              <select className="bg-white border border-slate-300 text-slate-800 p-2 rounded text-sm focus:outline-none focus:border-[#4caf50]">
                 <option>00</option>
               </select>
-              <span className="text-white font-bold">:</span>
-              <select className="bg-[#1c2638] border border-[#2d3748] text-white p-2 rounded text-sm focus:outline-none focus:border-[#01B4EA]">
+              <span className="text-slate-800 font-bold">:</span>
+              <select className="bg-white border border-slate-300 text-slate-800 p-2 rounded text-sm focus:outline-none focus:border-[#4caf50]">
                 <option>00</option>
               </select>
             </div>
@@ -143,19 +150,19 @@ const BannedLimitOrdersPage = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-xs text-slate-400 uppercase font-bold">Scrip</label>
-          <select className="bg-[#1c2638] border border-[#2d3748] text-slate-200 p-3 rounded text-sm focus:outline-none focus:border-[#01B4EA] w-full">
+          <label className="text-xs text-slate-600 uppercase font-bold">Scrip</label>
+          <select className="bg-white border border-slate-300 text-slate-800 p-3 rounded text-sm focus:outline-none focus:border-[#4caf50] w-full">
             <option>Select Scrip</option>
           </select>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-xs text-slate-400 uppercase font-bold">Password</label>
-          <div className="border-b border-[#2d3748] relative">
+          <label className="text-xs text-slate-600 uppercase font-bold">Password</label>
+          <div className="border-b border-slate-300 relative">
             <input
               type="password"
               placeholder="Transaction Password"
-              className="bg-transparent text-white p-2 w-full text-sm focus:outline-none focus:border-[#01B4EA] transition-colors"
+              className="bg-transparent text-slate-800 p-2 w-full text-sm focus:outline-none focus:border-[#4caf50] transition-colors"
             />
           </div>
         </div>
@@ -163,7 +170,7 @@ const BannedLimitOrdersPage = () => {
         <div className="md:col-span-2 pt-4">
           <button
             onClick={toggleView}
-            className="bg-[#01B4EA] hover:bg-cyan-600 text-white font-bold py-3 px-12 rounded transition-all uppercase tracking-wider text-xs w-full active:scale-[0.98]"
+            className="btn-success-gradient text-white font-bold py-3 px-12 rounded uppercase tracking-wider text-xs w-full"
           >
             Add to Ban
           </button>
