@@ -184,7 +184,7 @@ const ActiveTradesPage = () => {
     };
 
     const EditView = () => (
-        <div className="flex flex-col h-full bg-[#202940] p-4 md:p-6 space-y-6 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#202940] p-4 md:p-6 space-y-6">
             <div className="flex items-center gap-4 mb-2">
                  <button onClick={() => setView('detail')} className="text-slate-400 text-xs hover:text-white">
                     ← Back
@@ -393,7 +393,7 @@ const ActiveTradesPage = () => {
     );
 
     return (
-        <div className="flex flex-col h-full bg-[#202940] p-4 md:p-6 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#202940] p-4 md:p-6">
             {view === 'list' && <ListView />}
             {view === 'detail' && selectedTrade && <DetailView />}
             {view === 'edit' && selectedTrade && <EditView />}

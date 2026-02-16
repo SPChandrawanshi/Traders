@@ -91,7 +91,7 @@ const BankDetailsPage = () => {
 
       {/* Table Section */}
       <div className="flex-1 bg-[#202940] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col shadow-xl">
-        <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
+        <div className="overflow-x-auto flex-1">
           <table className="w-full text-left border-collapse">
             <thead className="sticky top-0 bg-[#1c2638] z-10">
               <tr className="text-slate-100 text-[11px] font-semibold border-b border-[#2d3748] uppercase tracking-wider">
@@ -148,7 +148,7 @@ const BankDetailsPage = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-4 space-y-4 overflow-y-auto custom-scrollbar">
+            <form onSubmit={handleSubmit} className="p-4 space-y-4">
               <div>
                 <label className="block text-slate-400 text-xs uppercase font-bold mb-1">Bank Name</label>
                 <input

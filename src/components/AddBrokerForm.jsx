@@ -239,7 +239,7 @@ const AddBrokerForm = ({ onBack, onSave }) => {
         </div>
       </div>
       
-      <div className="p-8 overflow-y-auto custom-scrollbar flex-1">
+      <div className="p-8 flex-1">
         <form onSubmit={handleSubmit}>
             
             {/* TAB: DETAILS */}

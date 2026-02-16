@@ -53,7 +53,7 @@ const ClosedTradesPage = () => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#1a2035] p-4 md:p-6 space-y-4 overflow-y-auto">
+        <div className="flex flex-col h-full bg-[#1a2035] overflow-y-auto">
 
             {/* Filter Card */}
             <div className="bg-[#1f283e] p-6 rounded-lg border border-white/10 shadow-xl">

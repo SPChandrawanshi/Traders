@@ -82,7 +82,7 @@ const ScripDataPage = () => {
 
             {/* Scrip Data Table */}
             <div className="flex-1 bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col shadow-xl">
-                <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
+                <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse min-w-[1200px]">
                         <thead className="sticky top-0 bg-[#202940] z-10 border-b border-[#2d3748]">
                             <tr className="text-[#a0aec0] text-[11px] font-bold uppercase tracking-wider">

@@ -45,10 +45,10 @@ const LiveM2MPage = () => {
   );
 
   return (
-    <div className="flex flex-col h-full bg-[#1a2035] space-y-12">
+    <div className="flex flex-col h-full bg-[#1a2035] p-6 space-y-12">
 
       {/* 1. Live M2M Table Section */}
-      <div className="relative mt-8">
+      <div className="relative mt-4">
         <div className="bg-[#1f283e] rounded-md shadow-2xl relative pt-12">
           {/* Table Offset Header */}
           <div

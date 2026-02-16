@@ -94,7 +94,7 @@ const ClientDetailsForm = ({ onBack, onSave, mode = 'edit' }) => {
         <button onClick={onBack} className="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors">Close</button>
       </div>
       
-      <div className="p-8 overflow-y-auto custom-scrollbar flex-1">
+      <div className="p-8 flex-1">
         
         {/* Personal Details */}
         <FormSection title="Personal Details">

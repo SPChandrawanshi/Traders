@@ -25,7 +25,7 @@ const dummyNotifications = [
 
 const NotificationsPage = () => {
     return (
-        <div className="flex flex-col h-full bg-[#1a2035] p-2 md:p-6 space-y-6 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#1a2035] p-2 ">
             {/* Header Action */}
             <div className="flex justify-start">
                 <button className="bg-[#5cb85c] hover:bg-[#4cae4c] text-white text-[11px] font-bold py-2.5 px-5 rounded shadow uppercase tracking-wider transition-all active:scale-95">

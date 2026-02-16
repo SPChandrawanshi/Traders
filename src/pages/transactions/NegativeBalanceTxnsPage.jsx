@@ -3,7 +3,7 @@ import { RotateCcw } from 'lucide-react';
 
 const NegativeBalanceTxnsPage = () => {
     return (
-        <div className="flex flex-col h-full bg-[#1a2035] p-6 space-y-8 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#1a2035]">
             {/* Top Date Filter Section */}
             <div className="flex flex-col md:flex-row gap-4 items-center">
                 <div className="grid grid-cols-2 bg-white rounded overflow-hidden shadow-lg w-full md:w-auto">
@@ -66,7 +66,7 @@ const NegativeBalanceTxnsPage = () => {
                     <span className="text-slate-400 text-sm">Showing <b className="text-white">0</b> of <b className="text-white">0</b> items.</span>
                 </div>
 
-                <div className="overflow-x-auto overflow-y-auto custom-scrollbar min-h-[100px]">
+                <div className="overflow-x-auto min-h-[100px]">
                     <table className="w-full text-left border-collapse min-w-[1000px]">
                         <thead>
                             <tr className="text-white text-[13px] font-bold tracking-wider">

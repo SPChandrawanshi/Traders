@@ -55,7 +55,7 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#1a2035] p-2 md:p-6 space-y-6 overflow-y-auto custom-scrollbar shadow-inner">
+        <div className="flex flex-col h-full bg-[#1a2035] shadow-inner p-6 space-y-8">
             <style>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: #1a2035; }
@@ -94,7 +94,7 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
             </div>
 
             {/* Create Button */}
-            <div className="flex justify-start px-1">
+            <div className="flex justify-start">
                 <button
                     onClick={() => {
                         setSelectedClient(null);
