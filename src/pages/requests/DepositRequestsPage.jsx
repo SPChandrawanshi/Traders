@@ -67,7 +67,7 @@ const DepositRequestsPage = () => {
             </div>
 
             <div className="flex-1 bg-[#202940] rounded-lg border border-white/5 overflow-hidden flex flex-col shadow-2xl">
-                <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
+                <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse min-w-[1000px]">
                         <thead className="sticky top-0 bg-[#202940] z-20 border-b border-white/5">
                             <tr className="text-white text-[14px] font-bold tracking-tight">

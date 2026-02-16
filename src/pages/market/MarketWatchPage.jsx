@@ -99,10 +99,10 @@ const MarketWatchPage = () => {
 
     return (
         <div className="flex flex-col h-full bg-[#1a2035] overflow-hidden relative">
-            <div className="flex-1 overflow-y-auto custom-scrollbar pb-24">
+            <div className="flex-1 pb-24">
                 {/* Header / Search Area */}
-                <div className="p-4 md:p-6 pb-2">
-                    <div className="bg-[#4CAF50] p-3 px-4 rounded-sm shadow-md mb-6 flex justify-between items-center">
+                <div>
+                    <div className="bg-[#4CAF50] p-3 px-4 shadow-md mb-6 flex justify-between items-center">
                         <h2 className="text-white font-medium text-lg tracking-wide">Market Watch</h2>
                     </div>
 
@@ -139,8 +139,8 @@ const MarketWatchPage = () => {
                 </div>
 
                 {/* Desktop Table View - Updated to Black Theme as per screenshot */}
-                <div className="hidden md:block px-6">
-                    <div className="bg-black rounded-sm overflow-hidden shadow-2xl">
+                <div className="hidden md:block">
+                    <div className="bg-black overflow-hidden shadow-2xl">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="text-white text-[12px] font-bold uppercase tracking-wider bg-black border-b border-white/5">

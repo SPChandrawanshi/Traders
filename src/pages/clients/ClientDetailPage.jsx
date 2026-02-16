@@ -61,7 +61,7 @@ const ClientDetailPage = ({ client, onClose }) => {
     ];
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 overflow-y-auto custom-scrollbar">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50">
             <div className="min-h-screen p-4 flex items-center justify-center">
                 <div className="w-full max-w-7xl bg-[#1a2035] rounded-lg shadow-2xl relative animate-in fade-in zoom-in duration-200">
                     {/* Header */}

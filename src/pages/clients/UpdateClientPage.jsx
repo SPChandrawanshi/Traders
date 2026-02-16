@@ -142,7 +142,7 @@ const UpdateClientPage = ({ client, onClose, onSave }) => {
     const fieldsetLabelClass = "text-sm font-bold text-[#5cb85c] mb-6 uppercase tracking-[0.2em] border-b border-[#5cb85c]/30 pb-2 inline-block";
 
     return (
-        <div className="fixed inset-0 bg-[#0f1423] z-50 overflow-y-auto custom-scrollbar">
+        <div className="fixed inset-0 bg-[#0f1423] z-50">
             <div className="min-h-screen p-4 md:p-8 flex items-center justify-center">
                 <div className="w-full max-w-7xl bg-[#1a2035] rounded-xl shadow-2xl relative border border-white/5 pb-24">
 

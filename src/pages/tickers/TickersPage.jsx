@@ -25,7 +25,7 @@ const TickersPage = () => {
 
     if (view === 'add') {
         return (
-            <div className="flex flex-col h-full text-[#a0aec0] p-6">
+            <div className="flex flex-col h-full text-[#a0aec0] ">
                 <div className="mb-6">
                     <div className="inline-block bg-[#4CAF50] text-white px-4 py-2 rounded shadow-md">
                         <h2 className="text-sm font-bold uppercase tracking-wider">Add Ticker</h2>
@@ -140,7 +140,7 @@ const TickersPage = () => {
     }
 
     return (
-        <div className="flex flex-col h-full text-[#a0aec0] space-y-6 pt-6">
+        <div className="flex flex-col h-full text-[#a0aec0]  pt-6">
             <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Showing <span className="text-white font-bold">0</span> of items.</span>
             </div>
@@ -156,7 +156,7 @@ const TickersPage = () => {
 
             {/* Tickers Table */}
             <div className="flex-1 bg-[#202940] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col shadow-xl min-h-[100px]">
-                <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
+                <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="text-[#a0aec0] text-[11px] font-bold uppercase tracking-wider border-b border-[#2d3748]">

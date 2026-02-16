@@ -39,7 +39,7 @@ const AccountsPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden space-y-4">
+    <div className="flex flex-col h-full overflow-hidden ">
       {/* Date Filter Bar */}
       <div className="flex flex-wrap gap-4 items-end">
         <input
@@ -68,7 +68,7 @@ const AccountsPage = () => {
 
       {/* Table Section */}
       <div className="flex-1 overflow-hidden flex flex-col shadow-xl">
-        <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
+        <div className="overflow-x-auto flex-1">
           <table className="w-full border-collapse border border-[#2d3748]">
             <thead className="sticky top-0 bg-[#1c2638] z-10">
               <tr className="text-slate-100 text-xs font-semibold">

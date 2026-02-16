@@ -46,7 +46,7 @@ const ClosedPositionsPage = () => {
     );
 
     return (
-        <div className="flex flex-col h-full bg-[#1a2035] p-2 md:p-4 space-y-6 overflow-y-auto custom-scrollbar">
+        <div className="flex flex-col h-full bg-[#1a2035]">
             {/* Header Section from screenshot style */}
             <div className="bg-[#1f283e] rounded-sm shadow-xl border border-white/5 overflow-hidden">
                 <div className="hidden md:block overflow-x-auto">

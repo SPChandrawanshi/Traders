@@ -68,7 +68,7 @@ const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
     `}>
       <div className="flex flex-col h-full border-r border-white/5 overflow-hidden">
         {/* Navigation Items */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-4">
+        <div className="flex-1 pt-4 pb-4 overflow-y-auto custom-scrollbar">
           <div className="px-3 space-y-1">
             {menuItems.map((item) => (
               <button

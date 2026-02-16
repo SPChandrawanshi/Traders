@@ -211,7 +211,7 @@ function App() {
 
   return (
     <Layout onLogout={handleLogout} onNavigate={setView} currentView={view}>
-      <div className="flex flex-col h-full overflow-y-auto custom-scrollbar px-6 py-4">
+      <div>
         {renderContent()}
       </div>
     </Layout>

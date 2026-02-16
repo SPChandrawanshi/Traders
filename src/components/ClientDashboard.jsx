@@ -11,7 +11,7 @@ const ClientDashboard = ({ onBack, client }) => {
     const [showActions, setShowActions] = useState(false);
 
   return (
-    <div className="flex flex-col h-full bg-[#0b111e] p-6 space-y-6 overflow-y-auto custom-scrollbar">
+    <div className="flex flex-col h-full bg-[#0b111e] p-6 space-y-6">
       <div className="flex items-center gap-4">
         <button 
             onClick={onBack}

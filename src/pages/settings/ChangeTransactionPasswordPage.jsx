@@ -40,7 +40,7 @@ const ChangeTransactionPasswordPage = () => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#1a2035] space-y-6 pt-10">
+        <div className="flex flex-col h-full bg-[#1a2035]">
             <div className="relative">
                 {/* Material Card Container */}
                 <div className="bg-[#1f283e] rounded-md shadow-2xl relative pt-16 pb-6">
