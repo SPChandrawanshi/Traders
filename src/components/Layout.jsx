@@ -41,7 +41,7 @@ const Layout = ({ children, onLogout, onNavigate, currentView }) => {
           />
         )}
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto flex flex-col p-4 bg-[#1a2035]">
+        <main className={`flex-1 overflow-x-hidden overflow-y-auto flex flex-col bg-[#1a2035] ${(currentView === 'live-m2m' || currentView === 'broker-m2m' || currentView === 'users' || currentView === 'pending-orders' || currentView === 'banned' || currentView === 'bank' || currentView === 'create-broker') ? '' : 'p-4'}`}>
           {children}
         </main>
       </div>

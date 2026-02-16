@@ -17,7 +17,7 @@ const ActivePositionsPage = () => {
 
     return (
         <div className="flex flex-col h-full bg-[#1a2035] overflow-hidden">
-            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto  space-y-6 custom-scrollbar">
 
                 {/* Unified Card Container - Matching Screenshot */}
                 <div className="bg-[#1f283e] p-6 rounded shadow-xl overflow-x-auto border border-white/5">

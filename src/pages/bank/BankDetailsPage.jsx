@@ -60,7 +60,7 @@ const BankDetailsPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden relative">
+    <div className="flex flex-col h-full bg-[#1a2035] p-4 space-y-8 overflow-y-auto relative">
       {/* Header Actions */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-white tracking-tight italic">Bank Details Management</h2>
@@ -73,7 +73,7 @@ const BankDetailsPage = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-[#202940] p-4 rounded border border-[#2d3748] mb-6 flex items-center gap-4">
+      <div className="bg-[#202940] rounded border border-[#2d3748] mb-6 flex items-center gap-4">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input

@@ -25,7 +25,7 @@ const UsersPage = ({ onNavigate }) => {
     };
 
     return (
-        <div className="flex flex-col h-full overflow-y-auto">
+        <div className="flex flex-col h-full bg-[#1a2035] space-y-8 overflow-y-auto">
 
             {/* Filter Section */}
             <div className="bg-[#1f283e] p-6 rounded-lg border border-white/10 shadow-xl">

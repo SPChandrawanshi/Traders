@@ -9,7 +9,7 @@ const ClosedPositionsPage = () => {
     ];
 
     const MobileClosedPositionCard = ({ pos }) => (
-        <div className="bg-[#1f283e] p-4 rounded-lg border border-white/5 shadow-md mb-3 active:scale-[0.98] transition-transform">
+        <div className="bg-[#1f283e] p-4 p-4 rounded-lg border border-white/5 shadow-md mb-3 active:scale-[0.98] transition-transform">
             <div className="flex justify-between items-center mb-3">
                 <span className="text-white text-sm font-bold uppercase tracking-wide">
                     {pos.scrip}
