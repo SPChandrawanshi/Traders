@@ -15,25 +15,28 @@ const LiveM2MPage = () => {
   const StatCard = ({ title, data }) => (
     <div className="bg-[#1f283e] rounded-md shadow-2xl relative mt-10 mb-6">
       {/* Offset Header */}
-      <div className="absolute -top-6 left-4 right-4 bg-gradient-to-tr from-[#43a047] to-[#66bb6a] rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] px-6 py-4 z-10">
+      <div
+        className="absolute -top-6 left-4 right-4 rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] px-6 py-4 z-10"
+        style={{ background: 'linear-gradient(60deg, #288c6c, #4ea752)' }}
+      >
         <h3 className="text-white text-base font-bold uppercase tracking-tight">{title}</h3>
       </div>
 
       {/* Card Body */}
-      <div className="pt-12 px-6 pb-6 space-y-4">
+      <div className="pt-12 px-6 pb-6">
         {data.map((item, index) => (
-          <div key={index} className="space-y-1">
-            <div className="flex flex-col items-center">
-              <span className="text-slate-400 text-[10px] uppercase font-bold tracking-[0.1em]">{item.label}</span>
-              <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-white text-3xl font-bold tracking-tight">{item.value.split(' ')[0]}</span>
+          <div key={index}>
+            <div className="flex flex-col items-end py-4">
+              <span className="text-slate-400 text-sm font-normal mb-2">{item.label}</span>
+              <h3 className="text-white text-3xl font-bold tracking-tight">
+                {item.value.split(' ')[0]}{' '}
                 {item.value.includes('Lakhs') && (
-                  <span className="text-slate-400 text-sm font-medium">Lakhs</span>
+                  <span className="text-sm font-normal">Lakhs</span>
                 )}
-              </div>
+              </h3>
             </div>
             {index < data.length - 1 && (
-              <div className="h-[1px] bg-white opacity-5 w-full my-4"></div>
+              <hr className="border-white/10" />
             )}
           </div>
         ))}
@@ -48,7 +51,10 @@ const LiveM2MPage = () => {
       <div className="relative mt-8">
         <div className="bg-[#1f283e] rounded-md shadow-2xl relative pt-12">
           {/* Table Offset Header */}
-          <div className="absolute -top-6 left-4 bg-gradient-to-tr from-[#43a047] to-[#66bb6a] rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] px-10 py-5 z-10 w-[calc(100%-32px)]">
+          <div
+            className="absolute -top-6 left-4 rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] px-10 py-5 z-10 w-[calc(100%-32px)]"
+            style={{ background: 'linear-gradient(60deg, #288c6c, #4ea752)' }}
+          >
             <h2 className="text-white text-base font-bold uppercase tracking-tight">
               Live M2M under: Demo pannel
             </h2>
@@ -87,8 +93,8 @@ const LiveM2MPage = () => {
         </div>
       </div>
 
-      {/* 2. Turnover Rows - Updated Grid to Match Screenshot spacing */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* 2. Turnover Rows - Full Width Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         <StatCard
           title="Buy Turnover"
           data={[
@@ -122,7 +128,7 @@ const LiveM2MPage = () => {
       </div>
 
       {/* 3. Status Rows */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 pb-10">
         <StatCard
           title="Active Users"
           data={[

@@ -14,62 +14,74 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-top bg-no-repeat relative font-sans"
+      className="page-header min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: `url('https://shrishreenathjitraders.in/admin/images/cover.jpg')`,
-        backgroundPosition: 'center top'
+        fontFamily: 'Roboto, Helvetica, Arial, sans-serif'
       }}
     >
-      {/* Dark Overlay for contrast - Matching screenshot depth */}
+      {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/25" />
 
-      <div className="relative w-full max-w-[450px] mx-4 mt-12">
+      {/* Card Container */}
+      <div className="relative w-full max-w-[500px] mx-auto px-4">
         <form onSubmit={handleSubmit} autoComplete="off">
-          {/* Material Card Container */}
-          <div className="bg-[#1f283e] rounded-md shadow-[0_10px_30px_-12px_rgba(0,0,0,0.42),0_4px_25px_0px_rgba(0,0,0,0.12),0_8px_10px_-5px_rgba(0,0,0,0.2)] relative pb-4 pt-20">
+          {/* Material Design Card */}
+          <div className="card card-dark relative">
 
-            {/* Wide Green Header Card Overlay - Exactly as in Screenshot */}
-            <div className="absolute -top-10 left-5 right-5 h-[90px] bg-gradient-to-tr from-[#43a047] to-[#66bb6a] rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] flex items-center justify-center z-10">
-              <Contact className="w-10 h-10 text-white opacity-100" />
+            {/* Card Header - Success Style - Centered with Icon on Left */}
+            <div className="card-header-success absolute left-1/2 -translate-x-1/2 w-[calc(100%-30px)] h-[70px] flex items-center justify-start px-6">
+              <Contact className="w-8 h-8 text-white" />
             </div>
 
-            <div className="px-8 pb-4 space-y-12">
-              <div style={{ color: 'red' }}></div>
+            {/* Card Body */}
+            <div className="px-8 pt-16 pb-5">
 
-              {/* Username Input Row */}
-              <div className="flex items-center gap-4">
-                <label className="text-slate-200 text-sm font-normal w-28">Username</label>
-                <div className="flex-1">
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                    className="w-full bg-transparent border-b border-white/20 text-white pb-1 focus:outline-none focus:border-[#4caf50] transition-colors text-[14px]"
-                  />
+              {/* Form Fields Container */}
+              <div className="space-y-5 mb-4">
+
+                {/* Username Field */}
+                <div className="flex items-center gap-4">
+                  <label className="text-slate-300 text-sm font-light w-24">
+                    Username
+                  </label>
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
+                      className="w-full bg-transparent border-b border-white/20 text-white pb-1.5 focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+                      style={{ fontFamily: 'Roboto, Helvetica, Arial, sans-serif' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Password Field */}
+                <div className="flex items-center gap-4">
+                  <label className="text-slate-300 text-sm font-light w-24">
+                    Password
+                  </label>
+                  <div className="flex-1">
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      autoComplete="new-password"
+                      className="w-full bg-transparent border-b border-white/20 text-white pb-1.5 focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+                      style={{ fontFamily: 'Roboto, Helvetica, Arial, sans-serif' }}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Password Input Row */}
-              <div className="flex items-center gap-4">
-                <label className="text-slate-200 text-sm font-normal w-28">Password</label>
-                <div className="flex-1">
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    autoComplete="new-password"
-                    className="w-full bg-transparent border-b border-white/20 text-white pb-1 focus:outline-none focus:border-[#4caf50] transition-colors text-[14px]"
-                  />
-                </div>
-              </div>
-
-              {/* Card Footer with Sign In Button */}
-              <div className="pt-2 pb-2">
+              {/* Card Footer - Button */}
+              <div className="pt-3 flex justify-start pl-0">
                 <button
                   type="submit"
-                  className="bg-[#5cb85c] hover:bg-[#4caf50] text-white font-bold py-3 px-8 rounded shadow-lg uppercase text-[11px] tracking-widest transition-all active:scale-95"
+                  className="btn-success-gradient text-white font-bold py-2.5 px-8 rounded uppercase text-[11px] tracking-widest"
+                  style={{ fontFamily: 'Roboto, Helvetica, Arial, sans-serif' }}
                 >
                   Sign in
                 </button>
@@ -81,5 +93,4 @@ const LoginPage = ({ onLogin }) => {
     </div>
   );
 };
-
 export default LoginPage;

@@ -45,8 +45,11 @@ const ChangePasswordPage = () => {
                 {/* Material Card Container */}
                 <div className="bg-[#1f283e] rounded-md shadow-2xl relative pt-16 pb-6">
 
-                    {/* Floating Green Header Card - Exactly as in screenshot */}
-                    <div className="absolute -top-6 left-5 bg-gradient-to-tr from-[#43a047] to-[#66bb6a] rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] px-8 py-5 z-10">
+                    {/* Floating Green Header Card */}
+                    <div
+                        className="absolute -top-6 left-5 rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] px-8 py-5 z-10"
+                        style={{ background: 'linear-gradient(60deg, #288c6c, #4ea752)' }}
+                    >
                         <h4 className="text-white text-[15px] font-bold tracking-tight">Change Password</h4>
                     </div>
 
@@ -109,7 +112,7 @@ const ChangePasswordPage = () => {
                             <div className="mt-12">
                                 <button
                                     type="submit"
-                                    className="bg-[#5cb85c] hover:bg-[#4caf50] text-white font-bold py-2.5 px-8 rounded shadow-lg transition-all active:scale-95 uppercase text-[11px] tracking-widest"
+                                    className="btn-success-gradient text-white font-bold py-2.5 px-8 rounded uppercase text-[11px] tracking-widest"
                                 >
                                     UPDATE
                                 </button>

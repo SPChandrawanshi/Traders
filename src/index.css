@@ -33,3 +33,90 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+
+/* Material Design Card Styles */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  margin: 1.875rem auto;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Dark Edition Card */
+.dark-edition .card,
+.card-dark {
+  background: #202940;
+}
+
+/* Page Header */
+.page-header {
+  min-height: 100vh;
+  max-height: 1000px;
+  display: flex !important;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  color: #fff;
+  position: relative;
+  align-items: center;
+}
+
+/* Material Design Green Gradient Button */
+.btn-success-gradient {
+  background: linear-gradient(60deg, #288c6c, #4ea752);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-success-gradient:hover {
+  box-shadow: 0 6px 25px 0 rgba(0, 0, 0, 0.18), 0 9px 12px -6px rgba(76, 175, 80, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-success-gradient:active {
+  transform: scale(0.98);
+}
+
+/* Material Design Card Header Success */
+.card-header-success {
+  background: linear-gradient(60deg, #288c6c, #4ea752);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4);
+  border-radius: 0.1875rem;
+  margin-top: -1.875rem;
+  padding: 0.9375rem;
+}
+
+/* Card Header Variants */
+.card [class*="card-header-"]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
+  border-radius: 0.1875rem;
+  margin-top: -1.875rem;
+  padding: 0.9375rem;
+}
+
+.card .card-header {
+  border-bottom: none;
+  background: transparent;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  color: #fff;
+}
+
+.card [class*="card-header-"] {
+  margin: 0 15px;
+  padding: 0;
+  position: relative;
+}
+
+/* Font Smoothing */
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

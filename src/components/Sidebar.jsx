@@ -80,9 +80,10 @@ const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
                 className={`
                   w-full flex items-center px-4 py-3 rounded-md transition-all duration-200 group
                   ${currentView === item.id
-                    ? 'bg-[#4caf50] text-white shadow-lg'
+                    ? 'text-white shadow-lg'
                     : 'text-slate-300 hover:bg-white/5 hover:text-white'}
                 `}
+                style={currentView === item.id ? { background: 'linear-gradient(60deg, #288c6c, #4ea752)' } : {}}
               >
                 <div className={`
                   mr-4 transition-colors
