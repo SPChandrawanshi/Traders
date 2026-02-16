@@ -1,167 +1,95 @@
 import React, { useState } from 'react';
-import { Search, RotateCcw, Eye, Download } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 
 const NegativeBalanceTxnsPage = () => {
-    const initialTransactions = [
-        { id: 6066638, username: "SHRE074", name: "Dinesh jind", amount: "925", txnType: "Added", notes: "Negative Balance Adjustment", createdAt: "2026-02-02 23:04:01" },
-        { id: 6066505, username: "SHRE0308", name: "Kapil jind", amount: "1124", txnType: "Added", notes: "Negative Balance Adjustment", createdAt: "2026-02-02 22:47:01" },
-        { id: 6066462, username: "SHRE0279", name: "Padam", amount: "1749.5726", txnType: "Added", notes: "Negative Balance Adjustment", createdAt: "2026-02-02 22:44:01" },
-        { id: 6066012, username: "SHRE0116", name: "Raj bir kapil jind", amount: "306", txnType: "Added", notes: "Negative Balance Adjustment", createdAt: "2026-02-02 21:59:01" },
-        { id: 6066011, username: "SHRE001", name: "Sample User", amount: "500", txnType: "Added", notes: "Negative Balance Adjustment", createdAt: "2026-02-02 21:58:01" },
-    ];
-
-    const [transactions, setTransactions] = useState(initialTransactions);
-    const [filters, setFilters] = useState({
-        userId: '',
-        amount: '',
-        fromDate: '',
-        toDate: ''
-    });
-
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleSearch = () => {
-        const filtered = initialTransactions.filter(txn => {
-            const matchesId = filters.userId ? txn.id.toString().includes(filters.userId) : true;
-            const matchesAmount = filters.amount ? txn.amount.toString().includes(filters.amount) : true;
-            // Date filtering would require converting stings to Dates, skipping for now as per "simple fix" instruction unless widely requested. 
-            // Focusing on ID and Amount as shown in the secondary filter bar which has the Search button.
-            return matchesId && matchesAmount;
-        });
-        setTransactions(filtered);
-    };
-
-    const handleReset = () => {
-        setFilters({ userId: '', amount: '', fromDate: '', toDate: '' });
-        setTransactions(initialTransactions);
-    };
-
-    const handleDownload = () => {
-        alert("Downloading Negative Balance Report...");
-    };
-
     return (
-        <div className="flex flex-col h-full text-[#a0aec0] space-y-6">
-            {/* Top Filter Bar */}
-            <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1 flex gap-4">
-                    <div className="flex-1 bg-white rounded overflow-hidden">
-                        <input
-                            type="date"
-                            name="fromDate"
-                            value={filters.fromDate}
-                            onChange={handleFilterChange}
-                            placeholder="From Date"
-                            className="w-full px-4 py-3 text-slate-500 bg-white focus:outline-none text-sm font-medium"
-                        />
-                    </div>
-                    <div className="flex-1 bg-white rounded overflow-hidden">
-                        <input
-                            type="date"
-                            name="toDate"
-                            value={filters.toDate}
-                            onChange={handleFilterChange}
-                            placeholder="To Date"
-                            className="w-full px-4 py-3 text-slate-500 bg-white focus:outline-none text-sm font-medium"
-                        />
-                    </div>
+        <div className="flex flex-col h-full bg-[#1a2035] p-6 space-y-8 overflow-y-auto custom-scrollbar">
+            {/* Top Date Filter Section */}
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+                <div className="grid grid-cols-2 bg-white rounded overflow-hidden shadow-lg w-full md:w-auto">
+                    <input
+                        type="text"
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => (e.target.value === "" ? (e.target.type = "text") : null)}
+                        placeholder="From Date"
+                        className="px-6 py-3 border-r border-slate-200 focus:outline-none text-slate-700 font-medium text-sm min-w-[150px]"
+                    />
+                    <input
+                        type="text"
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => (e.target.value === "" ? (e.target.type = "text") : null)}
+                        placeholder="To Date"
+                        className="px-6 py-3 focus:outline-none text-slate-700 font-medium text-sm min-w-[150px]"
+                    />
                 </div>
-                <button
-                    onClick={handleDownload}
-                    className="bg-[#17a2b8] hover:bg-[#138496] text-white font-bold py-3 px-8 rounded flex items-center justify-center gap-2 text-xs uppercase tracking-widest transition-all"
-                >
-                    <Download className="w-4 h-4" /> Download Report
+                <button className="bg-[#17a2b8] hover:bg-[#138496] text-white px-10 py-3 rounded font-bold text-[11px] uppercase tracking-widest shadow-lg transition-all w-full md:w-auto">
+                    DOWNLOAD REPORT
                 </button>
             </div>
 
-            {/* Secondary Filter Bar */}
-            <div className="bg-[#151c2c] p-6 rounded-lg border border-[#2d3748] shadow-xl">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                    <div className="space-y-1">
-                        <label className="text-[10px] font-medium uppercase tracking-wider text-slate-500">User ID</label>
+            {/* Search Card Section */}
+            <div className="bg-[#1f283e] p-8 rounded shadow-2xl border border-white/5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
+                    <div className="group">
+                        <label className="block text-[11px] text-slate-500 font-bold uppercase tracking-widest mb-2">User ID</label>
                         <input
                             type="text"
-                            name="userId"
-                            value={filters.userId}
-                            onChange={handleFilterChange}
-                            className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors text-sm"
+                            placeholder=" "
+                            className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-[#5cb85c] transition-all"
                         />
                     </div>
-                    <div className="space-y-1">
-                        <label className="text-[10px] font-medium uppercase tracking-wider text-slate-500">Amount</label>
+                    <div className="group">
+                        <label className="block text-[11px] text-slate-500 font-bold uppercase tracking-widest mb-2">Amount</label>
                         <input
                             type="text"
-                            name="amount"
-                            value={filters.amount}
-                            onChange={handleFilterChange}
-                            className="w-full bg-transparent border-b border-slate-700 text-white py-1 focus:outline-none focus:border-[#4CAF50] transition-colors text-sm"
+                            placeholder=" "
+                            className="w-full bg-transparent border-b border-white/10 py-2 text-white focus:outline-none focus:border-[#5cb85c] transition-all"
                         />
                     </div>
-                    <div className="flex gap-2 col-span-1 md:col-start-1">
-                        <button
-                            onClick={handleSearch}
-                            className="flex-1 bg-[#4CAF50] hover:bg-green-600 text-white py-2 rounded text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
-                        >
-                            <Search className="w-3 h-3" /> SEARCH
-                        </button>
-                        <button
-                            onClick={handleReset}
-                            className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
-                        >
-                            <RotateCcw className="w-3 h-3" /> RESET
-                        </button>
-                    </div>
+                </div>
+                <div className="flex gap-4">
+                    <button className="bg-[#5cb85c] hover:bg-[#4caf50] text-white px-10 py-3 rounded font-bold text-[11px] uppercase tracking-widest shadow-lg transition-all">SEARCH</button>
+                    <button className="bg-[#808080] hover:bg-[#707070] text-white px-10 py-3 rounded font-bold text-[11px] uppercase tracking-widest flex items-center gap-2 shadow-lg transition-all">
+                        <RotateCcw className="w-4 h-4" /> RESET
+                    </button>
+
                 </div>
             </div>
 
-            <div>
-                <h2 className="text-white text-2xl font-semibold">Total amount adjusted during the week: <span className="text-white">75065.68</span></h2>
+            {/* Summary Statement */}
+            <div className="py-4">
+                <h3 className="text-white text-[25px] font-medium tracking-tight">Total amount adjusted during the week: 0</h3>
             </div>
 
-            <div className="flex items-center gap-2 text-sm font-medium pt-4">
-                <span>Showing <span className="text-white font-bold">{transactions.length}</span> of <span className="text-white font-bold">{initialTransactions.length}</span> items.</span>
-            </div>
+            {/* Table Results Section */}
+            <div className="bg-[#1f283e] rounded-lg shadow-2xl border border-white/5 overflow-hidden">
+                <div className="px-8 py-4 bg-[#212a41] border-b border-white/5">
+                    <span className="text-slate-400 text-sm">Showing <b className="text-white">0</b> of <b className="text-white">0</b> items.</span>
+                </div>
 
-            {/* Transactions Table */}
-            <div className="flex-1 bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col shadow-xl">
-                <div className="overflow-x-auto overflow-y-auto custom-scrollbar flex-1">
+                <div className="overflow-x-auto overflow-y-auto custom-scrollbar min-h-[100px]">
                     <table className="w-full text-left border-collapse min-w-[1000px]">
-                        <thead className="sticky top-0 bg-[#0b111e] z-10">
-                            <tr className="text-white text-[11px] font-bold uppercase tracking-wider border-b border-[#2d3748]">
-                                <th className="px-6 py-5 w-16"></th>
-                                <th className="px-6 py-5">
-                                    <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors">
-                                        ID <span className="text-[9px] align-top">↑↑</span>
-                                    </div>
-                                </th>
-                                <th className="px-6 py-5 uppercase">username</th>
-                                <th className="px-6 py-5 uppercase">name</th>
-                                <th className="px-6 py-5 uppercase">Amount</th>
-                                <th className="px-6 py-5 uppercase">Txn Type</th>
-                                <th className="px-6 py-5 uppercase">Notes</th>
-                                <th className="px-6 py-5 uppercase">Created At</th>
+                        <thead>
+                            <tr className="text-white text-[13px] font-bold tracking-wider">
+                                <th className="px-8 py-5 w-16"></th>
+                                <th className="px-8 py-5">ID <span className="text-[10px] opacity-50 ml-1">↑↑</span></th>
+                                <th className="px-8 py-5">username</th>
+                                <th className="px-8 py-5">name</th>
+                                <th className="px-8 py-5">Amount</th>
+                                <th className="px-8 py-5">Txn Type</th>
+                                <th className="px-8 py-5">Notes</th>
+                                <th className="px-8 py-5">Created At</th>
                             </tr>
                         </thead>
-                        <tbody className="text-[13px]">
-                            {transactions.map((txn, idx) => (
-                                <tr key={txn.id} className="border-b border-[#2d3748] hover:bg-[#1c2638] transition-colors group">
-                                    <td className="px-6 py-4">
-                                        <Eye className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-white transition-colors" />
-                                    </td>
-                                    <td className="px-6 py-4 text-white font-medium">{txn.id}</td>
-                                    <td className="px-6 py-4 text-white font-medium">{txn.username}</td>
-                                    <td className="px-6 py-4 text-blue-400 font-medium">{txn.name}</td>
-                                    <td className="px-6 py-4 text-white font-mono">{txn.amount}</td>
-                                    <td className="px-6 py-4 text-white">{txn.txnType}</td>
-                                    <td className="px-6 py-4 text-white">{txn.notes}</td>
-                                    <td className="px-6 py-4 text-white font-mono text-[11px]">{txn.createdAt}</td>
-                                </tr>
-                            ))}
+                        <tbody className="text-[13px] text-slate-400">
+                            {/* Empty as per screenshot "Showing 0 of 0" */}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Pagination Placeholder */}
+                <div className="px-8 py-6 border-t border-white/5 bg-[#1a2035]/50 outline-none">
+                    <div className="w-8 h-8 flex items-center justify-center text-white text-sm font-bold rounded cursor-default">1</div>
                 </div>
             </div>
         </div>

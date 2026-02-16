@@ -7,9 +7,9 @@ const Layout = ({ children, onLogout, onNavigate, currentView }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#0b111e]">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#1a2035]">
       {/* Mobile Header */}
-      <div className="flex items-center justify-between md:hidden bg-[#151c2c] p-4 text-white border-b border-[#2d3748]">
+      <div className="flex items-center justify-between md:hidden bg-[#1a2035] p-4 text-white border-b border-white/5">
         <h1 className="font-bold">TRADERS</h1>
         <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -41,7 +41,7 @@ const Layout = ({ children, onLogout, onNavigate, currentView }) => {
           />
         )}
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto flex flex-col p-4 bg-[#0b111e]">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto flex flex-col p-4 bg-[#1a2035]">
           {children}
         </main>
       </div>

@@ -23,7 +23,7 @@ import ActionLedgerPage from './pages/logs/ActionLedgerPage';
 import NotificationsPage from './pages/notifications/NotificationsPage';
 import ClosedPositionsPage from './pages/positions/ClosedPositionsPage';
 import TradingClientsPage from './pages/clients/TradingClientsPage';
-import ClientDetailsPage from './pages/clients/ClientDetailsPage';
+import ClientDetailPage from './pages/clients/ClientDetailPage';
 import NewClientBankDetailsPage from './pages/bank/NewClientBankDetailsPage';
 import ChangePasswordPage from './pages/settings/ChangePasswordPage';
 import ChangeTransactionPasswordPage from './pages/settings/ChangeTransactionPasswordPage';
@@ -33,6 +33,7 @@ import DepositRequestsPage from './pages/requests/DepositRequestsPage';
 import NegativeBalanceTxnsPage from './pages/transactions/NegativeBalanceTxnsPage';
 import PendingOrdersPage from './pages/orders/PendingOrdersPage';
 import ScripDataPage from './pages/data/ScripDataPage';
+import UsersPage from './pages/users/UsersPage';
 import CreateFundForm from './components/CreateFundForm';
 import AddBrokerForm from './components/AddBrokerForm';
 import CreateTradeForm from './components/CreateTradeForm';
@@ -75,23 +76,23 @@ function App() {
   };
 
   const handleAddClient = (newClientData) => {
-      // Basic ID generation and default values for simplicity
-      const newClient = {
-          id: Math.floor(Math.random() * 10000000).toString(),
-          fullName: newClientData.name || 'New User',
-          username: newClientData.username || 'user' + Math.floor(Math.random() * 1000),
-          ledgerBalance: newClientData.creditLimit || '0',
-          grossPL: '0.0000',
-          brokerage: '0.0000',
-          swapCharges: '0.0000',
-          netPL: '0',
-          admin: 'demo001', // Default
-          demoAccount: newClientData.demoAccount ? 'Yes' : 'No',
-          status: newClientData.accountStatus ? 'Active' : 'Suspended',
-          ...newClientData
-      };
-      setClients([...clients, newClient]);
-      setView('users');
+    // Basic ID generation and default values for simplicity
+    const newClient = {
+      id: Math.floor(Math.random() * 10000000).toString(),
+      fullName: newClientData.name || 'New User',
+      username: newClientData.username || 'user' + Math.floor(Math.random() * 1000),
+      ledgerBalance: newClientData.creditLimit || '0',
+      grossPL: '0.0000',
+      brokerage: '0.0000',
+      swapCharges: '0.0000',
+      netPL: '0',
+      admin: 'demo001', // Default
+      demoAccount: newClientData.demoAccount ? 'Yes' : 'No',
+      status: newClientData.accountStatus ? 'Active' : 'Suspended',
+      ...newClientData
+    };
+    setClients([...clients, newClient]);
+    setView('users');
   };
 
   // Dummy Data for Trades (Lifted from TradesPage)
@@ -100,21 +101,21 @@ function App() {
   ]);
 
   const handleAddTrade = (newTradeData) => {
-      const newTrade = {
-          id: Math.floor(Math.random() * 10000000).toString(),
-          scrip: newTradeData.scrip,
-          segment: 'MCX', // Default
-          userId: newTradeData.userId,
-          buyRate: newTradeData.buyRate || '0',
-          sellRate: newTradeData.sellRate || '0',
-          lots: (newTradeData.lots || '0') + ' lots',
-          pl: '0',
-          timeDiff: '0 secs',
-          boughtAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
-          ...newTradeData
-      };
-      setTrades([...trades, newTrade]);
-      setView('trades');
+    const newTrade = {
+      id: Math.floor(Math.random() * 10000000).toString(),
+      scrip: newTradeData.scrip,
+      segment: 'MCX', // Default
+      userId: newTradeData.userId,
+      buyRate: newTradeData.buyRate || '0',
+      sellRate: newTradeData.sellRate || '0',
+      lots: (newTradeData.lots || '0') + ' lots',
+      pl: '0',
+      timeDiff: '0 secs',
+      boughtAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      ...newTradeData
+    };
+    setTrades([...trades, newTrade]);
+    setView('trades');
   };
 
   const [selectedClient, setSelectedClient] = useState(null);
@@ -170,15 +171,15 @@ function App() {
       case 'create-client':
         return <ClientDetailsForm onBack={() => setView('users')} onSave={handleAddClient} mode="create" />;
       case 'create-broker':
-         return <AddBrokerForm onBack={() => setView('users')} onSave={(data) => { console.log('Broker Saved:', data); setView('users'); }} />;
+        return <AddBrokerForm onBack={() => setView('users')} onSave={(data) => { console.log('Broker Saved:', data); setView('users'); }} />;
       case 'create-fund-deposit':
         return <CreateFundForm onBack={() => setView('users')} onSave={(data) => { console.log('Deposit Saved:', data); setView('users'); }} mode="deposit" initialUser={selectedClient} />;
       case 'create-fund-withdraw':
         return <CreateFundForm onBack={() => setView('users')} onSave={(data) => { console.log('Withdraw Saved:', data); setView('users'); }} mode="withdraw" initialUser={selectedClient} />;
       case 'client-details':
-        return <ClientDetailsForm onBack={() => setView('users')} mode="edit" />;
+        return <ClientDetailPage onClose={() => setView('users')} />;
       case 'trading-clients':
-         return <TradingClientsPage clients={clients} onClientClick={() => setView('client-details')} onCreateClick={() => setView('create-client')} onAddBrokerClick={() => setView('create-broker')} onDepositClick={handleDeposit} onWithdrawClick={handleWithdraw} onViewClick={() => setView('client-details')} />;
+        return <UsersPage onNavigate={setView} />;
       case 'new-client-bank':
         return <NewClientBankDetailsPage />;
       case 'create-trade':
