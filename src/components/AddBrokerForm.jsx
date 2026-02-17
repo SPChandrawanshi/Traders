@@ -1,343 +1,421 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ChevronDown } from 'lucide-react';
-
-const FormSection = ({ title, children, className = "" }) => (
-  <div className={`mb-8 ${className}`}>
-    <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6 border-b border-[#2d3748] pb-2">{title}</h3>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-      {children}
-    </div>
-  </div>
-);
-
-const InputField = ({ label, type = "text", subtext, placeholder, name, value, onChange }) => (
-  <div className="flex flex-col gap-1">
-    <label className="text-xs text-slate-400 font-medium">{label}</label>
-    <input 
-      type={type} 
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className="bg-transparent border-b border-[#2d3748] text-slate-100 py-1 transition-colors focus:border-[#4CAF50] focus:outline-none text-sm w-full"
-    />
-    {subtext && <p className="text-[10px] text-slate-500 mt-1 leading-tight">{subtext}</p>}
-  </div>
-);
-
-const SelectField = ({ label, name, options, value, onChange, subtext }) => (
-  <div className="flex flex-col gap-1">
-    <label className="text-xs text-slate-400 font-medium">{label}</label>
-    <div className="relative">
-      <select 
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="bg-[#0b111e] border border-[#2d3748] text-slate-100 py-1 px-3 rounded w-full appearance-none text-sm focus:outline-none focus:border-[#4CAF50]"
-      >
-        {options.map((opt, i) => (
-          <option key={opt} value={opt}>{opt}</option>
-        ))}
-      </select>
-      <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-slate-400">
-        <ChevronDown className="w-3 h-3" />
-      </div>
-    </div>
-    {subtext && <p className="text-[10px] text-slate-500 mt-1 leading-tight">{subtext}</p>}
-  </div>
-);
-
-const ToggleSwitch = ({ label, checked, onChange }) => (
-    <div className="flex justify-between items-center py-2 border-b border-[#2d3748]">
-        <span className="text-xs text-slate-300 font-medium">{label}</span>
-        <button 
-            type="button"
-            onClick={() => onChange(!checked)}
-            className={`w-10 h-5 flex items-center rounded-full p-1 transition-colors ${checked ? 'bg-[#4CAF50]' : 'bg-slate-700'}`}
-        >
-            <div className={`bg-white w-3 h-3 rounded-full shadow-md transform transition-transform ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
-        </button>
-    </div>
-);
-
-const SegmentSettings = ({ title, prefix, data, onChange }) => (
-    <div className="mb-6 p-4 bg-[#1a2333] rounded border border-[#2d3748]">
-        <div className="flex justify-between items-center mb-4">
-             <h4 className="text-sm font-bold text-[#01B4EA] uppercase">{title}</h4>
-             <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">Trading Enabled</span>
-                 <button 
-                    type="button"
-                    onClick={() => onChange(prefix, 'enabled', !data[prefix]?.enabled)}
-                    className={`w-8 h-4 flex items-center rounded-full p-0.5 transition-colors ${data[prefix]?.enabled ? 'bg-[#4CAF50]' : 'bg-slate-700'}`}
-                >
-                    <div className={`bg-white w-3 h-3 rounded-full shadow-md transform transition-transform ${data[prefix]?.enabled ? 'translate-x-4' : 'translate-x-0'}`} />
-                </button>
-             </div>
-        </div>
-
-        {data[prefix]?.enabled && (
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-4">
-                     <SelectField 
-                        label="Brokerage Type" 
-                        name={`${prefix}_brokerageType`}
-                        value={data[prefix]?.brokerageType || 'Per Crore Basis'} 
-                        options={['Per Crore Basis', 'Per Lot Basis']}
-                        onChange={(e) => onChange(prefix, 'brokerageType', e.target.value)}
-                    />
-                     <InputField 
-                        label="Brokerage" 
-                        name={`${prefix}_brokerage`}
-                        value={data[prefix]?.brokerage || '0'} 
-                        onChange={(e) => onChange(prefix, 'brokerage', e.target.value)}
-                    />
-                </div>
-                <div className="space-y-4">
-                    <SelectField 
-                        label="Exposure Type" 
-                        name={`${prefix}_exposureType`}
-                        value={data[prefix]?.exposureType || 'Per Turnover Basis'} 
-                        options={['Per Turnover Basis', 'Fixed Exposure']}
-                        onChange={(e) => onChange(prefix, 'exposureType', e.target.value)}
-                    />
-                    <InputField 
-                        label="Intraday Exposure/Margin" 
-                        name={`${prefix}_intradayExposure`}
-                        value={data[prefix]?.intradayExposure || '0'} 
-                        onChange={(e) => onChange(prefix, 'intradayExposure', e.target.value)}
-                        subtext="Margin required to initiate trade."
-                    />
-                    <InputField 
-                        label="Holding Exposure/Margin" 
-                        name={`${prefix}_holdingExposure`}
-                        value={data[prefix]?.holdingExposure || '0'} 
-                        onChange={(e) => onChange(prefix, 'holdingExposure', e.target.value)}
-                         subtext="Margin required to hold overnight."
-                    />
-                </div>
-             </div>
-        )}
-    </div>
-);
 
 const AddBrokerForm = ({ onBack, onSave }) => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
-    password: '',
-    transactionPassword: '',
-    
-    accountStatus: 'Active',
-    sharePL: '0',
-    shareBrokerage: '50',
-    shareSwap: '10',
-    brokerageShareType: 'Percentage',
-    tradingClientsLimit: '10',
-    subBrokersLimit: '3',
+    const [formData, setFormData] = useState({
+        // Personal Details
+        firstName: '',
+        lastName: '',
+        username: '',
+        password: '',
+        transactionPasswordSet: '',
 
-    permissions: {
-        subBrokerActions: true,
-        payinAllowed: false,
-        payoutAllowed: false,
-        createClientsAllowed: false,
-        clientTasksAllowed: false,
-        tradeActivityAllowed: false,
-        notificationsAllowed: false
-    },
+        // Config
+        accountStatus: 'Active',
+        sharePL: '0',
+        shareBrokerage: '50',
+        shareSwap: '10',
+        brokerageShareType: 'Percentage',
+        tradingClientsLimit: '10',
+        subBrokersLimit: '3',
 
-    segmentSettings: {
-        comex_future: { enabled: false },
-        comex_currency: { enabled: false },
-        comex_crypto: { enabled: false },
-        nse_acc: { enabled: false },
-        nse_equity_opt_short: { enabled: false },
-        nse_equity_opt: { enabled: false },
-        nse_index_opt_short: { enabled: false },
-        nse_index_opt: { enabled: false }, 
-        nse_spot: { enabled: false },
-        mcx_future: { enabled: false },
-        mcx_opt: { enabled: false },
-        mcx_opt_short: { enabled: false }
-    },
+        // Permissions
+        permissions: {
+            subBrokerActions: 'Yes',
+            payinAllowed: 'No',
+            payoutAllowed: 'No',
+            createClientsAllowed: 'No',
+            clientTasksAllowed: 'No',
+            tradeActivityAllowed: 'No',
+            notificationsAllowed: 'No'
+        },
 
-    mcxLotMargins: {},
-    mcxLotBrokerage: {}
-  });
+        // Segments
+        segments: {
+            comex_commodity_future: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', exposureType: 'Per Turnover Basis', intraday: '', holding: '' },
+            comex_currency_future: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', exposureType: 'Per Turnover Basis', intraday: '', holding: '' },
+            comex_crypto_future: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', exposureType: 'Per Turnover Basis', intraday: '', holding: '' },
+            nse_all_future: { enabled: false, brokerage: '', intraday: '', holding: '' },
+            nse_equity_opt_short: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', intraday: '', holding: '' },
+            nse_equity_opt: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', intraday: '', holding: '' },
+            nse_index_opt_short: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', intraday: '', holding: '' },
+            nse_index_opt: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', intraday: '', holding: '' },
+            nse_equity_spot: { enabled: false, brokerage: '', intraday: '', holding: '' },
+            mcx_all_future: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', exposureType: 'Per Turnover Basis', intraday: '', holding: '' },
+            mcx_comm_opt: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', intraday: '', holding: '' },
+            mcx_comm_opt_short: { enabled: false, brokerageType: 'Per Crore Basis', brokerage: '', intraday: '', holding: '' }
+        },
 
-  const [activeTab, setActiveTab] = useState('details'); // details, segments, lots
+        // MCX Lot Wise Margins
+        mcxMargins: {
+            ALUMINI: { intraday: '', holding: '' },
+            ALUMINIUM: { intraday: '', holding: '' },
+            COPPER: { intraday: '', holding: '' },
+            COTTON: { intraday: '', holding: '' },
+            CRUDEOIL: { intraday: '', holding: '' },
+            CRUDEOILM: { intraday: '', holding: '' },
+            GOLD: { intraday: '', holding: '' },
+            GOLDGUINEA: { intraday: '', holding: '' },
+            GOLDM: { intraday: '', holding: '' },
+            GOLDPETAL: { intraday: '', holding: '' },
+            LEAD: { intraday: '', holding: '' },
+            LEADMINI: { intraday: '', holding: '' },
+            MCXBULLDEX: { intraday: '', holding: '' },
+            NATGASMINI: { intraday: '', holding: '' },
+            NATURALGAS: { intraday: '', holding: '' },
+            NICKEL: { intraday: '', holding: '' },
+            SILVER: { intraday: '', holding: '' },
+            SILVERM: { intraday: '', holding: '' },
+            SILVERMIC: { intraday: '', holding: '' },
+            ZINC: { intraday: '', holding: '' },
+            ZINCMINI: { intraday: '', holding: '' }
+        },
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+        // MCX Lot Wise Brokerage - Single Field
+        mcxBrokerage: {
+            ALUMINI: '', ALUMINIUM: '', COPPER: '', COTTON: '', CRUDEOIL: '', CRUDEOILM: '',
+            GOLD: '', GOLDGUINEA: '', GOLDM: '', GOLDPETAL: '', LEAD: '', LEADMINI: '',
+            MCXBULLDEX: '', NATGASMINI: '', NATURALGAS: '', NICKEL: '', SILVER: '',
+            SILVERM: '', SILVERMIC: '', ZINC: '', ZINCMINI: ''
+        },
 
-  const handlePermissionChange = (key, val) => {
-    setFormData(prev => ({
-        ...prev,
-        permissions: { ...prev.permissions, [key]: val }
-    }));
-  };
+        finalTransactionPassword: ''
+    });
 
-  const handleSegmentChange = (prefix, field, val) => {
-      setFormData(prev => ({
-          ...prev,
-          segmentSettings: {
-              ...prev.segmentSettings,
-              [prefix]: {
-                  ...prev.segmentSettings[prefix],
-                  [field]: val
-              }
-          }
-      }));
-  };
-  
-    const mcxCommodities = [
-        'ALUMINI', 'ALUMINIUM', 'COPPER', 'COTTON', 'CRUDEOIL', 'CRUDEOILM', 'GOLD', 
-        'GOLDGUINEA', 'GOLDM', 'GOLDPETAL', 'LEAD', 'LEADMINI', 'MCXBULLDEX', 
-        'NATGASMINI', 'NATURALGAS', 'NICKEL', 'SILVER', 'SILVERM', 'SILVERMIC', 'ZINC', 'ZINCMINI'
-    ];
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
+    const handlePermissionChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            permissions: { ...prev.permissions, [field]: value }
+        }));
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Saving Broker Data:", formData);
-    if(onSave) onSave(formData);
-  };
+    const handleSegmentChange = (segment, field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            segments: {
+                ...prev.segments,
+                [segment]: { ...prev.segments[segment], [field]: value }
+            }
+        }));
+    };
 
-  return (
-    <div className="bg-[#151c2c] rounded-lg border border-[#2d3748] overflow-hidden flex flex-col h-full animate-fade-in relative">
-         <button 
-            onClick={onBack}
-            className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-20"
-        >
-            <ArrowLeft className="w-6 h-6" />
-        </button>
+    const handleMcxMarginChange = (scrip, field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            mcxMargins: {
+                ...prev.mcxMargins,
+                [scrip]: { ...prev.mcxMargins[scrip], [field]: value }
+            }
+        }));
+    };
 
-      <div className="px-6 py-4 bg-[#1a2333] border-b border-[#2d3748] flex items-center gap-4">
-        <h2 className="text-lg font-bold text-white">Add Sub Broker</h2>
-        <div className="flex gap-2">
-            <button 
-                onClick={() => setActiveTab('details')}
-                className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === 'details' ? 'bg-[#01B4EA] text-white' : 'text-slate-400 hover:bg-slate-700'}`}
-            >
-                Details & Config
-            </button>
-            <button 
-                onClick={() => setActiveTab('segments')}
-                className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === 'segments' ? 'bg-[#01B4EA] text-white' : 'text-slate-400 hover:bg-slate-700'}`}
-            >
-                Segments
-            </button>
-             <button 
-                onClick={() => setActiveTab('lots')}
-                className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === 'lots' ? 'bg-[#01B4EA] text-white' : 'text-slate-400 hover:bg-slate-700'}`}
-            >
-                Lot Wise Limits
-            </button>
+    const handleMcxBrokerageChange = (scrip, value) => {
+        setFormData(prev => ({
+            ...prev,
+            mcxBrokerage: { ...prev.mcxBrokerage, [scrip]: value }
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(formData);
+    };
+
+    // Components
+    const SectionHeader = ({ color, title }) => (
+        <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-2">
+            <span className={`w-2.5 h-2.5 rounded-sm ${color}`}></span>
+            <h3 className="text-white text-[15px] font-bold uppercase tracking-wide">{title}</h3>
         </div>
-      </div>
-      
-      <div className="p-8 flex-1">
-        <form onSubmit={handleSubmit}>
-            
-            {/* TAB: DETAILS */}
-            {activeTab === 'details' && (
-                <>
-                    <FormSection title="Personal Details">
-                        <InputField label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} subtext="Insert Real name of the broker. Will be visible in website." />
-                        <InputField label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} subtext="Insert Real name of the broker. Will be visible in website." />
-                        <InputField label="Username" name="username" value={formData.username} onChange={handleChange} subtext="Username for logging-in. Must be unique. No symbols." />
-                        <InputField label="Password" name="password" type="password" value={formData.password} onChange={handleChange} subtext="Password for logging-in. Case sensitive." />
-                        <InputField label="Transaction Password" name="transactionPassword" type="password" value={formData.transactionPassword} onChange={handleChange} />
-                    </FormSection>
+    );
 
-                    <FormSection title="Config">
-                         <SelectField label="Account Status" name="accountStatus" options={['Active', 'Suspended', 'Closed']} value={formData.accountStatus} onChange={handleChange} />
-                         <InputField label="Profit/Loss Share in %" name="sharePL" value={formData.sharePL} onChange={handleChange} subtext="Example: 30, will give broker 30% of total brokerage." />
-                         <InputField label="Brokerage Share in %" name="shareBrokerage" value={formData.shareBrokerage} onChange={handleChange} subtext="Example: 50, will give broker 50% of total brokerage." />
-                         <InputField label="Swap Share in %" name="shareSwap" value={formData.shareSwap} onChange={handleChange} subtext="Example: 10, will give broker 10% of total swap." />
-                         <SelectField label="Brokerage Share Type" name="brokerageShareType" options={['Percentage', 'Fixed']} value={formData.brokerageShareType} onChange={handleChange} subtext="Fixed or Percentage based sharing." />
-                         <InputField label="Trading Clients Limit" name="tradingClientsLimit" value={formData.tradingClientsLimit} onChange={handleChange} />
-                         <InputField label="Sub Brokers Limit" name="subBrokersLimit" value={formData.subBrokersLimit} onChange={handleChange} />
-                    </FormSection>
+    const InputGroup = ({ label, subtext, value, onChange, name, type = "text", placeholder = "" }) => (
+        <div className="mb-8">
+            <label className="block text-[#bcc0cf] text-[11px] font-bold uppercase mb-2 tracking-wider">{label}</label>
+            <input
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                className="w-full bg-[#1a2035] border-b border-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:border-[#4caf50] focus:bg-white/5 transition-colors placeholder-slate-600"
+                placeholder={placeholder}
+            />
+            {subtext && <p className="text-[12px] text-[#868a9a] mt-2 leading-relaxed font-normal">{subtext}</p>}
+        </div>
+    );
 
-                    <FormSection title="Permissions">
-                        <div className="col-span-1 md:col-span-2 space-y-2">
-                             <ToggleSwitch label="Sub Brokers Actions (Create, Edit)" checked={formData.permissions.subBrokerActions} onChange={(val) => handlePermissionChange('subBrokerActions', val)} />
-                             <ToggleSwitch label="Payin Allowed" checked={formData.permissions.payinAllowed} onChange={(val) => handlePermissionChange('payinAllowed', val)} />
-                             <ToggleSwitch label="Payout Allowed" checked={formData.permissions.payoutAllowed} onChange={(val) => handlePermissionChange('payoutAllowed', val)} />
-                             <ToggleSwitch label="Create Clients Allowed" checked={formData.permissions.createClientsAllowed} onChange={(val) => handlePermissionChange('createClientsAllowed', val)} />
-                             <ToggleSwitch label="Client Tasks Allowed" checked={formData.permissions.clientTasksAllowed} onChange={(val) => handlePermissionChange('clientTasksAllowed', val)} />
-                             <ToggleSwitch label="Trade Activity Allowed" checked={formData.permissions.tradeActivityAllowed} onChange={(val) => handlePermissionChange('tradeActivityAllowed', val)} />
-                             <ToggleSwitch label="Notifications Allowed" checked={formData.permissions.notificationsAllowed} onChange={(val) => handlePermissionChange('notificationsAllowed', val)} />
-                        </div>
-                    </FormSection>
-                </>
-            )}
-
-            {/* TAB: SEGMENTS */}
-            {activeTab === 'segments' && (
-                <div className="space-y-4">
-                    <SegmentSettings title="COMEX Commodity Future" prefix="comex_future" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="COMEX Currency Future" prefix="comex_currency" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="COMEX Crypto Future" prefix="comex_crypto" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    
-                    <SegmentSettings title="NSE ALL Future" prefix="nse_acc" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="NSE Equity Options (Shortselling)" prefix="nse_equity_opt_short" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="NSE Equity Options" prefix="nse_equity_opt" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="NSE Index Options (Shortselling)" prefix="nse_index_opt_short" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="NSE Index Options" prefix="nse_index_opt" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                     <SegmentSettings title="NSE Equity Spot" prefix="nse_spot" data={formData.segmentSettings} onChange={handleSegmentChange} />
-
-                    <SegmentSettings title="MCX ALL Future" prefix="mcx_future" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="MCX Commodity Options" prefix="mcx_opt" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                    <SegmentSettings title="MCX Commodity Options (Shortselling)" prefix="mcx_opt_short" data={formData.segmentSettings} onChange={handleSegmentChange} />
-                </div>
-            )}
-
-            {/* TAB: LOT WISE LIMITS */}
-            {activeTab === 'lots' && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div>
-                         <h3 className="text-[#01B4EA] font-bold text-sm uppercase mb-4 border-b border-[#2d3748] pb-2">MCX Lot wise Margins (Intraday / Holding)</h3>
-                         <div className="space-y-4">
-                            {mcxCommodities.map(comm => (
-                                <div key={comm} className="flex gap-2 items-center">
-                                    <span className="text-xs text-slate-400 w-24">{comm}</span>
-                                    <input placeholder="Intraday" className="bg-[#1a2333] border border-[#2d3748] text-white text-xs px-2 py-1 rounded w-full focus:outline-none focus:border-[#4CAF50]" />
-                                    <input placeholder="Holding" className="bg-[#1a2333] border border-[#2d3748] text-white text-xs px-2 py-1 rounded w-full focus:outline-none focus:border-[#4CAF50]" />
-                                </div>
-                            ))}
-                         </div>
-                    </div>
-                    <div>
-                         <h3 className="text-[#01B4EA] font-bold text-sm uppercase mb-4 border-b border-[#2d3748] pb-2">MCX Lot wise Brokerage</h3>
-                         <div className="space-y-4">
-                            {mcxCommodities.map(comm => (
-                                <div key={comm} className="flex gap-2 items-center">
-                                    <span className="text-xs text-slate-400 w-24">{comm}</span>
-                                    <input placeholder="Brokerage" className="bg-[#1a2333] border border-[#2d3748] text-white text-xs px-2 py-1 rounded w-full focus:outline-none focus:border-[#4CAF50]" />
-                                </div>
-                            ))}
-                         </div>
-                    </div>
-                </div>
-            )}
-
-            <div className="pt-8 border-t border-[#2d3748] mt-8 flex justify-end">
-                 <button
-                  type="submit"
-                  className="bg-[#4CAF50] hover:bg-green-600 text-white font-bold py-3 px-10 rounded shadow-lg uppercase tracking-wider text-sm transition-all flex items-center gap-2"
+    const SelectGroup = ({ label, subtext, value, onChange, options, name }) => (
+        <div className="mb-8">
+            <label className="block text-[#bcc0cf] text-[11px] font-bold uppercase mb-2 tracking-wider">{label}</label>
+            <div className="relative">
+                <select
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    className="w-full bg-[#1a2035] border-b border-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:border-[#4caf50] focus:bg-white/5 transition-colors appearance-none cursor-pointer"
                 >
-                  SAVE BROKER
-                </button>
+                    {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
+                <div className="absolute right-3 top-2.5 pointer-events-none text-slate-500">
+                    <i className="fa-solid fa-caret-down text-xs"></i>
+                </div>
             </div>
-        </form>
-      </div>
-    </div>
-  );
+            {subtext && <p className="text-[12px] text-[#868a9a] mt-2 leading-relaxed font-normal">{subtext}</p>}
+        </div>
+    );
+
+    const SegmentBlock = ({ title, segmentKey, config }) => {
+        // config: { hasBrokerageType, hasExposureType }
+        const data = formData.segments[segmentKey];
+        return (
+            <div className="mb-10 p-6 rounded bg-[#1a2035]/30 border border-white/5">
+                <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
+                    <h4 className="text-[#4caf50] text-[13px] font-bold uppercase tracking-widest">{title}</h4>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                        <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider group-hover:text-white transition-colors">Trading Enabled</span>
+                        <div className="relative">
+                            <input
+                                type="checkbox"
+                                checked={data.enabled}
+                                onChange={(e) => handleSegmentChange(segmentKey, 'enabled', e.target.checked)}
+                                className="sr-only peer"
+                            />
+                            <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#4caf50]"></div>
+                        </div>
+                    </label>
+                </div>
+
+                {data.enabled && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 animate-fadeIn">
+                        {config.hasBrokerageType && (
+                            <SelectGroup
+                                label="Brokerage Type"
+                                value={data.brokerageType}
+                                options={['Per Crore Basis', 'Per Lot Basis']}
+                                onChange={(e) => handleSegmentChange(segmentKey, 'brokerageType', e.target.value)}
+                            />
+                        )}
+                        <InputGroup
+                            label="Brokerage"
+                            value={data.brokerage}
+                            onChange={(e) => handleSegmentChange(segmentKey, 'brokerage', e.target.value)}
+                            name={`${segmentKey}_brokerage`}
+                        />
+                        {config.hasExposureType && (
+                            <SelectGroup
+                                label="Exposure Type"
+                                value={data.exposureType}
+                                options={['Per Turnover Basis', 'Fixed Exposure']}
+                                onChange={(e) => handleSegmentChange(segmentKey, 'exposureType', e.target.value)}
+                            />
+                        )}
+                        <InputGroup
+                            label="Intraday Exposure/Margin"
+                            value={data.intraday}
+                            onChange={(e) => handleSegmentChange(segmentKey, 'intraday', e.target.value)}
+                            subtext="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade."
+                            name={`${segmentKey}_intraday`}
+                        />
+                        <InputGroup
+                            label="Holding Exposure/Margin"
+                            value={data.holding}
+                            onChange={(e) => handleSegmentChange(segmentKey, 'holding', e.target.value)}
+                            subtext="Holding Exposure auto calculates the margin money required to hold a position overnight for the next market working day. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and holding exposure is 800, (45000 X 100) / 80 = 56250 is required to hold position overnight. System automatically checks at a given time around market closure to check and close all trades if margin(M2M) insufficient."
+                            name={`${segmentKey}_holding`}
+                        />
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    const mcxScrips = Object.keys(formData.mcxMargins);
+
+    return (
+        <div className="min-h-screen bg-[#1a2035] font-sans flex flex-col items-center py-10 px-4">
+            <div className="w-full max-w-7xl relative">
+
+                {/* 3D Ribbon Header */}
+                <div className="relative z-20 mb-[-25px] ml-4">
+                    <div
+                        className="px-8 py-4 rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] relative z-10"
+                        style={{
+                            background: 'linear-gradient(60deg, #66bb6a, #43a047)',
+                            display: 'inline-block'
+                        }}
+                    >
+                        <h2 className="text-white text-[16px] font-bold leading-none tracking-widest uppercase m-0">
+                            Add Broker
+                        </h2>
+                    </div>
+                    {/* 3D Triangle Fold */}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '-10px',
+                        left: '6px',
+                        width: '0',
+                        height: '0',
+                        borderLeft: '10px solid transparent',
+                        borderRight: '10px solid transparent',
+                        borderTop: '10px solid #2e7d32',
+                        zIndex: '5'
+                    }}></div>
+                </div>
+
+                {/* Main Card */}
+                <div className="bg-[#202940] rounded-md shadow-2xl border border-white/5 pt-16 pb-12 px-6 lg:px-10 w-full">
+                    <form onSubmit={handleSubmit}>
+
+                        {/* 1. PERSONAL DETAILS */}
+                        <div className="mb-12">
+                            <SectionHeader color="bg-[#4caf50]" title="Personal Details" /> {/* Green */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                <InputGroup label="First Name" subtext="Insert Real name of the broker. Will be visible in website" name="firstName" value={formData.firstName} onChange={handleChange} />
+                                <InputGroup label="Last Name" subtext="Insert Real name of the broker. Will be visible in website" name="lastName" value={formData.lastName} onChange={handleChange} />
+                                <InputGroup label="Username" subtext="username for loggin-in with, is not case sensitive. must be unique for every trader. should not contain symbols." name="username" value={formData.username} onChange={handleChange} />
+                                <InputGroup label="Password" subtext="password for loggin-in with, is case sensitive." name="password" type="password" value={formData.password} onChange={handleChange} />
+                                <InputGroup label="Transaction Password to set" name="transactionPasswordSet" type="password" value={formData.transactionPasswordSet} onChange={handleChange} />
+                            </div>
+                        </div>
+
+                        {/* 2. CONFIG */}
+                        <div className="mb-12">
+                            <SectionHeader color="bg-[#ff9800]" title="Config" /> {/* Orange */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                <SelectGroup label="Account Status" options={['Active', 'Suspended', 'Closed']} name="accountStatus" value={formData.accountStatus} onChange={handleChange} />
+                                <InputGroup label="Profit/Loss Share in %" subtext="Example: 30, will give broker 30% of total brokerage collected from clients" name="sharePL" value={formData.sharePL} onChange={handleChange} />
+                                <InputGroup label="Brokerage Share in %" subtext="Example: 30, will give broker 30% of total brokerage collected from clients. This field is irrelevant if the Brokerage Share Type is set to 'Fixed'." name="shareBrokerage" value={formData.shareBrokerage} onChange={handleChange} />
+                                <InputGroup label="Swap Share in %" subtext="Example: 30, will give broker 30% of total swap collected from clients" name="shareSwap" value={formData.shareSwap} onChange={handleChange} />
+                                <SelectGroup label="Brokerage Share Type" subtext="If fixed is selected, Then Brokerage set in sections below like MCX, NSE, etc. will be your brokerage and any amount above that will be of broker. If Percentage is selected then Brokerage set in sections below will be the minimum brokerage which can be set in Client's account and Broker will get % wise share in brokerage set above." options={['Percentage', 'Fixed']} name="brokerageShareType" value={formData.brokerageShareType} onChange={handleChange} />
+                                <InputGroup label="Trading Clients Limit" subtext="Max. no. of Trading Clients" name="tradingClientsLimit" value={formData.tradingClientsLimit} onChange={handleChange} />
+                                <InputGroup label="Sub Brokers Limit" subtext="Max. no. of Sub-brokers" name="subBrokersLimit" value={formData.subBrokersLimit} onChange={handleChange} />
+                            </div>
+                        </div>
+
+                        {/* 3. PERMISSIONS */}
+                        <div className="mb-12">
+                            <SectionHeader color="bg-[#f44336]" title="Permissions" /> {/* Red */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                <SelectGroup label="Sub Brokers Actions (Create, Edit)" options={['Yes', 'No']} value={formData.permissions.subBrokerActions} onChange={(e) => handlePermissionChange('subBrokerActions', e.target.value)} />
+                                <SelectGroup label="Payin Allowed" options={['Yes', 'No']} value={formData.permissions.payinAllowed} onChange={(e) => handlePermissionChange('payinAllowed', e.target.value)} />
+                                <SelectGroup label="Payout Allowed" options={['Yes', 'No']} value={formData.permissions.payoutAllowed} onChange={(e) => handlePermissionChange('payoutAllowed', e.target.value)} />
+                                <SelectGroup label="Create Clients Allowed (Create, Update and Reset Password)" options={['Yes', 'No']} value={formData.permissions.createClientsAllowed} onChange={(e) => handlePermissionChange('createClientsAllowed', e.target.value)} />
+                                <SelectGroup label="Client Tasks Allowed (Account Reset, Recalculate brokerage etc.)" options={['Yes', 'No']} value={formData.permissions.clientTasksAllowed} onChange={(e) => handlePermissionChange('clientTasksAllowed', e.target.value)} />
+                                <SelectGroup label="Trade Activity Allowed (Create, Update, Restore, Delete Trade)" options={['Yes', 'No']} value={formData.permissions.tradeActivityAllowed} onChange={(e) => handlePermissionChange('tradeActivityAllowed', e.target.value)} />
+                                <SelectGroup label="Notifications Allowed" options={['Yes', 'No']} value={formData.permissions.notificationsAllowed} onChange={(e) => handlePermissionChange('notificationsAllowed', e.target.value)} />
+                            </div>
+                        </div>
+
+                        {/* 4. TRADING SEGMENTS */}
+                        <div className="mb-12">
+                            <SectionHeader color="bg-[#00bcd4]" title="Trading Segments" /> {/* Cyan/Blue */}
+                            <div className="space-y-2">
+                                <SegmentBlock title="COMEX Commodity Future :" segmentKey="comex_commodity_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                                <SegmentBlock title="COMEX Currency Future :" segmentKey="comex_currency_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                                <SegmentBlock title="COMEX Crypto Future :" segmentKey="comex_crypto_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                                <SegmentBlock title="NSE ALL Future :" segmentKey="nse_all_future" config={{ hasBrokerageType: false, hasExposureType: false }} />
+                                <SegmentBlock title="NSE Equity Options (Shortselling):" segmentKey="nse_equity_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                                <SegmentBlock title="NSE Equity Options :" segmentKey="nse_equity_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                                <SegmentBlock title="NSE Index Options (Shortselling):" segmentKey="nse_index_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                                <SegmentBlock title="NSE Index Options :" segmentKey="nse_index_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                                <SegmentBlock title="NSE Equity Spot :" segmentKey="nse_equity_spot" config={{ hasBrokerageType: false, hasExposureType: false }} />
+                                <SegmentBlock title="MCX ALL Future :" segmentKey="mcx_all_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                                <SegmentBlock title="MCX Commodity Options :" segmentKey="mcx_comm_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                                <SegmentBlock title="MCX Commodity Options (Shortselling):" segmentKey="mcx_comm_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                            </div>
+                        </div>
+
+                        {/* 5. MCX LOT WISE MARGINS */}
+                        <div className="mb-12">
+                            <SectionHeader color="bg-[#9c27b0]" title="MCX Lot wise Margins" /> {/* Purple */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {mcxScrips.map(scrip => (
+                                    <div key={scrip} className="bg-[#1a2035] p-4 rounded border border-white/5">
+                                        <h5 className="text-[#4caf50] text-[12px] font-bold uppercase mb-4">{scrip}</h5>
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-[#bcc0cf] text-[10px] font-bold uppercase mb-1">INTRADAY</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.mcxMargins[scrip].intraday}
+                                                    onChange={(e) => handleMcxMarginChange(scrip, 'intraday', e.target.value)}
+                                                    className="w-full bg-transparent border-b border-white/10 text-white text-sm py-1 focus:border-[#4caf50] focus:outline-none"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[#bcc0cf] text-[10px] font-bold uppercase mb-1">HOLDING</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.mcxMargins[scrip].holding}
+                                                    onChange={(e) => handleMcxMarginChange(scrip, 'holding', e.target.value)}
+                                                    className="w-full bg-transparent border-b border-white/10 text-white text-sm py-1 focus:border-[#4caf50] focus:outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 6. MCX LOT WISE BROKERAGE */}
+                        <div className="mb-12">
+                            <SectionHeader color="bg-[#e91e63]" title="MCX Lot wise Brokerage" /> {/* Pink/Rose */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {Object.keys(formData.mcxBrokerage).map(scrip => (
+                                    <div key={scrip}>
+                                        <label className="block text-[#bcc0cf] text-[11px] font-bold uppercase mb-2">{scrip}</label>
+                                        <input
+                                            type="text"
+                                            value={formData.mcxBrokerage[scrip]}
+                                            onChange={(e) => handleMcxBrokerageChange(scrip, e.target.value)}
+                                            className="w-full bg-[#1a2035] border-b border-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:border-[#4caf50] transition-colors"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 7. TRANSACTION PASSWORD (FINAL) */}
+                        <div className="mb-12 pt-8 border-t border-white/10">
+                            <div className="max-w-md">
+                                <InputGroup
+                                    label="Your Transaction Password"
+                                    name="finalTransactionPassword"
+                                    type="password"
+                                    value={formData.finalTransactionPassword}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        {/* SAVE BUTTON */}
+                        <div className="pt-4 flex justify-end">
+                            <button
+                                type="submit"
+                                className="bg-gradient-to-r from-[#4caf50] to-[#43a047] hover:from-[#43a047] hover:to-[#388e3c] text-white px-10 py-3 rounded shadow-[0_4px_20px_0_rgba(76,175,80,0.4)] font-bold text-xs tracking-widest transition-all uppercase hover:scale-105 active:scale-95"
+                            >
+                                ADD BROKER
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <style jsx>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 0.3s ease-out forwards;
+                }
+            `}</style>
+        </div>
+    );
 };
 
 export default AddBrokerForm;

@@ -74,7 +74,7 @@ const UsersPage = ({ onNavigate }) => {
             {/* Add Sub Broker Button */}
             <div>
                 <button
-                    onClick={() => onNavigate?.('add-broker')}
+                    onClick={() => onNavigate('create-broker')}
                     className="btn-success-gradient text-white font-bold py-2.5 px-6 rounded uppercase tracking-wide text-xs"
                 >
                     ADD SUB BROKER

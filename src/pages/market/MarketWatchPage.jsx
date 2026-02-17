@@ -6,6 +6,14 @@ const MarketWatchPage = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [selectedScrips, setSelectedScrips] = useState([]);
     const [bannedScrips, setBannedScrips] = useState([]); // Track banned scrips
+    const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+
+    React.useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date().toLocaleTimeString());
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
 
     const suggestions = [
         { id: '341', label: '341' },
@@ -24,9 +32,9 @@ const MarketWatchPage = () => {
         { id: '5', name: 'CRUDEOIL26FEB5900CE', expiry: '2026-02-17', bid: '131', ask: '134.1', ltp: '131', change: '-64.1', high: '211.8', low: '128' },
         { id: '6', name: 'CRUDEOIL26FEB5900PE', expiry: '2026-02-17', bid: '403.3', ask: '418', ltp: '404.7', change: '46.3', high: '430.4', low: '335' },
         { id: '7', name: 'CRUDEOIL26FEB5950CE', expiry: '2026-02-17', bid: '121.8', ask: '124', ltp: '124.6', change: '-62.2', high: '198.8', low: '119.5' },
-        { id: '8', name: 'CRUDEOIL26FEB5950PE', expiry: '2026-02-17', bid: '415.2', ask: '479.8', ltp: '442.4', change: '44.7', high: '469', low: '365' },
-        { id: '9', name: 'CRUDEOIL26FEB6150CE', expiry: '2026-02-17', bid: '88.2', ask: '98.9', ltp: '91.6', change: '-108.3', high: '199.9', low: '87.3' },
-    ]);
+        { id: '8', name: 'CRUDEOIL26FEB5950PE', expiry: '2026-02-17', bid: '415.2', ask: '479.8', ltp: '442.4', change: '44.7', high: '469', low: '365', time: '11:10:18' },
+        { id: '9', name: 'CRUDEOIL26FEB6150CE', expiry: '2026-02-17', bid: '88.2', ask: '98.9', ltp: '91.6', change: '-108.3', high: '199.9', low: '87.3', time: '11:10:18' },
+    ].map(s => ({ ...s, time: s.time || '11:10:18' })));
 
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -71,8 +79,8 @@ const MarketWatchPage = () => {
                         {isSelected && <Check className="w-4 h-4 text-white" />}
                     </div>
                     <div>
-                        <h3 className="text-white font-bold text-[13px] uppercase tracking-tight">{scrip.name}</h3>
-                        <p className="text-[10px] text-slate-500">{scrip.expiry}</p>
+                        <h3 className="text-white font-bold text-sm uppercase tracking-tight">{scrip.name}</h3>
+                        <p className="text-[12px] text-slate-500">{scrip.expiry}</p>
                     </div>
                 </div>
             </div>
@@ -89,7 +97,10 @@ const MarketWatchPage = () => {
             <div className="mt-4 flex justify-end">
                 <button
                     onClick={() => onToggleBan(scrip.id)}
-                    className={`bg-[#e53935] hover:bg-red-600 text-white font-bold text-[10px] uppercase px-4 py-2 rounded shadow transition-all`}
+                    className={`font-bold text-sm uppercase px-4 py-2 rounded shadow transition-all active:scale-95 text-white ${isBanned
+                        ? 'bg-linear-to-r from-[#288c6c] to-[#4ea752] hover:from-[#1b5e20] hover:to-[#2e7d32]'
+                        : 'bg-linear-to-r from-[#e53935] to-[#f44336] hover:from-[#b71c1c] hover:to-[#c62828]'
+                        }`}
                 >
                     {isBanned ? 'REMOVE BAN' : 'ADD TO BAN'}
                 </button>
@@ -104,13 +115,19 @@ const MarketWatchPage = () => {
                 <div>
                     <div className="bg-[#4CAF50] p-3 px-4 shadow-md mb-6 flex justify-between items-center">
                         <h2 className="text-white font-medium text-lg tracking-wide">Market Watch</h2>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[12px] font-bold uppercase tracking-widest" style={{ color: '#bcc0cf' }}>Time:</span>
+                            <span className="text-white font-bold text-sm">{currentTime}</span>
+                        </div>
                     </div>
 
-                    {successMessage && (
-                        <div className="text-white text-center font-bold text-sm mb-4">
-                            {successMessage}
-                        </div>
-                    )}
+                    <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 pointer-events-none">
+                        {successMessage && (
+                            <div className="bg-slate-800/90 text-white px-6 py-2 rounded-full shadow-2xl border border-white/10 backdrop-blur-md animate-bounce text-xs font-bold uppercase tracking-wider">
+                                {successMessage}
+                            </div>
+                        )}
+                    </div>
 
                     <div className="relative max-w-sm mb-2">
                         <input
@@ -143,7 +160,7 @@ const MarketWatchPage = () => {
                     <div className="bg-black overflow-hidden shadow-2xl">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="text-white text-[12px] font-bold uppercase tracking-wider bg-black border-b border-white/5">
+                                <tr className="text-white text-sm font-bold uppercase tracking-wider bg-black border-b border-white/5">
                                     <th className="py-4 w-16 text-center"></th>
                                     <th className="py-4 px-4 min-w-[200px]">Scrip</th>
                                     <th className="py-4 text-center">Bid</th>
@@ -152,6 +169,7 @@ const MarketWatchPage = () => {
                                     <th className="py-4 text-center">Change</th>
                                     <th className="py-4 text-center">High</th>
                                     <th className="py-4 text-center">Low</th>
+                                    <th className="py-4 text-center" style={{ color: '#bcc0cf' }}>Time</th>
                                     <th className="py-4 text-right px-6">Action</th>
                                 </tr>
                             </thead>
@@ -180,10 +198,14 @@ const MarketWatchPage = () => {
                                         </td>
                                         <td className="py-4 text-center text-white text-[14px] font-bold">{scrip.high}</td>
                                         <td className="py-4 text-center text-white text-[14px] font-bold">{scrip.low}</td>
+                                        <td className="py-4 text-center text-[12px] font-medium" style={{ color: '#bcc0cf' }}>{scrip.time}</td>
                                         <td className="py-4 text-right px-6">
                                             <button
                                                 onClick={() => toggleBanStatus(scrip.id)}
-                                                className="bg-[#e53935] hover:bg-red-600 text-white font-bold text-[10px] py-2 px-4 rounded shadow transition-all uppercase whitespace-nowrap"
+                                                className={`text-white font-bold text-sm py-2 px-4 rounded shadow transition-all uppercase whitespace-nowrap active:scale-95 ${bannedScrips.includes(scrip.id)
+                                                    ? 'bg-linear-to-r from-[#288c6c] to-[#4ea752] hover:from-[#1b5e20] hover:to-[#2e7d32]'
+                                                    : 'bg-linear-to-r from-[#e53935] to-[#f44336] hover:from-[#b71c1c] hover:to-[#c62828]'
+                                                    }`}
                                             >
                                                 {bannedScrips.includes(scrip.id) ? 'REMOVE BAN' : 'ADD TO BAN'}
                                             </button>
@@ -210,8 +232,8 @@ const MarketWatchPage = () => {
                 </div>
             </div>
 
-            {/* Bottom Floating Action Bar - Updated to Black/Dark Theme */}
-            <div className="absolute bottom-0 left-0 right-0 bg-black p-4 border-t border-white/10 z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+            {/* Bottom Floating Action Bar - Updated to White Theme as per screenshot */}
+            <div className="absolute bottom-0 left-0 right-0 bg-white p-4 z-10 shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
                 <div className="flex gap-4 justify-start">
                     <button
                         onClick={() => {
@@ -225,7 +247,7 @@ const MarketWatchPage = () => {
                             setSelectedScrips([]);
                             setTimeout(() => setSuccessMessage(''), 3000);
                         }}
-                        className="bg-[#9c27b0] hover:bg-purple-700 text-white font-bold py-2.5 px-8 rounded shadow-lg transition-all uppercase text-[11px] tracking-widest active:scale-95"
+                        className="bg-[#9c27b0] hover:bg-[#8e24aa] text-white font-bold py-2.5 px-6 rounded-md shadow-md transition-all uppercase text-sm tracking-wide active:scale-95"
                     >
                         ADD TO BAN
                     </button>
@@ -241,7 +263,7 @@ const MarketWatchPage = () => {
                             setSelectedScrips([]);
                             setTimeout(() => setSuccessMessage(''), 3000);
                         }}
-                        className="bg-[#9c27b0] hover:bg-purple-700 text-white font-bold py-2.5 px-8 rounded shadow-lg transition-all uppercase text-[11px] tracking-widest active:scale-95"
+                        className="bg-[#9c27b0] hover:bg-[#8e24aa] text-white font-bold py-2.5 px-6 rounded-md shadow-md transition-all uppercase text-sm tracking-wide active:scale-95"
                     >
                         REMOVE FROM BAN
                     </button>

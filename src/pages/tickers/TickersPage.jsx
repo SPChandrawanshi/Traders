@@ -25,14 +25,35 @@ const TickersPage = () => {
 
     if (view === 'add') {
         return (
-            <div className="flex flex-col h-full text-[#a0aec0] ">
-                <div className="mb-6">
-                    <div className="inline-block bg-[#4CAF50] text-white px-4 py-2 rounded shadow-md">
-                        <h2 className="text-sm font-bold uppercase tracking-wider">Add Ticker</h2>
+            <div className="flex flex-col h-full text-[#a0aec0]">
+                {/* 3D Ribbon Page Header - Non-clickable heading */}
+                <div className="relative mb-8" style={{ marginLeft: '15px' }}>
+                    <div
+                        className="px-8 py-4 rounded-md shadow-xl relative z-10"
+                        style={{
+                            background: 'linear-gradient(60deg, #66bb6a, #43a047)',
+                            display: 'inline-block'
+                        }}
+                    >
+                        <h2 className="text-white text-[15px] font-bold leading-none tracking-widest uppercase m-0">
+                            Add Ticker
+                        </h2>
                     </div>
+                    {/* 3D Fold Effect */}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '-10px',
+                        left: '5px',
+                        width: '0',
+                        height: '0',
+                        borderLeft: '10px solid transparent',
+                        borderRight: '10px solid transparent',
+                        borderTop: '10px solid #2e7d32',
+                        zIndex: '5'
+                    }}></div>
                 </div>
 
-                <div className="bg-[#151c2c] p-10 rounded-lg border border-[#2d3748] shadow-2xl">
+                <div className="bg-[#151c2c] p-8 lg:p-10 rounded-lg border border-white/5 shadow-2xl">
                     <form onSubmit={handleSave} className="space-y-12">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
                             {/* Start Date & Time */}

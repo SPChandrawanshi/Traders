@@ -41,8 +41,15 @@ import CreateTradeForm from './components/CreateTradeForm';
 
 function App() {
   const [user, setUser] = useState(() => {
+    // Check for valid session
     const savedUser = localStorage.getItem('traders_user');
-    return savedUser ? JSON.parse(savedUser) : null;
+    const sessionValid = localStorage.getItem('traders_session_valid');
+
+    // Only restore user if session is explicitly valid
+    if (savedUser && sessionValid === 'true') {
+      return JSON.parse(savedUser);
+    }
+    return null;
   });
   const [view, setView] = useState(() => {
     return localStorage.getItem('traders_view') || 'live-m2m';
@@ -51,8 +58,10 @@ function App() {
   useEffect(() => {
     if (user) {
       localStorage.setItem('traders_user', JSON.stringify(user));
+      localStorage.setItem('traders_session_valid', 'true');
     } else {
       localStorage.removeItem('traders_user');
+      localStorage.removeItem('traders_session_valid');
     }
   }, [user]);
 
@@ -67,6 +76,7 @@ function App() {
 
   const handleLogin = (username) => {
     setUser({ name: username });
+    localStorage.setItem('traders_session_valid', 'true');
   };
 
   const handleLogout = () => {
@@ -74,6 +84,7 @@ function App() {
     setView('overview');
     localStorage.removeItem('traders_user');
     localStorage.removeItem('traders_view');
+    localStorage.removeItem('traders_session_valid');
   };
 
   const handleAddClient = (newClientData) => {
@@ -172,6 +183,8 @@ function App() {
       case 'create-client':
         return <ClientDetailsForm onBack={() => setView('users')} onSave={handleAddClient} mode="create" />;
       case 'create-broker':
+        return <AddBrokerForm onBack={() => setView('users')} onSave={(data) => { console.log('Broker Saved:', data); setView('users'); }} />;
+      case 'broker-accounts':
         return <BrokerAccountsPage />;
       case 'add-broker-form':
         return <AddBrokerForm onBack={() => setView('users')} onSave={(data) => { console.log('Broker Saved:', data); setView('users'); }} />;
@@ -186,7 +199,7 @@ function App() {
       case 'new-client-bank':
         return <NewClientBankDetailsPage />;
       case 'create-trade':
-        return <CreateTradeForm onSave={handleAddTrade} />;
+        return <CreateTradeForm onSave={handleAddTrade} onBack={() => setView('trades')} />;
       case 'change-password':
         return <ChangePasswordPage />;
       case 'change-transaction-password':
