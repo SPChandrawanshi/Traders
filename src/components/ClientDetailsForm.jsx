@@ -89,13 +89,14 @@ const ClientDetailsForm = ({ onBack, onSave, mode = 'edit' }) => {
   const [openSections, setOpenSections] = useState({
     personal: true,
     config: true,
-    mcx: false,
-    equity: false,
-    options: false,
-    comex: false,
-    forex: false,
-    crypto: false
+    mcx: true,
+    equity: true,
+    options: true,
+    comex: true,
+    forex: true,
+    crypto: true
   });
+
 
   const [formData, setFormData] = useState({
     // Basic Details
@@ -116,11 +117,12 @@ const ClientDetailsForm = ({ onBack, onSave, mode = 'edit' }) => {
       mcx: { enabled: true, brokerageType: 'Per Lot Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '23:30', marginType: 'Per Lot Basis', exposureMultiplier: '1' },
       equity: { enabled: true, brokerageType: 'Per Crore Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '15:30', marginType: 'Percentage', exposureMultiplier: '1' },
       options: { enabled: true, brokerageType: 'Per Lot Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '15:30', marginType: 'Fixed', exposureMultiplier: '1' },
-      comex: { enabled: false, brokerageType: 'Per Crore Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '00:00', marginType: 'Fixed', exposureMultiplier: '1' },
-      forex: { enabled: false, brokerageType: 'Per Crore Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '00:00', marginType: 'Fixed', exposureMultiplier: '1' },
-      crypto: { enabled: false, brokerageType: 'Per Crore Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '00:00', marginType: 'Fixed', exposureMultiplier: '1' }
+      comex: { enabled: true, brokerageType: 'Per Crore Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '00:00', marginType: 'Fixed', exposureMultiplier: '1' },
+      forex: { enabled: true, brokerageType: 'Per Crore Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '00:00', marginType: 'Fixed', exposureMultiplier: '1' },
+      crypto: { enabled: true, brokerageType: 'Per Crore Basis', brokerageValue: '0', leverage: '1', maxLot: '0', autoSquareOff: false, squareOffTime: '00:00', marginType: 'Fixed', exposureMultiplier: '1' }
     }
   });
+
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));

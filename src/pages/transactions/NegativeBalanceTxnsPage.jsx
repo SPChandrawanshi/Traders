@@ -52,6 +52,7 @@ const NegativeBalanceTxnsPage = () => {
                     <button className="bg-[#808080] hover:bg-[#707070] text-white px-10 py-3 rounded font-bold text-[11px] uppercase tracking-widest flex items-center gap-2 shadow-lg transition-all">
                         <RotateCcw className="w-4 h-4" /> RESET
                     </button>
+
                 </div>
             </div>
 
