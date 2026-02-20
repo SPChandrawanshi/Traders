@@ -247,7 +247,7 @@ const BannedLimitOrdersPage = () => {
   );
 
   return (
-    <div className="p-6">
+    <div className="p-4 bg-[#1a2035] h-full overflow-y-auto">
       {view === 'list' ? <ListView /> : <AddFormView />}
     </div>
   );

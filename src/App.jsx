@@ -8,6 +8,7 @@ import PendingOrdersTable from './components/PendingOrdersTable';
 import ClientDetailsForm from './components/ClientDetailsForm';
 import LoginPage from './pages/LoginPage';
 import AccountsPage from './pages/accounts/AccountsPage';
+import BrokerAccountsPage from './pages/accounts/BrokerAccountsPage';
 import BannedLimitOrdersPage from './pages/banned/BannedLimitOrdersPage';
 import BankDetailsPage from './pages/bank/BankDetailsPage';
 import TradesPage from './pages/trades/TradesPage';
@@ -171,6 +172,8 @@ function App() {
       case 'create-client':
         return <ClientDetailsForm onBack={() => setView('users')} onSave={handleAddClient} mode="create" />;
       case 'create-broker':
+        return <BrokerAccountsPage />;
+      case 'add-broker-form':
         return <AddBrokerForm onBack={() => setView('users')} onSave={(data) => { console.log('Broker Saved:', data); setView('users'); }} />;
       case 'create-fund-deposit':
         return <CreateFundForm onBack={() => setView('users')} onSave={(data) => { console.log('Deposit Saved:', data); setView('users'); }} mode="deposit" initialUser={selectedClient} />;

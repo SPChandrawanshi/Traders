@@ -26,7 +26,7 @@ const NewClientBankDetailsPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-[#1a2035] space-y-8 overflow-y-auto">
       {/* Header */}
       <div className="mb-8">
         <div className="inline-block bg-[#4CAF50] text-white px-4 py-2 rounded-md shadow-sm">

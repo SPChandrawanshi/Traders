@@ -140,7 +140,7 @@ const TickersPage = () => {
     }
 
     return (
-        <div className="flex flex-col h-full text-[#a0aec0]  pt-6">
+        <div className="flex flex-col h-full text-[#a0aec0]">
             <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Showing <span className="text-white font-bold">0</span> of items.</span>
             </div>

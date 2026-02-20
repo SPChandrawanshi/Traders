@@ -41,31 +41,30 @@ const AccountsPage = () => {
   return (
     <div className="flex flex-col h-full overflow-hidden ">
       {/* Date Filter Bar */}
-      <div className="flex flex-wrap gap-4 items-end">
-        <input
-          type="text"
-          name="fromDate"
-          value={filters.fromDate}
-          onChange={handleFilterChange}
-          placeholder="From Date"
-          className="bg-white text-slate-900 px-4 py-2 rounded text-sm outline-none border border-slate-300"
-        />
-        <input
-          type="text"
-          name="toDate"
-          value={filters.toDate}
-          onChange={handleFilterChange}
-          placeholder="To Date"
-          className="bg-white text-slate-900 px-4 py-2 rounded text-sm outline-none border border-slate-300"
-        />
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="grid grid-cols-2 bg-white rounded overflow-hidden shadow-lg w-full md:w-auto">
+          <input
+            type="text"
+            onFocus={(e) => (e.target.type = "date")}
+            onBlur={(e) => (e.target.value === "" ? (e.target.type = "text") : null)}
+            placeholder="From Date"
+            className="px-6 py-3 border-r border-slate-200 focus:outline-none text-slate-700 font-medium text-sm min-w-[150px]"
+          />
+          <input
+            type="text"
+            onFocus={(e) => (e.target.type = "date")}
+            onBlur={(e) => (e.target.value === "" ? (e.target.type = "text") : null)}
+            placeholder="To Date"
+            className="px-6 py-3 focus:outline-none text-slate-700 font-medium text-sm min-w-[150px]"
+          />
+        </div>
         <button
           onClick={handleCalculate}
-          className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2 px-6 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+          className="bg-[#5cb85c] hover:bg-[#4cae4c] text-white font-bold py-3 px-8 rounded uppercase tracking-widest text-[11px] transition-all shadow-lg active:scale-95 w-full md:w-auto"
         >
           CALCULATE FOR CUSTOM DATES
         </button>
       </div>
-
       {/* Table Section */}
       <div className="flex-1 overflow-hidden flex flex-col shadow-xl">
         <div className="overflow-x-auto flex-1">

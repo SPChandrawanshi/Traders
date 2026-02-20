@@ -33,7 +33,7 @@ const TraderFundsPage = ({ onNavigate }) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#202940] overflow-y-auto">
+        <div className="flex flex-col h-full bg-[#1a2035] space-y-8 overflow-y-auto">
 
             {/* Top Bar - Date Filters and Download Button */}
             <div className="flex flex-col md:flex-row gap-4 items-end">

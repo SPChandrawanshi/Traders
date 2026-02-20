@@ -31,8 +31,8 @@ const PendingOrdersPage = () => {
 
     if (view === 'create') {
         return (
-            <div className="flex flex-col h-full text-[#a0aec0]">
-                <div className="mb-8">
+            <div className="flex flex-col h-full bg-[#1a2035] p-4 space-y-8 text-[#a0aec0] overflow-y-auto">
+                <div>
                     <div className="inline-block bg-[#4CAF50] text-white px-4 py-2 rounded-md shadow-sm">
                         <h2 className="text-base font-semibold uppercase tracking-tight">Create Limit Order</h2>
                     </div>
@@ -147,8 +147,8 @@ const PendingOrdersPage = () => {
     }
 
     return (
-        <div className="flex flex-col h-full text-[#a0aec0]">
-            <div className="mb-8">
+        <div className="flex flex-col h-full bg-[#1a2035] p-4 space-y-8 text-[#a0aec0] overflow-y-auto">
+            <div>
                 <button
                     onClick={handleCreateClick}
                     className="bg-[#4CAF50] hover:bg-green-600 text-white px-6 py-2.5 rounded text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-green-900/10"

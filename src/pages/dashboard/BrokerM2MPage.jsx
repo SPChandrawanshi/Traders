@@ -209,7 +209,7 @@ const BrokerM2MPage = () => {
   );
 
   return (
-    <div className="flex flex-col h-full bg-[#1a2035] p-6 space-y-8">
+    <div className="flex flex-col h-full bg-[#1a2035] p-4 space-y-8">
 
       {/* 1. Live M2M Table (Top) */}
       <div className="bg-[#1f283e] rounded-lg border border-white/5 shadow-xl overflow-hidden">

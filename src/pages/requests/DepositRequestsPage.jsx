@@ -61,7 +61,7 @@ const DepositRequestsPage = () => {
     };
 
     return (
-        <div className="flex flex-col h-full text-[#a0aec0]">
+        <div className="flex flex-col h-full bg-[#1a2035] p-6 space-y-8 text-[#a0aec0] overflow-y-auto">
             <div className="mb-6">
                 <span className="text-sm font-medium">Showing <span className="text-white font-bold">5</span> of <span className="text-white font-bold">5</span> items.</span>
             </div>
