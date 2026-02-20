@@ -18,7 +18,11 @@ const Layout = ({ children, onLogout, onNavigate, currentView }) => {
 
       {/* Desktop TopBar */}
       <div className="hidden md:block">
-        <TopBar currentViewLabel={currentView} />
+        <TopBar
+          currentViewLabel={currentView}
+          onLogout={onLogout}
+          onNavigate={onNavigate}
+        />
       </div>
 
       <div className="flex flex-1 overflow-hidden relative">

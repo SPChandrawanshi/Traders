@@ -2,26 +2,27 @@ import React from 'react';
 
 const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
   const menuItems = [
+    // { id: 'clinics', label: 'Clinics', icon: 'fa-hospital', path: '/super-admin/clinics' },
     { id: 'live-m2m', label: 'DashBoard', icon: 'fa-table-columns' },
     { id: 'market-watch', label: 'Market Watch', icon: 'fa-arrow-trend-up' },
     { id: 'notifications', label: 'Notifications', icon: 'fa-bell' },
     { id: 'action-ledger', label: 'Action Ledger', icon: 'fa-podcast' },
     { id: 'active-positions', label: 'Active Positions', icon: 'fa-certificate' },
     { id: 'closed-positions', label: 'Closed Positions', icon: 'fa-certificate' },
-    { id: 'users', label: 'Trading Clients', icon: 'fa-regular fa-face-flushed' },
     { id: 'trades', label: 'Trades', icon: 'fa-tag' },
     { id: 'group-trades', label: 'Group Trades', icon: 'fa-tag' },
     { id: 'closed-trades', label: 'Closed Trades', icon: 'fa-tag' },
     { id: 'deleted-trades', label: 'Deleted Trades', icon: 'fa-tag' },
     { id: 'pending-orders', label: 'Pending Orders', icon: 'fa-swatchbook' },
     { id: 'funds', label: 'Trader Funds', icon: 'fa-circle-dollar-to-slot' },
-    { id: 'trading-clients', label: 'Users', icon: 'fa-user-group' },
     { id: 'tickers', label: 'Tickers', icon: 'fa-calculator' },
     { id: 'banned', label: 'Banned Limit Orders', icon: 'fa-calculator' },
     { id: 'bank', label: 'Bank Details', icon: 'fa-calculator' },
-    { id: 'new-client-bank', label: 'Bank Details for new clients', icon: 'fa-calculator' },
     { id: 'accounts', label: 'Accounts', icon: 'fa-calculator' },
     { id: 'broker-accounts', label: 'Broker Accounts', icon: 'fa-calculator' },
+    { id: 'ip-logins', label: 'IP Logins', icon: 'fa-shield-halved' },
+    { id: 'trade-ip-tracking', label: 'Trade IP Tracking', icon: 'fa-location-dot' },
+    { id: 'global-updation', label: 'Global Updation', icon: 'fa-earth-americas' },
     { id: 'change-password', label: 'Change Login Password', icon: 'fa-user' },
     { id: 'change-transaction-password', label: 'Change Transaction Password', icon: 'fa-gear' },
     { id: 'withdrawal-requests', label: 'Withdrawal Requests', icon: 'fa-gear' },
@@ -38,9 +39,6 @@ const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
       shadow-2xl
     `}>
       <div className="flex flex-col h-full border-r border-white/5 overflow-hidden">
-
-
-
         {/* Navigation Items */}
         <div className="flex-1 pt-2 pb-4 overflow-y-auto custom-scrollbar">
           <div className="px-3 space-y-1">
@@ -48,9 +46,15 @@ const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
               <button
                 key={item.id}
                 onClick={() => {
+                  if (item.path) {
+                    window.history.pushState({}, '', item.path);
+                  } else {
+                    window.history.pushState({}, '', '/');
+                  }
                   onNavigate(item.id);
                   if (window.innerWidth < 768) onClose();
                 }}
+
                 className={`
                   w-full flex items-center px-4 py-3 rounded-sm transition-all duration-200 group
                   ${currentView === item.id
@@ -84,7 +88,7 @@ const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
         }

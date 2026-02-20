@@ -8,7 +8,7 @@ import RecalculateBrokeragePage from './RecalculateBrokeragePage';
 import ChangePasswordPage from './ChangePasswordPage';
 import DeleteClientPage from './DeleteClientPage';
 
-const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) => {
+const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick, onLogout, onNavigate }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [selectedClient, setSelectedClient] = useState(null);
@@ -185,6 +185,8 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
             {showDetailPage && selectedClient && (
                 <ClientDetailPage
                     client={selectedClient}
+                    onLogout={onLogout}
+                    onNavigate={onNavigate}
                     onClose={() => {
                         setShowDetailPage(false);
                         setSelectedClient(null);
@@ -256,6 +258,8 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
             {showUpdatePage && selectedClient && (
                 <UpdateClientPage
                     client={selectedClient}
+                    onLogout={onLogout}
+                    onNavigate={onNavigate}
                     onClose={() => {
                         setShowUpdatePage(false);
                         setSelectedClient(null);
@@ -273,6 +277,8 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
             {showCreatePage && (
                 <CreateClientPage
                     client={selectedClient}
+                    onLogout={onLogout}
+                    onNavigate={onNavigate}
                     onClose={() => {
                         setShowCreatePage(false);
                         setSelectedClient(null);

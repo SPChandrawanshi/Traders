@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { X, Save, ArrowLeft, Info, Check } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Save, ArrowLeft, Info, Check, Lock, Key, Settings, User, ChevronDown } from 'lucide-react';
 
-const CreateClientPage = ({ client, onClose, onSave }) => {
+const CreateClientPage = ({ client, onClose, onSave, onLogout, onNavigate }) => {
     const [formData, setFormData] = useState({
         // 1. Personal Details
         fullName: client?.fullName || '',
@@ -138,12 +138,25 @@ const CreateClientPage = ({ client, onClose, onSave }) => {
     });
 
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+    const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+    const profileRef = useRef(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentTime(new Date().toLocaleTimeString());
         }, 1000);
         return () => clearInterval(timer);
+    }, []);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setShowProfileDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
     const handleChange = (e) => {
@@ -232,14 +245,80 @@ const CreateClientPage = ({ client, onClose, onSave }) => {
     return (
         <div className="fixed inset-0 bg-[#1a2035] z-50 flex flex-col overflow-hidden">
             {/* Top Bar - Green as per screenshot */}
-            <div className="bg-[#4caf50] h-14 flex items-center justify-end px-6 shadow-md shrink-0">
+            <div className="bg-[#4caf50] h-14 flex items-center justify-between px-4 shadow-md shrink-0">
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onClose}
+                        className="flex items-center gap-2 text-white hover:bg-black/10 px-3 py-1.5 rounded transition-colors"
+                    >
+                        <i className="fa-solid fa-arrow-left text-[18px]"></i>
+                        <span className="text-[14px] font-bold uppercase tracking-tight">Back</span>
+                    </button>
+                </div>
                 <div className="flex items-center gap-4 text-white">
                     <button className="hover:bg-black/10 p-1 rounded-full transition-colors">
-                        <span className="fa-solid fa-gear text-[18px]"></span>
+                        <Settings className="w-5 h-5 mx-1" />
                     </button>
-                    <div className="flex items-center gap-2 font-bold uppercase text-[13px] cursor-pointer hover:bg-black/10 px-3 py-1.5 rounded transition-colors tracking-tight">
-                        <span className="fa-solid fa-user text-[11px] scale-110"></span>
-                        DEMO PANNEL
+
+                    {/* Profile Dropdown Container */}
+                    <div className="relative" ref={profileRef}>
+                        <div
+                            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                            className="flex items-center gap-2 font-bold uppercase text-[12px] cursor-pointer hover:bg-black/10 px-3 py-1.5 rounded transition-colors tracking-tight select-none"
+                        >
+                            <User className="w-4 h-4 text-white/80" />
+                            DEMO PANNEL
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
+                        </div>
+
+                        {/* Dropdown Menu */}
+                        {showProfileDropdown && (
+                            <div className="absolute right-0 mt-3 w-64 bg-white rounded shadow-2xl overflow-hidden z-50 border border-gray-100 animate-in fade-in zoom-in duration-200 origin-top-right">
+                                {/* Ledger Balance Section */}
+                                <div className="px-5 py-4 border-b border-gray-100">
+                                    <p className="text-[#333] text-[14px] font-medium">
+                                        Ledger-Balance: <span className="font-bold">0</span>
+                                    </p>
+                                </div>
+
+                                {/* Action Items */}
+                                <div className="py-1">
+                                    <button
+                                        onClick={() => {
+                                            if (onNavigate) onNavigate('change-password');
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-5 py-3 text-[#333] hover:bg-gray-50 transition-colors text-[13px] font-medium text-left"
+                                    >
+                                        <Lock className="w-4 h-4 text-gray-400" />
+                                        Change Login Password
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (onNavigate) onNavigate('change-transaction-password');
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-5 py-3 text-[#333] hover:bg-gray-50 transition-colors text-[13px] font-medium text-left"
+                                    >
+                                        <Key className="w-4 h-4 text-gray-400" />
+                                        Change Transaction Password
+                                    </button>
+                                </div>
+
+                                {/* Logout Button */}
+                                <div className="p-3">
+                                    <button
+                                        onClick={() => {
+                                            if (onLogout) onLogout();
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full bg-[#f44336] hover:bg-[#d32f2f] text-white py-2.5 rounded text-[13px] font-bold uppercase transition-all shadow-md"
+                                    >
+                                        Log out
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -275,7 +354,11 @@ const CreateClientPage = ({ client, onClose, onSave }) => {
                         { icon: 'fa-file-invoice-dollar', label: 'Deposit Requests' },
                         { icon: 'fa-right-from-bracket', label: 'Log Out' }
                     ].map((item) => (
-                        <div key={item.label} className={`text-slate-400 text-sm flex items-center justify-between py-2 px-3 rounded hover:bg-white/5 cursor-pointer transition-colors ${item.label === 'Trading Clients' ? 'bg-[#4caf50] text-white' : ''}`}>
+                        <div
+                            key={item.label}
+                            onClick={onClose}
+                            className={`text-slate-400 text-sm flex items-center justify-between py-2 px-3 rounded hover:bg-white/5 cursor-pointer transition-colors ${item.label === 'Trading Clients' ? 'bg-[#4caf50] text-white' : ''}`}
+                        >
                             <div className="flex items-center gap-3">
                                 <div className="w-5 h-5 flex items-center justify-center opacity-70">
                                     <span className={`fa-solid ${item.icon} text-xs`}></span>
@@ -714,7 +797,7 @@ const CreateClientPage = ({ client, onClose, onSave }) => {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 6px;
                 }

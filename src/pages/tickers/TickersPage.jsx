@@ -25,136 +25,141 @@ const TickersPage = () => {
 
     if (view === 'add') {
         return (
-            <div className="flex flex-col h-full text-[#a0aec0]">
-                {/* 3D Ribbon Page Header - Non-clickable heading */}
-                <div className="relative mb-8" style={{ marginLeft: '15px' }}>
-                    <div
-                        className="px-8 py-4 rounded-md shadow-xl relative z-10"
-                        style={{
-                            background: 'linear-gradient(60deg, #66bb6a, #43a047)',
-                            display: 'inline-block'
-                        }}
-                    >
-                        <h2 className="text-white text-[15px] font-bold leading-none tracking-widest uppercase m-0">
-                            Add Ticker
-                        </h2>
+            <div className="flex flex-col h-full bg-[#1a2035]  text-[#a0aec0] overflow-y-auto">
+                <style>{`
+                    .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+                    .custom-scrollbar::-webkit-scrollbar-track { background: #1a2035; }
+                    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4CAF50; border-radius: 4px; }
+                `}</style>
+
+                <div className="max-w-6xl w-full mx-auto mt-4">
+                    <div className="bg-[#202940] rounded shadow-2xl relative border border-white/5 mt-8">
+                        {/* Floating Header Ribbon */}
+                        <div
+                            className="absolute -top-6 left-5 px-6 py-4 rounded shadow-xl z-10"
+                            style={{ background: 'linear-gradient(60deg, rgb(40, 140, 108), rgb(78, 167, 82))' }}
+                        >
+                            <h2 className="text-white text-[16px] font-normal uppercase leading-none tracking-tight">Add Ticker</h2>
+                        </div>
+
+                        <form onSubmit={handleSave} className="px-6 py-12 pt-16">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 px-2 lg:px-4">
+                                {/* Start Date & Time */}
+                                <div className="space-y-2">
+                                    <label className="block text-[#bcc0cf] text-[12px] font-bold uppercase tracking-tight">Start Date</label>
+                                    <div className="flex gap-1 items-end">
+                                        <div className="flex-1 border-b border-white/10 focus-within:border-[#4caf50] transition-colors">
+                                            <input
+                                                type="text"
+                                                className="w-full bg-transparent text-white py-2 focus:outline-none font-normal text-[15px]"
+                                                value={formData.startDate}
+                                                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="relative border-b border-white/10 focus-within:border-[#4caf50] transition-colors w-24">
+                                            <select
+                                                className="w-full bg-transparent text-white py-2 focus:outline-none appearance-none font-normal text-[15px]"
+                                                value={formData.startHour}
+                                                onChange={(e) => setFormData({ ...formData, startHour: e.target.value })}
+                                            >
+                                                {hours.map(h => <option key={h} value={h} className="bg-[#202940]">{h}</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-0 top-3 w-4 h-4 text-slate-500 pointer-events-none" />
+                                        </div>
+                                        <div className="relative border-b border-white/10 focus-within:border-[#4caf50] transition-colors w-24">
+                                            <select
+                                                className="w-full bg-transparent text-white py-2 focus:outline-none appearance-none font-normal text-[15px]"
+                                                value={formData.startMin}
+                                                onChange={(e) => setFormData({ ...formData, startMin: e.target.value })}
+                                            >
+                                                {minutes.map(m => <option key={m} value={m} className="bg-[#202940]">{m}</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-0 top-3 w-4 h-4 text-slate-500 pointer-events-none" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* End Date & Time */}
+                                <div className="space-y-2">
+                                    <label className="block text-[#bcc0cf] text-[12px] font-bold uppercase tracking-tight">End Date</label>
+                                    <div className="flex gap-1 items-end">
+                                        <div className="flex-1 border-b border-white/10 focus-within:border-[#4caf50] transition-colors">
+                                            <input
+                                                type="text"
+                                                className="w-full bg-transparent text-white py-2 focus:outline-none font-normal text-[15px]"
+                                                value={formData.endDate}
+                                                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="relative border-b border-white/10 focus-within:border-[#4caf50] transition-colors w-24">
+                                            <select
+                                                className="w-full bg-transparent text-white py-2 focus:outline-none appearance-none font-normal text-[15px]"
+                                                value={formData.endHour}
+                                                onChange={(e) => setFormData({ ...formData, endHour: e.target.value })}
+                                            >
+                                                {hours.map(h => <option key={h} value={h} className="bg-[#202940]">{h}</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-0 top-3 w-4 h-4 text-slate-500 pointer-events-none" />
+                                        </div>
+                                        <div className="relative border-b border-white/10 focus-within:border-[#4caf50] transition-colors w-24">
+                                            <select
+                                                className="w-full bg-transparent text-white py-2 focus:outline-none appearance-none font-normal text-[15px]"
+                                                value={formData.endMin}
+                                                onChange={(e) => setFormData({ ...formData, endMin: e.target.value })}
+                                            >
+                                                {minutes.map(m => <option key={m} value={m} className="bg-[#202940]">{m}</option>)}
+                                            </select>
+                                            <ChevronDown className="absolute right-0 top-3 w-4 h-4 text-slate-500 pointer-events-none" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Message */}
+                                <div className="space-y-2 group">
+                                    <label className="block text-[#bcc0cf] text-[12px] font-bold uppercase tracking-tight">Message</label>
+                                    <div className="border-b border-white/10 group-focus-within:border-[#4caf50] transition-colors">
+                                        <textarea
+                                            className="w-full bg-transparent text-white py-2 focus:outline-none font-normal text-[15px] min-h-[40px]"
+                                            value={formData.message}
+                                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                            placeholder="Enter message"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Transaction Password */}
+                                <div className="space-y-2 group">
+                                    <label className="block text-[#bcc0cf] text-[12px] font-bold uppercase tracking-tight">Transaction Password</label>
+                                    <div className="border-b border-white/10 group-focus-within:border-[#4caf50] transition-colors">
+                                        <input
+                                            type="password"
+                                            className="w-full bg-transparent text-white py-2 focus:outline-none font-normal text-[15px]"
+                                            value={formData.transactionPassword}
+                                            onChange={(e) => setFormData({ ...formData, transactionPassword: e.target.value })}
+                                            placeholder="******"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4 pt-12 px-2 lg:px-4">
+                                <button
+                                    type="submit"
+                                    className="text-white font-bold py-2.5 px-10 rounded transition-all uppercase text-[13px] tracking-wider shadow-lg active:scale-95"
+                                    style={{ background: 'linear-gradient(60deg, rgb(40, 140, 108), rgb(78, 167, 82))' }}
+                                >
+                                    SAVE
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setView('list')}
+                                    className="bg-[#344675] hover:bg-[#263148] text-white font-bold py-2.5 px-10 rounded transition-all uppercase text-[13px] tracking-wider shadow-lg active:scale-95"
+                                >
+                                    CANCEL
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    {/* 3D Fold Effect */}
-                    <div style={{
-                        position: 'absolute',
-                        bottom: '-10px',
-                        left: '5px',
-                        width: '0',
-                        height: '0',
-                        borderLeft: '10px solid transparent',
-                        borderRight: '10px solid transparent',
-                        borderTop: '10px solid #2e7d32',
-                        zIndex: '5'
-                    }}></div>
-                </div>
-
-                <div className="bg-[#151c2c] p-8 lg:p-10 rounded-lg border border-white/5 shadow-2xl">
-                    <form onSubmit={handleSave} className="space-y-12">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
-                            {/* Start Date & Time */}
-                            <div className="flex items-end gap-1">
-                                <div className="flex-1">
-                                    <label className="block text-slate-400 text-[11px] font-bold uppercase mb-2">Start Date</label>
-                                    <input
-                                        type="text"
-                                        className="w-full bg-white text-slate-800 px-4 py-2 focus:outline-none font-bold text-sm rounded-l"
-                                        value={formData.startDate}
-                                        onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                                    />
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        className="bg-white text-slate-800 pl-3 pr-7 py-2 focus:outline-none font-bold text-sm appearance-none border-l border-slate-200 cursor-pointer"
-                                        value={formData.startHour}
-                                        onChange={(e) => setFormData({ ...formData, startHour: e.target.value })}
-                                    >
-                                        {hours.map(h => <option key={h} value={h}>{h}</option>)}
-                                    </select>
-                                    <ChevronDown className="absolute right-1 top-2.5 w-4 h-4 text-slate-500 pointer-events-none" />
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        className="bg-white text-slate-800 pl-3 pr-7 py-2 focus:outline-none font-bold text-sm appearance-none border-l border-slate-200 cursor-pointer rounded-r"
-                                        value={formData.startMin}
-                                        onChange={(e) => setFormData({ ...formData, startMin: e.target.value })}
-                                    >
-                                        {minutes.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                    <ChevronDown className="absolute right-1 top-2.5 w-4 h-4 text-slate-500 pointer-events-none" />
-                                </div>
-                            </div>
-
-                            {/* End Date & Time */}
-                            <div className="flex items-end gap-1">
-                                <div className="flex-1">
-                                    <label className="block text-slate-400 text-[11px] font-bold uppercase mb-2">End Date</label>
-                                    <input
-                                        type="text"
-                                        className="w-full bg-white text-slate-800 px-4 py-2 focus:outline-none font-bold text-sm rounded-l"
-                                        value={formData.endDate}
-                                        onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                                    />
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        className="bg-white text-slate-800 pl-3 pr-7 py-2 focus:outline-none font-bold text-sm appearance-none border-l border-slate-200 cursor-pointer"
-                                        value={formData.endHour}
-                                        onChange={(e) => setFormData({ ...formData, endHour: e.target.value })}
-                                    >
-                                        {hours.map(h => <option key={h} value={h}>{h}</option>)}
-                                    </select>
-                                    <ChevronDown className="absolute right-1 top-2.5 w-4 h-4 text-slate-500 pointer-events-none" />
-                                </div>
-                                <div className="relative">
-                                    <select
-                                        className="bg-white text-slate-800 pl-3 pr-7 py-2 focus:outline-none font-bold text-sm appearance-none border-l border-slate-200 cursor-pointer rounded-r"
-                                        value={formData.endMin}
-                                        onChange={(e) => setFormData({ ...formData, endMin: e.target.value })}
-                                    >
-                                        {minutes.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                    <ChevronDown className="absolute right-1 top-2.5 w-4 h-4 text-slate-500 pointer-events-none" />
-                                </div>
-                            </div>
-
-                            {/* Message */}
-                            <div className="space-y-4">
-                                <label className="block text-slate-400 text-[11px] font-bold uppercase">Message</label>
-                                <textarea
-                                    className="w-full bg-transparent border-b border-slate-700 text-white min-h-[40px] focus:outline-none focus:border-[#4CAF50] transition-colors py-1 text-sm font-medium"
-                                    value={formData.message}
-                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                    placeholder="Message"
-                                />
-                            </div>
-
-                            {/* Transaction Password */}
-                            <div className="space-y-4">
-                                <label className="block text-slate-400 text-[11px] font-bold uppercase">Transaction Password</label>
-                                <input
-                                    type="password"
-                                    className="w-full bg-transparent border-b border-slate-700 text-white focus:outline-none focus:border-[#4CAF50] transition-colors py-1 text-sm font-medium"
-                                    value={formData.transactionPassword}
-                                    onChange={(e) => setFormData({ ...formData, transactionPassword: e.target.value })}
-                                    placeholder="Transaction Password"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="pt-4">
-                            <button
-                                type="submit"
-                                className="bg-[#17a2b8] hover:bg-[#138496] text-white font-bold py-2.5 px-12 rounded shadow-md text-xs uppercase tracking-widest transition-all"
-                            >
-                                ADD TICKER
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
         );

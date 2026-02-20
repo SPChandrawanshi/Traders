@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, User, ChevronDown, Settings, Lock, Key } from 'lucide-react';
 
-const ClientDetailPage = ({ client, onClose, onUpdate, onReset, onRecalculate, onDuplicate, onChangePassword, onDelete }) => {
+const ClientDetailPage = ({ client, onClose, onUpdate, onReset, onRecalculate, onDuplicate, onChangePassword, onDelete, onLogout, onNavigate }) => {
     const [showDetails, setShowDetails] = useState(false);
     const [showActionsDropdown, setShowActionsDropdown] = useState(false);
+    const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+    const profileRef = useRef(null);
 
     const clientData = {
         id: client?.id || '3705377',
@@ -68,11 +70,14 @@ const ClientDetailPage = ({ client, onClose, onUpdate, onReset, onRecalculate, o
             if (showActionsDropdown && !event.target.closest('.actions-dropdown-container')) {
                 setShowActionsDropdown(false);
             }
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setShowProfileDropdown(false);
+            }
         };
 
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [showActionsDropdown]);
+    }, [showActionsDropdown, showProfileDropdown]);
 
     const fundsData = [
         {
@@ -91,14 +96,80 @@ const ClientDetailPage = ({ client, onClose, onUpdate, onReset, onRecalculate, o
             `}</style>
 
             {/* Top Bar - Solid Green */}
-            <div className="bg-[#4caf50] h-14 flex items-center justify-end px-6 shadow-md shrink-0">
+            <div className="bg-[#4caf50] h-14 flex items-center justify-between px-4 shadow-md shrink-0">
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onClose}
+                        className="flex items-center gap-2 text-white hover:bg-black/10 px-3 py-1.5 rounded transition-colors"
+                    >
+                        <span className="fa-solid fa-arrow-left text-[18px]"></span>
+                        <span className="text-[14px] font-bold uppercase tracking-tight">Back</span>
+                    </button>
+                </div>
                 <div className="flex items-center gap-4 text-white">
                     <button className="hover:bg-black/10 p-2 rounded-full transition-colors">
-                        <span className="fa-solid fa-gear w-5 h-5 flex items-center justify-center"></span>
+                        <Settings className="w-5 h-5 flex items-center justify-center" />
                     </button>
-                    <div className="flex items-center gap-2 font-bold uppercase text-[13px] cursor-pointer hover:bg-black/10 px-3 py-1.5 rounded transition-colors">
-                        <span className="fa-solid fa-user text-xs"></span>
-                        DEMO PANNEL
+
+                    {/* Profile Dropdown Container */}
+                    <div className="relative" ref={profileRef}>
+                        <div
+                            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                            className="flex items-center gap-2 font-bold uppercase text-[13px] cursor-pointer hover:bg-black/10 px-3 py-1.5 rounded transition-colors select-none"
+                        >
+                            <User className="text-white text-xs scale-125 mr-1" />
+                            DEMO PANNEL
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
+                        </div>
+
+                        {/* Dropdown Menu */}
+                        {showProfileDropdown && (
+                            <div className="absolute right-0 mt-3 w-64 bg-white rounded shadow-2xl overflow-hidden z-50 border border-gray-100 animate-in fade-in zoom-in duration-200 origin-top-right">
+                                {/* Ledger Balance Section */}
+                                <div className="px-5 py-4 border-b border-gray-100">
+                                    <p className="text-[#333] text-[14px] font-medium">
+                                        Ledger-Balance: <span className="font-bold">0</span>
+                                    </p>
+                                </div>
+
+                                {/* Action Items */}
+                                <div className="py-1">
+                                    <button
+                                        onClick={() => {
+                                            if (onNavigate) onNavigate('change-password');
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-5 py-3 text-[#333] hover:bg-gray-50 transition-colors text-[13px] font-medium text-left"
+                                    >
+                                        <Lock className="w-4 h-4 text-gray-400" />
+                                        Change Login Password
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (onNavigate) onNavigate('change-transaction-password');
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-5 py-3 text-[#333] hover:bg-gray-50 transition-colors text-[13px] font-medium text-left"
+                                    >
+                                        <Key className="w-4 h-4 text-gray-400" />
+                                        Change Transaction Password
+                                    </button>
+                                </div>
+
+                                {/* Logout Button */}
+                                <div className="p-3">
+                                    <button
+                                        onClick={() => {
+                                            if (onLogout) onLogout();
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full bg-[#f44336] hover:bg-[#d32f2f] text-white py-2.5 rounded text-[13px] font-bold uppercase transition-all shadow-md"
+                                    >
+                                        Log out
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -137,7 +208,11 @@ const ClientDetailPage = ({ client, onClose, onUpdate, onReset, onRecalculate, o
                         { id: 'deposit-requests', icon: 'fa-arrow-down-to-bracket', label: 'Deposit Requests' },
                         { id: 'negative-balance', icon: 'fa-triangle-exclamation', label: 'Negative Balance Txns' },
                     ].map((item) => (
-                        <div key={item.label} className={`text-slate-300 text-[12px] flex items-center gap-3 py-2.5 px-4 rounded hover:bg-white/5 cursor-pointer transition-colors ${item.label === 'Trading Clients' ? 'bg-[#4caf50] text-white shadow-lg font-bold' : ''}`}>
+                        <div
+                            key={item.label}
+                            onClick={item.label === 'Trading Clients' ? undefined : onClose}
+                            className={`text-slate-300 text-[12px] flex items-center gap-3 py-2.5 px-4 rounded hover:bg-white/5 cursor-pointer transition-colors ${item.label === 'Trading Clients' ? 'bg-[#4caf50] text-white shadow-lg font-bold' : ''}`}
+                        >
                             <div className="w-5 h-5 flex items-center justify-center opacity-80 text-sm">
                                 <span className={`fa-solid ${item.icon}`}></span>
                             </div>
@@ -168,20 +243,18 @@ const ClientDetailPage = ({ client, onClose, onUpdate, onReset, onRecalculate, o
                                     { label: 'EXPORT FUNDS' }
                                 ].map((item) => (
                                     <div key={item.label} className="flex gap-4 items-center">
-                                        <div className="flex bg-white border border-slate-300 rounded-sm overflow-hidden h-[42px] w-[440px] shadow-sm">
+                                        <div className="flex bg-white border border-slate-300 rounded-sm overflow-hidden h-[42px] w-[440px] shadow-sm" onClick={(e) => e.stopPropagation()}>
                                             <div className="flex-1 border-r border-slate-300 relative flex items-center">
                                                 <input
                                                     type="text"
                                                     placeholder="From Date"
                                                     onFocus={(e) => {
                                                         e.target.type = 'date';
-                                                        setTimeout(() => {
-                                                            if (e.target.type === 'date' && e.target.showPicker) {
-                                                                e.target.showPicker();
-                                                            }
-                                                        }, 100);
                                                     }}
-                                                    onBlur={(e) => { if (!e.target.value) e.target.type = 'text'; }}
+                                                    onBlur={(e) => {
+                                                        if (!e.target.value) e.target.type = 'text';
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
                                                     className="w-full h-full bg-white text-slate-700 px-4 outline-none text-[14px] cursor-pointer placeholder:text-slate-500 font-normal"
                                                 />
                                             </div>
@@ -191,13 +264,11 @@ const ClientDetailPage = ({ client, onClose, onUpdate, onReset, onRecalculate, o
                                                     placeholder="To Date"
                                                     onFocus={(e) => {
                                                         e.target.type = 'date';
-                                                        setTimeout(() => {
-                                                            if (e.target.type === 'date' && e.target.showPicker) {
-                                                                e.target.showPicker();
-                                                            }
-                                                        }, 100);
                                                     }}
-                                                    onBlur={(e) => { if (!e.target.value) e.target.type = 'text'; }}
+                                                    onBlur={(e) => {
+                                                        if (!e.target.value) e.target.type = 'text';
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
                                                     className="w-full h-full bg-white text-slate-700 px-4 outline-none text-[14px] cursor-pointer placeholder:text-slate-500 font-normal"
                                                 />
                                             </div>

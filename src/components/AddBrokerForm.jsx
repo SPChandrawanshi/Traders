@@ -70,7 +70,7 @@ const AddBrokerForm = ({ onBack, onSave }) => {
             ZINCMINI: { intraday: '', holding: '' }
         },
 
-        // MCX Lot Wise Brokerage - Single Field
+        // MCX Lot Wise Brokerage
         mcxBrokerage: {
             ALUMINI: '', ALUMINIUM: '', COPPER: '', COTTON: '', CRUDEOIL: '', CRUDEOILM: '',
             GOLD: '', GOLDGUINEA: '', GOLDM: '', GOLDPETAL: '', LEAD: '', LEADMINI: '',
@@ -125,72 +125,106 @@ const AddBrokerForm = ({ onBack, onSave }) => {
         onSave(formData);
     };
 
-    // Components
-    const SectionHeader = ({ color, title }) => (
-        <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-2">
-            <span className={`w-2.5 h-2.5 rounded-sm ${color}`}></span>
-            <h3 className="text-white text-[15px] font-bold uppercase tracking-wide">{title}</h3>
+    // Components - MATCHING THE SCREENSHOT EXACTLY
+    const SectionHeader = ({ title }) => (
+        <div className="w-full bg-[#4f4a4a] py-3 px-6 mb-6 mt-2 text-center">
+            <h3 className="text-white text-[24px] font-bold tracking-wide">{title}:</h3>
         </div>
     );
 
     const InputGroup = ({ label, subtext, value, onChange, name, type = "text", placeholder = "" }) => (
         <div className="mb-8">
-            <label className="block text-[#bcc0cf] text-[11px] font-bold uppercase mb-2 tracking-wider">{label}</label>
-            <input
-                type={type}
-                name={name}
-                value={value}
-                onChange={onChange}
-                className="w-full bg-[#1a2035] border-b border-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:border-[#4caf50] focus:bg-white/5 transition-colors placeholder-slate-600"
-                placeholder={placeholder}
-            />
-            {subtext && <p className="text-[12px] text-[#868a9a] mt-2 leading-relaxed font-normal">{subtext}</p>}
+            <label className="block text-[#ffffff] text-[15px] font-normal mb-1">
+                {label}
+            </label>
+            <div className="relative pt-3">
+                <input
+                    type={type}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    className="w-full bg-transparent border-b border-[#4f5361] text-white opacity-90 px-0 py-1 text-base focus:outline-none focus:border-white/40 transition-all"
+                    placeholder={placeholder}
+                />
+            </div>
+            {subtext && <p className="text-[#888ea8] text-[14px] mt-2 font-normal leading-normal">{subtext}</p>}
+        </div>
+    );
+
+    const PermissionRow = ({ label, value, onChange, options }) => (
+        <div className="flex justify-between items-center py-1">
+            <label className="text-white text-[15px] font-normal leading-tight pr-4">
+                {label}
+            </label>
+            <div className="relative min-w-[70px]">
+                <select
+                    value={value}
+                    onChange={onChange}
+                    className="w-full bg-white text-black font-bold px-2 py-0.5 text-[14px] border border-gray-300 rounded-sm appearance-none cursor-pointer outline-none shadow-sm"
+                >
+                    {options.map(opt => <option key={opt} value={opt} className="bg-white">{opt}</option>)}
+                </select>
+                <div className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-black">
+                    <i className="fa-solid fa-chevron-down text-[10px]"></i>
+                </div>
+            </div>
         </div>
     );
 
     const SelectGroup = ({ label, subtext, value, onChange, options, name }) => (
         <div className="mb-8">
-            <label className="block text-[#bcc0cf] text-[11px] font-bold uppercase mb-2 tracking-wider">{label}</label>
+            <label className="block text-white text-[15px] font-normal mb-2">
+                {label}
+            </label>
             <div className="relative">
                 <select
                     name={name}
                     value={value}
                     onChange={onChange}
-                    className="w-full bg-[#1a2035] border-b border-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:border-[#4caf50] focus:bg-white/5 transition-colors appearance-none cursor-pointer"
+                    className="w-full bg-white text-black font-bold px-3 py-2 text-[15px] border border-gray-300 rounded-sm appearance-none cursor-pointer outline-none shadow-sm"
                 >
-                    {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    {options.map(opt => <option key={opt} value={opt} className="bg-white">{opt}</option>)}
                 </select>
-                <div className="absolute right-3 top-2.5 pointer-events-none text-slate-500">
-                    <i className="fa-solid fa-caret-down text-xs"></i>
+                <div className="absolute right-3 top-[50%] -translate-y-1/2 pointer-events-none text-black">
+                    <i className="fa-solid fa-chevron-down text-[12px]"></i>
                 </div>
             </div>
-            {subtext && <p className="text-[12px] text-[#868a9a] mt-2 leading-relaxed font-normal">{subtext}</p>}
+            {subtext && <p className="text-[#888ea8] text-[14px] mt-2 font-normal leading-normal">{subtext}</p>}
         </div>
     );
 
     const SegmentBlock = ({ title, segmentKey, config }) => {
-        // config: { hasBrokerageType, hasExposureType }
         const data = formData.segments[segmentKey];
         return (
-            <div className="mb-10 p-6 rounded bg-[#1a2035]/30 border border-white/5">
-                <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
-                    <h4 className="text-[#4caf50] text-[13px] font-bold uppercase tracking-widest">{title}</h4>
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                        <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider group-hover:text-white transition-colors">Trading Enabled</span>
-                        <div className="relative">
+            <div className="mb-8">
+                <SectionHeader title={title} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-2">
+                    {/* Left Column */}
+                    <div>
+                        <div className="flex items-center gap-3 mb-4">
                             <input
                                 type="checkbox"
                                 checked={data.enabled}
                                 onChange={(e) => handleSegmentChange(segmentKey, 'enabled', e.target.checked)}
-                                className="sr-only peer"
+                                className="w-[18px] h-[18px] bg-transparent border border-[#4f5361] rounded-sm cursor-pointer accent-[#4caf50]"
                             />
-                            <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#4caf50]"></div>
+                            <span className="text-white text-[15px] font-normal">Trading Enabled</span>
                         </div>
-                    </label>
-                </div>
-
-                {data.enabled && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 animate-fadeIn">
+                        <InputGroup
+                            label="Brokerage"
+                            value={data.brokerage}
+                            onChange={(e) => handleSegmentChange(segmentKey, 'brokerage', e.target.value)}
+                            name={`${segmentKey}_brokerage`}
+                        />
+                        <InputGroup
+                            label="Intraday Exposure/Margin"
+                            value={data.intraday}
+                            onChange={(e) => handleSegmentChange(segmentKey, 'intraday', e.target.value)}
+                            subtext="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade."
+                        />
+                    </div>
+                    {/* Right Column */}
+                    <div className="md:pt-0">
                         {config.hasBrokerageType && (
                             <SelectGroup
                                 label="Brokerage Type"
@@ -199,12 +233,6 @@ const AddBrokerForm = ({ onBack, onSave }) => {
                                 onChange={(e) => handleSegmentChange(segmentKey, 'brokerageType', e.target.value)}
                             />
                         )}
-                        <InputGroup
-                            label="Brokerage"
-                            value={data.brokerage}
-                            onChange={(e) => handleSegmentChange(segmentKey, 'brokerage', e.target.value)}
-                            name={`${segmentKey}_brokerage`}
-                        />
                         {config.hasExposureType && (
                             <SelectGroup
                                 label="Exposure Type"
@@ -214,66 +242,45 @@ const AddBrokerForm = ({ onBack, onSave }) => {
                             />
                         )}
                         <InputGroup
-                            label="Intraday Exposure/Margin"
-                            value={data.intraday}
-                            onChange={(e) => handleSegmentChange(segmentKey, 'intraday', e.target.value)}
-                            subtext="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade."
-                            name={`${segmentKey}_intraday`}
-                        />
-                        <InputGroup
                             label="Holding Exposure/Margin"
                             value={data.holding}
                             onChange={(e) => handleSegmentChange(segmentKey, 'holding', e.target.value)}
                             subtext="Holding Exposure auto calculates the margin money required to hold a position overnight for the next market working day. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and holding exposure is 800, (45000 X 100) / 80 = 56250 is required to hold position overnight. System automatically checks at a given time around market closure to check and close all trades if margin(M2M) insufficient."
-                            name={`${segmentKey}_holding`}
                         />
                     </div>
-                )}
+                </div>
             </div>
         );
     };
 
-    const mcxScrips = Object.keys(formData.mcxMargins);
-
     return (
-        <div className="min-h-screen bg-[#1a2035] font-sans flex flex-col items-center py-10 px-4">
-            <div className="w-full max-w-7xl relative">
+        <div className="min-h-screen bg-[#1b2236] font-sans flex flex-col items-center px-4">
+            <div className="w-full max-w-7xl">
 
-                {/* 3D Ribbon Header */}
-                <div className="relative z-20 mb-[-25px] ml-4">
-                    <div
-                        className="px-8 py-4 rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] relative z-10"
-                        style={{
-                            background: 'linear-gradient(60deg, #66bb6a, #43a047)',
-                            display: 'inline-block'
-                        }}
-                    >
-                        <h2 className="text-white text-[16px] font-bold leading-none tracking-widest uppercase m-0">
-                            Add Broker
-                        </h2>
+                {/* Main Card Wrapper with Floating Header */}
+                <div className="relative bg-[#202940] w-full p-8 lg:p-12 rounded-sm shadow-2xl border border-white/5 mt-16 animate-fadeIn">
+
+                    {/* Floating Header Ribbon */}
+                    <div className="absolute -top-6 left-6 z-20">
+                        {/* Main Tab */}
+                        <div
+                            className="px-8 py-4 rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.3)] min-w-[180px]"
+                            style={{ background: 'linear-gradient(60deg, rgb(40, 140, 108), rgb(78, 167, 82))' }}
+                        >
+                            <h2 className="text-white text-[20px] font-bold m-0 tracking-wide">
+                                Add Broker:
+                            </h2>
+                        </div>
+                        {/* Shadow Fold/Tail Piece (The small green square behind) */}
+                        <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-[#1e7e34] -z-10 rounded-sm transform rotate-45"></div>
                     </div>
-                    {/* 3D Triangle Fold */}
-                    <div style={{
-                        position: 'absolute',
-                        bottom: '-10px',
-                        left: '6px',
-                        width: '0',
-                        height: '0',
-                        borderLeft: '10px solid transparent',
-                        borderRight: '10px solid transparent',
-                        borderTop: '10px solid #2e7d32',
-                        zIndex: '5'
-                    }}></div>
-                </div>
 
-                {/* Main Card */}
-                <div className="bg-[#202940] rounded-md shadow-2xl border border-white/5 pt-16 pb-12 px-6 lg:px-10 w-full">
                     <form onSubmit={handleSubmit}>
 
                         {/* 1. PERSONAL DETAILS */}
-                        <div className="mb-12">
-                            <SectionHeader color="bg-[#4caf50]" title="Personal Details" /> {/* Green */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                        <div className="mb-6">
+                            <SectionHeader title="Personal Details" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 mt-4 px-4">
                                 <InputGroup label="First Name" subtext="Insert Real name of the broker. Will be visible in website" name="firstName" value={formData.firstName} onChange={handleChange} />
                                 <InputGroup label="Last Name" subtext="Insert Real name of the broker. Will be visible in website" name="lastName" value={formData.lastName} onChange={handleChange} />
                                 <InputGroup label="Username" subtext="username for loggin-in with, is not case sensitive. must be unique for every trader. should not contain symbols." name="username" value={formData.username} onChange={handleChange} />
@@ -282,11 +289,30 @@ const AddBrokerForm = ({ onBack, onSave }) => {
                             </div>
                         </div>
 
+                        <hr className="border-[#4f5361]/20 my-8" />
+
                         {/* 2. CONFIG */}
-                        <div className="mb-12">
-                            <SectionHeader color="bg-[#ff9800]" title="Config" /> {/* Orange */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-                                <SelectGroup label="Account Status" options={['Active', 'Suspended', 'Closed']} name="accountStatus" value={formData.accountStatus} onChange={handleChange} />
+                        <div className="mb-6">
+                            <SectionHeader title="Config" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 mt-4 px-4">
+                                <div className="mb-8 flex items-center pt-4">
+                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                        <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                name="accountStatus"
+                                                checked={formData.accountStatus === 'Active'}
+                                                onChange={(e) => setFormData(prev => ({ ...prev, accountStatus: e.target.checked ? 'Active' : 'Suspended' }))}
+                                                className="w-5 h-5 bg-transparent border-2 border-[#4f5361] rounded transition-all appearance-none checked:bg-[#4caf50] checked:border-[#4caf50]"
+                                            />
+                                            <i className="fa-solid fa-check absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-[10px] opacity-0 check-icon transition-opacity"></i>
+                                        </div>
+                                        <span className="text-white text-[15px] font-normal group-hover:text-white/80 transition-colors">Account Status</span>
+                                    </label>
+                                    <style>{`
+                                        input:checked + .check-icon { opacity: 1; }
+                                    `}</style>
+                                </div>
                                 <InputGroup label="Profit/Loss Share in %" subtext="Example: 30, will give broker 30% of total brokerage collected from clients" name="sharePL" value={formData.sharePL} onChange={handleChange} />
                                 <InputGroup label="Brokerage Share in %" subtext="Example: 30, will give broker 30% of total brokerage collected from clients. This field is irrelevant if the Brokerage Share Type is set to 'Fixed'." name="shareBrokerage" value={formData.shareBrokerage} onChange={handleChange} />
                                 <InputGroup label="Swap Share in %" subtext="Example: 30, will give broker 30% of total swap collected from clients" name="shareSwap" value={formData.shareSwap} onChange={handleChange} />
@@ -296,122 +322,143 @@ const AddBrokerForm = ({ onBack, onSave }) => {
                             </div>
                         </div>
 
+                        <hr className="border-[#4f5361]/20 my-8" />
+
                         {/* 3. PERMISSIONS */}
-                        <div className="mb-12">
-                            <SectionHeader color="bg-[#f44336]" title="Permissions" /> {/* Red */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-                                <SelectGroup label="Sub Brokers Actions (Create, Edit)" options={['Yes', 'No']} value={formData.permissions.subBrokerActions} onChange={(e) => handlePermissionChange('subBrokerActions', e.target.value)} />
-                                <SelectGroup label="Payin Allowed" options={['Yes', 'No']} value={formData.permissions.payinAllowed} onChange={(e) => handlePermissionChange('payinAllowed', e.target.value)} />
-                                <SelectGroup label="Payout Allowed" options={['Yes', 'No']} value={formData.permissions.payoutAllowed} onChange={(e) => handlePermissionChange('payoutAllowed', e.target.value)} />
-                                <SelectGroup label="Create Clients Allowed (Create, Update and Reset Password)" options={['Yes', 'No']} value={formData.permissions.createClientsAllowed} onChange={(e) => handlePermissionChange('createClientsAllowed', e.target.value)} />
-                                <SelectGroup label="Client Tasks Allowed (Account Reset, Recalculate brokerage etc.)" options={['Yes', 'No']} value={formData.permissions.clientTasksAllowed} onChange={(e) => handlePermissionChange('clientTasksAllowed', e.target.value)} />
-                                <SelectGroup label="Trade Activity Allowed (Create, Update, Restore, Delete Trade)" options={['Yes', 'No']} value={formData.permissions.tradeActivityAllowed} onChange={(e) => handlePermissionChange('tradeActivityAllowed', e.target.value)} />
-                                <SelectGroup label="Notifications Allowed" options={['Yes', 'No']} value={formData.permissions.notificationsAllowed} onChange={(e) => handlePermissionChange('notificationsAllowed', e.target.value)} />
+                        <div className="mb-6">
+                            <SectionHeader title="Permissions" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-8 mt-4">
+                                <PermissionRow label="Sub Brokers Actions (Create, Edit)" options={['Yes', 'No']} value={formData.permissions.subBrokerActions} onChange={(e) => handlePermissionChange('subBrokerActions', e.target.value)} />
+                                <PermissionRow label="Payin Allowed" options={['Yes', 'No']} value={formData.permissions.payinAllowed} onChange={(e) => handlePermissionChange('payinAllowed', e.target.value)} />
+                                <PermissionRow label="Payout Allowed" options={['Yes', 'No']} value={formData.permissions.payoutAllowed} onChange={(e) => handlePermissionChange('payoutAllowed', e.target.value)} />
+                                <PermissionRow label="Create Clients Allowed (Create, Update and Reset Password)" options={['Yes', 'No']} value={formData.permissions.createClientsAllowed} onChange={(e) => handlePermissionChange('createClientsAllowed', e.target.value)} />
+                                <PermissionRow label="Client Tasks Allowed (Account Reset, Recalculate brokerage etc.)" options={['Yes', 'No']} value={formData.permissions.clientTasksAllowed} onChange={(e) => handlePermissionChange('clientTasksAllowed', e.target.value)} />
+                                <PermissionRow label="Trade Activity Allowed (Create, Update, Restore, Delete Trade)" options={['Yes', 'No']} value={formData.permissions.tradeActivityAllowed} onChange={(e) => handlePermissionChange('tradeActivityAllowed', e.target.value)} />
+                                <PermissionRow label="Notifications Allowed" options={['Yes', 'No']} value={formData.permissions.notificationsAllowed} onChange={(e) => handlePermissionChange('notificationsAllowed', e.target.value)} />
                             </div>
                         </div>
 
-                        {/* 4. TRADING SEGMENTS */}
-                        <div className="mb-12">
-                            <SectionHeader color="bg-[#00bcd4]" title="Trading Segments" /> {/* Cyan/Blue */}
-                            <div className="space-y-2">
-                                <SegmentBlock title="COMEX Commodity Future :" segmentKey="comex_commodity_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
-                                <SegmentBlock title="COMEX Currency Future :" segmentKey="comex_currency_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
-                                <SegmentBlock title="COMEX Crypto Future :" segmentKey="comex_crypto_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
-                                <SegmentBlock title="NSE ALL Future :" segmentKey="nse_all_future" config={{ hasBrokerageType: false, hasExposureType: false }} />
-                                <SegmentBlock title="NSE Equity Options (Shortselling):" segmentKey="nse_equity_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
-                                <SegmentBlock title="NSE Equity Options :" segmentKey="nse_equity_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
-                                <SegmentBlock title="NSE Index Options (Shortselling):" segmentKey="nse_index_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
-                                <SegmentBlock title="NSE Index Options :" segmentKey="nse_index_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
-                                <SegmentBlock title="NSE Equity Spot :" segmentKey="nse_equity_spot" config={{ hasBrokerageType: false, hasExposureType: false }} />
-                                <SegmentBlock title="MCX ALL Future :" segmentKey="mcx_all_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
-                                <SegmentBlock title="MCX Commodity Options :" segmentKey="mcx_comm_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
-                                <SegmentBlock title="MCX Commodity Options (Shortselling):" segmentKey="mcx_comm_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
-                            </div>
+                        <hr className="border-[#4f5361]/20 my-8" />
+
+                        {/* 4. TRADING SEGMENTS - IN EXACT ORDER */}
+                        <div className="space-y-2">
+                            <SegmentBlock title="COMEX Commodity Future" segmentKey="comex_commodity_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="COMEX Currency Future" segmentKey="comex_currency_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="COMEX Crypto Future" segmentKey="comex_crypto_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="NSE ALL Future" segmentKey="nse_all_future" config={{ hasBrokerageType: false, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="NSE Equity Options (Shortselling)" segmentKey="nse_equity_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="NSE Equity Options" segmentKey="nse_equity_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="NSE Index Options (Shortselling)" segmentKey="nse_index_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="NSE Index Options" segmentKey="nse_index_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="NSE Equity Spot" segmentKey="nse_equity_spot" config={{ hasBrokerageType: false, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="MCX ALL Future" segmentKey="mcx_all_future" config={{ hasBrokerageType: true, hasExposureType: true }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="MCX Commodity Options (Shortselling)" segmentKey="mcx_comm_opt_short" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
+                            <SegmentBlock title="MCX Commodity Options" segmentKey="mcx_comm_opt" config={{ hasBrokerageType: true, hasExposureType: false }} />
+                            <hr className="border-[#4f5361]/20 my-8" />
                         </div>
 
                         {/* 5. MCX LOT WISE MARGINS */}
-                        <div className="mb-12">
-                            <SectionHeader color="bg-[#9c27b0]" title="MCX Lot wise Margins" /> {/* Purple */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {mcxScrips.map(scrip => (
-                                    <div key={scrip} className="bg-[#1a2035] p-4 rounded border border-white/5">
-                                        <h5 className="text-[#4caf50] text-[12px] font-bold uppercase mb-4">{scrip}</h5>
-                                        <div className="space-y-4">
-                                            <div>
-                                                <label className="block text-[#bcc0cf] text-[10px] font-bold uppercase mb-1">INTRADAY</label>
+                        <div className="mb-6">
+                            <SectionHeader title="MCX Lot wise Margins" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 px-8 mt-4">
+                                {Object.keys(formData.mcxMargins).map(scrip => (
+                                    <React.Fragment key={scrip}>
+                                        <div className="mb-4">
+                                            <label className="text-white text-[15px] font-normal block mb-1">{scrip} INTRADAY</label>
+                                            <div className="relative pt-4">
                                                 <input
                                                     type="text"
                                                     value={formData.mcxMargins[scrip].intraday}
                                                     onChange={(e) => handleMcxMarginChange(scrip, 'intraday', e.target.value)}
-                                                    className="w-full bg-transparent border-b border-white/10 text-white text-sm py-1 focus:border-[#4caf50] focus:outline-none"
+                                                    className="w-full bg-transparent border-b border-[#4f5361] text-white opacity-90 outline-none focus:border-white/40 py-1 text-base transition-all"
                                                 />
                                             </div>
-                                            <div>
-                                                <label className="block text-[#bcc0cf] text-[10px] font-bold uppercase mb-1">HOLDING</label>
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="text-white text-[15px] font-normal block mb-1">{scrip} HOLDING</label>
+                                            <div className="relative pt-4">
                                                 <input
                                                     type="text"
                                                     value={formData.mcxMargins[scrip].holding}
                                                     onChange={(e) => handleMcxMarginChange(scrip, 'holding', e.target.value)}
-                                                    className="w-full bg-transparent border-b border-white/10 text-white text-sm py-1 focus:border-[#4caf50] focus:outline-none"
+                                                    className="w-full bg-transparent border-b border-[#4f5361] text-white opacity-90 outline-none focus:border-white/40 py-1 text-base transition-all"
                                                 />
                                             </div>
+                                        </div>
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+
+                        <hr className="border-[#4f5361]/20 my-8" />
+
+                        {/* 6. MCX LOT WISE BROKERAGE */}
+                        <div className="mb-6">
+                            <SectionHeader title="MCX Lot wise Brokerage" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 px-8 mt-4">
+                                {Object.keys(formData.mcxBrokerage).map(scrip => (
+                                    <div key={scrip} className="mb-4">
+                                        <label className="text-white text-[15px] font-normal block mb-1">{scrip}:</label>
+                                        <div className="relative pt-4">
+                                            <input
+                                                type="text"
+                                                value={formData.mcxBrokerage[scrip]}
+                                                onChange={(e) => handleMcxBrokerageChange(scrip, e.target.value)}
+                                                className="w-full bg-transparent border-b border-[#4f5361] text-white opacity-90 px-0 py-1 text-base focus:outline-none focus:border-white/40 transition-all font-normal"
+                                            />
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        {/* 6. MCX LOT WISE BROKERAGE */}
-                        <div className="mb-12">
-                            <SectionHeader color="bg-[#e91e63]" title="MCX Lot wise Brokerage" /> {/* Pink/Rose */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                {Object.keys(formData.mcxBrokerage).map(scrip => (
-                                    <div key={scrip}>
-                                        <label className="block text-[#bcc0cf] text-[11px] font-bold uppercase mb-2">{scrip}</label>
-                                        <input
-                                            type="text"
-                                            value={formData.mcxBrokerage[scrip]}
-                                            onChange={(e) => handleMcxBrokerageChange(scrip, e.target.value)}
-                                            className="w-full bg-[#1a2035] border-b border-white/10 text-white px-3 py-2 text-sm focus:outline-none focus:border-[#4caf50] transition-colors"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <hr className="border-[#4f5361]/20 my-8" />
 
-                        {/* 7. TRANSACTION PASSWORD (FINAL) */}
-                        <div className="mb-12 pt-8 border-t border-white/10">
-                            <div className="max-w-md">
+                        {/* 7. TRANSACTION PASSWORD */}
+                        <div className="mb-6">
+                            <SectionHeader title="Transaction Password" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 px-8 mt-4">
                                 <InputGroup
                                     label="Your Transaction Password"
-                                    name="finalTransactionPassword"
                                     type="password"
+                                    name="finalTransactionPassword"
                                     value={formData.finalTransactionPassword}
                                     onChange={handleChange}
                                 />
                             </div>
                         </div>
 
-                        {/* SAVE BUTTON */}
-                        <div className="pt-4 flex justify-end">
+                        {/* CREATE BUTTON */}
+                        <div className="flex justify-start px-8 mt-12 pb-10">
                             <button
                                 type="submit"
-                                className="bg-gradient-to-r from-[#4caf50] to-[#43a047] hover:from-[#43a047] hover:to-[#388e3c] text-white px-10 py-3 rounded shadow-[0_4px_20px_0_rgba(76,175,80,0.4)] font-bold text-xs tracking-widest transition-all uppercase hover:scale-105 active:scale-95"
+                                className="bg-[#4caf50] hover:bg-[#43a047] text-white px-12 py-3 rounded shadow-lg shadow-green-900/40 font-bold text-xs tracking-widest uppercase transition-all"
                             >
-                                ADD BROKER
+                                CREATE SUB BROKER
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(10px); }
+                    from { opacity: 0; transform: translateY(5px); }
                     to { opacity: 1; transform: translateY(0); }
                 }
                 .animate-fadeIn {
-                    animation: fadeIn 0.3s ease-out forwards;
+                    animation: fadeIn 0.4s ease-out forwards;
                 }
             `}</style>
         </div>

@@ -38,6 +38,11 @@ import UsersPage from './pages/users/UsersPage';
 import CreateFundForm from './components/CreateFundForm';
 import AddBrokerForm from './components/AddBrokerForm';
 import CreateTradeForm from './components/CreateTradeForm';
+import IpLoginsPage from './pages/logs/IpLoginsPage';
+import TradeIpTrackingPage from './pages/logs/TradeIpTrackingPage';
+import GlobalUpdationPage from './pages/settings/GlobalUpdationPage';
+import ClinicsPage from './pages/super-admin/ClinicsPage';
+
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -52,8 +57,24 @@ function App() {
     return null;
   });
   const [view, setView] = useState(() => {
+    // Check URL path first
+    const path = window.location.pathname;
+    if (path === '/super-admin/clinics') return 'clinics';
+
     return localStorage.getItem('traders_view') || 'live-m2m';
   });
+
+  useEffect(() => {
+    // Handle URL changes (popstate)
+    const handleLocationChange = () => {
+      if (window.location.pathname === '/super-admin/clinics') {
+        setView('clinics');
+      }
+    };
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
 
   useEffect(() => {
     if (user) {
@@ -179,7 +200,7 @@ function App() {
       case 'closed-positions':
         return <ClosedPositionsPage />;
       case 'users':
-        return <TradingClientsPage clients={clients} onClientClick={() => setView('client-details')} onAddBrokerClick={() => setView('create-broker')} onDepositClick={handleDeposit} onWithdrawClick={handleWithdraw} onViewClick={() => setView('client-details')} />;
+        return <TradingClientsPage clients={clients} onLogout={handleLogout} onNavigate={setView} onClientClick={() => setView('client-details')} onAddBrokerClick={() => setView('create-broker')} onDepositClick={handleDeposit} onWithdrawClick={handleWithdraw} onViewClick={() => setView('client-details')} />;
       case 'create-client':
         return <ClientDetailsForm onBack={() => setView('users')} onSave={handleAddClient} mode="create" />;
       case 'create-broker':
@@ -199,7 +220,7 @@ function App() {
       case 'new-client-bank':
         return <NewClientBankDetailsPage />;
       case 'create-trade':
-        return <CreateTradeForm onSave={handleAddTrade} onBack={() => setView('trades')} />;
+        return <CreateTradeForm onSave={handleAddTrade} onBack={() => setView('trades')} onLogout={handleLogout} onNavigate={setView} />;
       case 'change-password':
         return <ChangePasswordPage />;
       case 'change-transaction-password':
@@ -216,7 +237,16 @@ function App() {
         return <ScripDataPage />;
       case 'group-trades':
         return <GroupTradesPage />;
+      case 'ip-logins':
+        return <IpLoginsPage />;
+      case 'trade-ip-tracking':
+        return <TradeIpTrackingPage />;
+      case 'global-updation':
+        return <GlobalUpdationPage />;
+      case 'clinics':
+        return <ClinicsPage />;
       default:
+
         return <LiveM2MPage />;
     }
   };
