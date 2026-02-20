@@ -41,8 +41,6 @@ import CreateTradeForm from './components/CreateTradeForm';
 import IpLoginsPage from './pages/logs/IpLoginsPage';
 import TradeIpTrackingPage from './pages/logs/TradeIpTrackingPage';
 import GlobalUpdationPage from './pages/settings/GlobalUpdationPage';
-import ClinicsPage from './pages/super-admin/ClinicsPage';
-
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -57,24 +55,8 @@ function App() {
     return null;
   });
   const [view, setView] = useState(() => {
-    // Check URL path first
-    const path = window.location.pathname;
-    if (path === '/super-admin/clinics') return 'clinics';
-
     return localStorage.getItem('traders_view') || 'live-m2m';
   });
-
-  useEffect(() => {
-    // Handle URL changes (popstate)
-    const handleLocationChange = () => {
-      if (window.location.pathname === '/super-admin/clinics') {
-        setView('clinics');
-      }
-    };
-    window.addEventListener('popstate', handleLocationChange);
-    return () => window.removeEventListener('popstate', handleLocationChange);
-  }, []);
-
 
   useEffect(() => {
     if (user) {
@@ -243,10 +225,7 @@ function App() {
         return <TradeIpTrackingPage />;
       case 'global-updation':
         return <GlobalUpdationPage />;
-      case 'clinics':
-        return <ClinicsPage />;
       default:
-
         return <LiveM2MPage />;
     }
   };
