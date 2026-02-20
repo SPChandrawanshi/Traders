@@ -3,14 +3,22 @@ import { RotateCcw, Edit, ArrowUp, ArrowDown, Eye, Copy } from 'lucide-react';
 import ClientDetailPage from './ClientDetailPage';
 import UpdateClientPage from './UpdateClientPage';
 import CreateClientPage from './CreateClientPage';
+import ResetAccountPage from './ResetAccountPage';
+import RecalculateBrokeragePage from './RecalculateBrokeragePage';
+import ChangePasswordPage from './ChangePasswordPage';
+import DeleteClientPage from './DeleteClientPage';
 
-const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) => {
+const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick, onLogout, onNavigate }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [selectedClient, setSelectedClient] = useState(null);
     const [showDetailPage, setShowDetailPage] = useState(false);
     const [showUpdatePage, setShowUpdatePage] = useState(false);
     const [showCreatePage, setShowCreatePage] = useState(false);
+    const [showResetPage, setShowResetPage] = useState(false);
+    const [showRecalculatePage, setShowRecalculatePage] = useState(false);
+    const [showChangePasswordPage, setShowChangePasswordPage] = useState(false);
+    const [showDeletePage, setShowDeletePage] = useState(false);
 
     // Dummy client data matching screenshot
     const dummyClient = {
@@ -55,7 +63,7 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#1a2035] shadow-inner p-6 space-y-8">
+        <div className="flex flex-col h-full bg-[#1a2035] shadow-inner p-6 space-y-8 overflow-y-auto custom-scrollbar">
             <style>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: #1a2035; }
@@ -100,7 +108,7 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
                         setSelectedClient(null);
                         setShowCreatePage(true);
                     }}
-                    className="bg-[#5cb85c] hover:bg-[#4caf50] text-white py-3 px-8 rounded font-bold text-[11px] uppercase tracking-widest shadow-lg transition-all"
+                    className="bg-[#4caf50] hover:bg-[#43a047] text-white py-3 px-8 rounded-md font-bold text-[11px] uppercase tracking-widest shadow-lg transition-all"
                 >
                     CREATE TRADING CLIENT
                 </button>
@@ -135,18 +143,18 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
                             <tr className="border-t border-white/5 hover:bg-white/[0.02] transition-colors">
                                 <td className="px-4 py-6">1</td>
                                 <td className="px-4 py-6">
-                                    <div className="flex flex-col items-center gap-3">
-                                        <div className="flex items-center justify-center gap-4">
+                                    <div className="flex flex-col items-start gap-3 pl-2">
+                                        <div className="flex items-center gap-4">
                                             <Eye onClick={() => handleView(dummyClient)} className="w-[18px] h-[18px] cursor-pointer hover:text-blue-400 transition-colors" />
                                             <Edit onClick={() => handleEdit(dummyClient)} className="w-[18px] h-[18px] cursor-pointer hover:text-yellow-400 transition-colors" />
                                             <Copy onClick={() => handleCopy(dummyClient)} className="w-[18px] h-[18px] cursor-pointer hover:text-green-400 transition-colors" />
                                         </div>
-                                        <div className="flex items-center justify-center gap-2">
-                                            <div onClick={() => handleDeposit(dummyClient)} className="w-7 h-7 bg-[#5cb85c] hover:bg-[#4caf50] rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-all">
-                                                <ArrowDown className="w-4 h-4 text-white" />
+                                        <div className="flex items-center gap-2">
+                                            <div onClick={() => handleDeposit(dummyClient)} className="w-5 h-5 bg-[#5cb85c] hover:bg-[#4caf50] rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-all">
+                                                <ArrowDown className="w-3 h-3 text-white" />
                                             </div>
-                                            <div onClick={() => handleWithdraw(dummyClient)} className="w-7 h-7 bg-[#d9534f] hover:bg-[#c9302c] rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-all">
-                                                <ArrowUp className="w-4 h-4 text-white" />
+                                            <div onClick={() => handleWithdraw(dummyClient)} className="w-5 h-5 bg-[#d9534f] hover:bg-[#c9302c] rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-all">
+                                                <ArrowUp className="w-3 h-3 text-white" />
                                             </div>
                                         </div>
                                     </div>
@@ -177,9 +185,71 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
             {showDetailPage && selectedClient && (
                 <ClientDetailPage
                     client={selectedClient}
+                    onLogout={onLogout}
+                    onNavigate={onNavigate}
                     onClose={() => {
                         setShowDetailPage(false);
                         setSelectedClient(null);
+                    }}
+                    onUpdate={(client) => {
+                        setShowDetailPage(false);
+                        setSelectedClient(client);
+                        setShowUpdatePage(true);
+                    }}
+                    onReset={(client) => {
+                        setShowDetailPage(false);
+                        setSelectedClient(client);
+                        setShowResetPage(true);
+                    }}
+                    onRecalculate={(client) => {
+                        setShowDetailPage(false);
+                        setSelectedClient(client);
+                        setShowRecalculatePage(true);
+                    }}
+                    onDuplicate={(client) => {
+                        setShowDetailPage(false);
+                        setSelectedClient(client);
+                        setShowCreatePage(true);
+                    }}
+                    onChangePassword={(client) => {
+                        setShowDetailPage(false);
+                        setSelectedClient(client);
+                        setShowChangePasswordPage(true);
+                    }}
+                    onDelete={(client) => {
+                        setShowDetailPage(false);
+                        setSelectedClient(client);
+                        setShowDeletePage(true);
+                    }}
+                />
+            )}
+
+            {/* Reset Account Modal */}
+            {showResetPage && selectedClient && (
+                <ResetAccountPage
+                    client={selectedClient}
+                    onClose={() => {
+                        setShowResetPage(false);
+                        setSelectedClient(null);
+                    }}
+                    onReset={(client, password) => {
+                        console.log('Resetting account for:', client.username, 'with password:', password);
+                        // Implement reset logic here
+                    }}
+                />
+            )}
+
+            {/* Recalculate Brokerage Modal */}
+            {showRecalculatePage && selectedClient && (
+                <RecalculateBrokeragePage
+                    client={selectedClient}
+                    onClose={() => {
+                        setShowRecalculatePage(false);
+                        setSelectedClient(null);
+                    }}
+                    onRecalculate={(client, password) => {
+                        console.log('Recalculating brokerage for:', client.username, 'with password:', password);
+                        // Implement recalculate logic here
                     }}
                 />
             )}
@@ -188,6 +258,8 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
             {showUpdatePage && selectedClient && (
                 <UpdateClientPage
                     client={selectedClient}
+                    onLogout={onLogout}
+                    onNavigate={onNavigate}
                     onClose={() => {
                         setShowUpdatePage(false);
                         setSelectedClient(null);
@@ -205,6 +277,8 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
             {showCreatePage && (
                 <CreateClientPage
                     client={selectedClient}
+                    onLogout={onLogout}
+                    onNavigate={onNavigate}
                     onClose={() => {
                         setShowCreatePage(false);
                         setSelectedClient(null);
@@ -214,6 +288,40 @@ const TradingClientsPage = ({ onCreateClick, onDepositClick, onWithdrawClick }) 
                         setShowCreatePage(false);
                         setSelectedClient(null);
                         alert(selectedClient ? 'Client copied successfully!' : 'Client created successfully!');
+                    }}
+                />
+            )}
+
+            {/* Change Password Modal */}
+            {showChangePasswordPage && selectedClient && (
+                <ChangePasswordPage
+                    client={selectedClient}
+                    onClose={() => {
+                        setShowChangePasswordPage(false);
+                        setSelectedClient(null);
+                    }}
+                    onChangePasswordConfirm={(newPass, transPass) => {
+                        console.log('Changing password for:', selectedClient.username, newPass, transPass);
+                        setShowChangePasswordPage(false);
+                        setSelectedClient(null);
+                        alert('Password updated successfully!');
+                    }}
+                />
+            )}
+
+            {/* Delete Client Modal */}
+            {showDeletePage && selectedClient && (
+                <DeleteClientPage
+                    client={selectedClient}
+                    onClose={() => {
+                        setShowDeletePage(false);
+                        setSelectedClient(null);
+                    }}
+                    onDeleteConfirm={(password) => {
+                        console.log('Deleting client:', selectedClient.username, 'with password:', password);
+                        setShowDeletePage(false);
+                        setSelectedClient(null);
+                        alert('Client deleted successfully!');
                     }}
                 />
             )}

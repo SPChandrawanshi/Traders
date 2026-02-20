@@ -43,21 +43,25 @@ const TraderFundsPage = ({ onNavigate }) => {
                         name="fromDate"
                         value={filters.fromDate}
                         onChange={handleFilterChange}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                         placeholder="From Date"
-                        className="bg-white text-slate-900 px-4 py-2.5 rounded text-sm outline-none border border-slate-300"
+                        className="bg-white text-slate-900 px-4 py-2.5 rounded text-sm outline-none border border-slate-300 min-w-[180px]"
                     />
                     <input
                         type="text"
                         name="toDate"
                         value={filters.toDate}
                         onChange={handleFilterChange}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                         placeholder="To Date"
-                        className="bg-white text-slate-900 px-4 py-2.5 rounded text-sm outline-none border border-slate-300"
+                        className="bg-white text-slate-900 px-4 py-2.5 rounded text-sm outline-none border border-slate-300 min-w-[180px]"
                     />
                 </div>
                 <button
                     onClick={handleDownloadReport}
-                    className="bg-[#00BCD4] hover:bg-[#00ACC1] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md whitespace-nowrap"
+                    className="bg-[#00BCD4] hover:bg-[#00ACC1] text-white font-bold py-2.5 px-6 rounded uppercase tracking-wide text-xs transition-all shadow-md whitespace-nowrap"
                 >
                     DOWNLOAD FUNDS REPORT
                 </button>
@@ -65,10 +69,10 @@ const TraderFundsPage = ({ onNavigate }) => {
 
             {/* Filter Section */}
             <div className="bg-[#1f283e] p-6 rounded-lg border border-white/10 shadow-xl">
-                <div className="flex flex-col md:flex-row gap-6 items-end">
-                    {/* Filter Fields */}
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
+                <div className="flex flex-col gap-6">
+                    {/* Filter Fields Row */}
+                    <div className="flex flex-col md:flex-row gap-8">
+                        <div className="w-full md:w-56">
                             <label className="text-slate-500 text-xs block mb-2">User ID</label>
                             <input
                                 type="text"
@@ -78,7 +82,7 @@ const TraderFundsPage = ({ onNavigate }) => {
                                 className="bg-transparent w-full text-white text-sm py-2 outline-none border-b border-slate-600 focus:border-[#4CAF50] transition-colors"
                             />
                         </div>
-                        <div>
+                        <div className="w-full md:w-56">
                             <label className="text-slate-500 text-xs block mb-2">Amount</label>
                             <input
                                 type="text"
@@ -90,17 +94,17 @@ const TraderFundsPage = ({ onNavigate }) => {
                         </div>
                     </div>
 
-                    {/* Buttons */}
-                    <div className="flex gap-3 shrink-0">
+                    {/* Buttons Row */}
+                    <div className="flex gap-2">
                         <button
                             onClick={handleSearch}
-                            className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                            className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2 px-5 rounded uppercase tracking-wide text-[11px] transition-all shadow-md"
                         >
                             SEARCH
                         </button>
                         <button
                             onClick={handleReset}
-                            className="bg-[#607d8b] hover:bg-[#546e7a] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                            className="bg-[#607d8b] hover:bg-[#546e7a] text-white font-bold py-2 px-5 rounded uppercase tracking-wide text-[11px] transition-all shadow-md"
                         >
                             RESET
                         </button>

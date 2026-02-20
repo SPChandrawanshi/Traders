@@ -30,7 +30,7 @@ const LoginPage = ({ onLogin }) => {
           <div className="card card-dark relative">
 
             {/* Card Header - Success Style - Centered with Icon on Left */}
-            <div className="card-header-success absolute left-1/2 -translate-x-1/2 w-[calc(100%-30px)] h-[70px] flex items-center justify-start px-6">
+            <div className="card-header-success absolute left-0 w-[calc(100%-30px)] h-[70px] flex items-center justify-start px-4">
               <Contact className="w-8 h-8 text-white" />
             </div>
 

@@ -121,20 +121,24 @@ const TradesPage = ({ trades = [], onCreateClick }) => {
 
                 <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
                     <input
-                        type="date"
+                        type="text"
                         name="fromDate"
                         value={filters.fromDate}
                         onChange={handleFilterChange}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                         placeholder="From Date"
-                        className="bg-white text-slate-900 text-sm py-2.5 px-4 rounded outline-none border border-slate-300 cursor-pointer"
+                        className="bg-white text-slate-900 text-sm py-2.5 px-4 rounded outline-none border border-slate-300 cursor-pointer min-w-[150px]"
                     />
                     <input
-                        type="date"
+                        type="text"
                         name="toDate"
                         value={filters.toDate}
                         onChange={handleFilterChange}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                         placeholder="To Date"
-                        className="bg-white text-slate-900 text-sm py-2.5 px-4 rounded outline-none border border-slate-300 cursor-pointer"
+                        className="bg-white text-slate-900 text-sm py-2.5 px-4 rounded outline-none border border-slate-300 cursor-pointer min-w-[150px]"
                     />
                     <button
                         onClick={handleExport}

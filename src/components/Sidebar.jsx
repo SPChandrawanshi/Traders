@@ -1,112 +1,105 @@
 import React from 'react';
-import {
-  LayoutDashboard,
-  TrendingUp,
-  Bell,
-  Radio,
-  Sun,
-  UserCircle,
-  Tag,
-  CircleDollarSign,
-  Users,
-  Calculator,
-  User,
-  Settings,
-  LogOut,
-  Layout as LayoutIcon,
-  Layers,
-  FileText,
-  BadgeAlert,
-  ClipboardList,
-  History,
-  Trash2,
-  Clock,
-  Wallet,
-  Building2,
-  Lock,
-  ArrowDownLeft,
-  ArrowUpRight,
-  ShieldAlert
-} from 'lucide-react';
 
 const Sidebar = ({ onLogout, onNavigate, currentView, isOpen, onClose }) => {
   const menuItems = [
-    { id: 'live-m2m', label: 'DashBoard', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { id: 'market-watch', label: 'Market Watch', icon: <TrendingUp className="w-5 h-5" /> },
-    { id: 'notifications', label: 'Notifications', icon: <Bell className="w-5 h-5" /> },
-    { id: 'action-ledger', label: 'Action Ledger', icon: <Radio className="w-5 h-5" /> },
-    { id: 'active-positions', label: 'Active Positions', icon: <Layers className="w-5 h-5" /> },
-    { id: 'closed-positions', label: 'Closed Positions', icon: <History className="w-5 h-5" /> },
-    { id: 'users', label: 'Trading Clients', icon: <UserCircle className="w-5 h-5" /> },
-    { id: 'trades', label: 'Trades', icon: <Tag className="w-5 h-5" /> },
-    { id: 'group-trades', label: 'Group Trades', icon: <Tag className="w-5 h-5" /> },
-    { id: 'closed-trades', label: 'Closed Trades', icon: <Tag className="w-5 h-5" /> },
-    { id: 'deleted-trades', label: 'Deleted Trades', icon: <Trash2 className="w-5 h-5" /> },
-    { id: 'pending-orders', label: 'Pending Orders', icon: <Clock className="w-5 h-5" /> },
-    { id: 'funds', label: 'Trader Funds', icon: <Wallet className="w-5 h-5" /> },
-    { id: 'trading-clients', label: 'Users', icon: <Users className="w-5 h-5" /> },
-    { id: 'tickers', label: 'Tickers', icon: <Calculator className="w-5 h-5" /> },
-    { id: 'banned', label: 'Banned Limit Orders', icon: <ShieldAlert className="w-5 h-5" /> },
-    { id: 'bank', label: 'Bank Details', icon: <Building2 className="w-5 h-5" /> },
-    { id: 'new-client-bank', label: 'Bank Details for new clients', icon: <Building2 className="w-5 h-5" /> },
-    { id: 'accounts', label: 'Accounts', icon: <FileText className="w-5 h-5" /> },
-    { id: 'create-broker', label: 'Broker Accounts', icon: <FileText className="w-5 h-5" /> },
-    { id: 'change-password', label: 'Change Login Password', icon: <Lock className="w-5 h-5" /> },
-    { id: 'change-transaction-password', label: 'Change Transaction Password', icon: <Lock className="w-5 h-5" /> },
-    { id: 'withdrawal-requests', label: 'Withdrawal Requests', icon: <ArrowUpRight className="w-5 h-5" /> },
-    { id: 'deposit-requests', label: 'Deposit Requests', icon: <ArrowDownLeft className="w-5 h-5" /> },
-    { id: 'negative-balance', label: 'Negative Balance Txns', icon: <BadgeAlert className="w-5 h-5" /> },
+    // { id: 'clinics', label: 'Clinics', icon: 'fa-hospital', path: '/super-admin/clinics' },
+    { id: 'live-m2m', label: 'DashBoard', icon: 'fa-table-columns' },
+    { id: 'market-watch', label: 'Market Watch', icon: 'fa-arrow-trend-up' },
+    { id: 'notifications', label: 'Notifications', icon: 'fa-bell' },
+    { id: 'action-ledger', label: 'Action Ledger', icon: 'fa-podcast' },
+    { id: 'active-positions', label: 'Active Positions', icon: 'fa-certificate' },
+    { id: 'closed-positions', label: 'Closed Positions', icon: 'fa-certificate' },
+    { id: 'trades', label: 'Trades', icon: 'fa-tag' },
+    { id: 'group-trades', label: 'Group Trades', icon: 'fa-tag' },
+    { id: 'closed-trades', label: 'Closed Trades', icon: 'fa-tag' },
+    { id: 'deleted-trades', label: 'Deleted Trades', icon: 'fa-tag' },
+    { id: 'pending-orders', label: 'Pending Orders', icon: 'fa-swatchbook' },
+    { id: 'funds', label: 'Trader Funds', icon: 'fa-circle-dollar-to-slot' },
+    { id: 'tickers', label: 'Tickers', icon: 'fa-calculator' },
+    { id: 'banned', label: 'Banned Limit Orders', icon: 'fa-calculator' },
+    { id: 'bank', label: 'Bank Details', icon: 'fa-calculator' },
+    { id: 'accounts', label: 'Accounts', icon: 'fa-calculator' },
+    { id: 'broker-accounts', label: 'Broker Accounts', icon: 'fa-calculator' },
+    { id: 'ip-logins', label: 'IP Logins', icon: 'fa-shield-halved' },
+    { id: 'trade-ip-tracking', label: 'Trade IP Tracking', icon: 'fa-location-dot' },
+    { id: 'global-updation', label: 'Global Updation', icon: 'fa-earth-americas' },
+    { id: 'change-password', label: 'Change Login Password', icon: 'fa-user' },
+    { id: 'change-transaction-password', label: 'Change Transaction Password', icon: 'fa-gear' },
+    { id: 'withdrawal-requests', label: 'Withdrawal Requests', icon: 'fa-gear' },
+    { id: 'deposit-requests', label: 'Deposit Requests', icon: 'fa-gear' },
+    { id: 'negative-balance', label: 'Negative Balance Txns', icon: 'fa-bell' },
   ];
 
   return (
     <aside className={`
       h-full bg-[#1a2035] text-white transition-all duration-300 ease-in-out flex-shrink-0 z-50
-      fixed inset-y-0 left-0 w-64
+      fixed inset-y-0 left-0 w-[260px]
       md:relative md:translate-x-0
       ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       shadow-2xl
     `}>
       <div className="flex flex-col h-full border-r border-white/5 overflow-hidden">
         {/* Navigation Items */}
-        <div className="flex-1 pt-4 pb-4 overflow-y-auto custom-scrollbar">
+        <div className="flex-1 pt-2 pb-4 overflow-y-auto custom-scrollbar">
           <div className="px-3 space-y-1">
             {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => {
+                  if (item.path) {
+                    window.history.pushState({}, '', item.path);
+                  } else {
+                    window.history.pushState({}, '', '/');
+                  }
                   onNavigate(item.id);
                   if (window.innerWidth < 768) onClose();
                 }}
+
                 className={`
-                  w-full flex items-center px-4 py-3 rounded-md transition-all duration-200 group
+                  w-full flex items-center px-4 py-3 rounded-sm transition-all duration-200 group
                   ${currentView === item.id
                     ? 'text-white shadow-lg'
-                    : 'text-slate-300 hover:bg-white/5 hover:text-white'}
+                    : 'text-[#bcc0cf] hover:bg-white/5 hover:text-white'}
                 `}
-                style={currentView === item.id ? { background: 'linear-gradient(60deg, #288c6c, #4ea752)' } : {}}
+                style={currentView === item.id ? { background: '#4caf50', fontWeight: 'bold' } : {}}
               >
                 <div className={`
-                  mr-4 transition-colors
+                  w-8 flex justify-center mr-2 transition-colors
                   ${currentView === item.id ? 'text-white' : 'text-slate-400 group-hover:text-white'}
                 `}>
-                  {item.icon}
+                  <i className={`fa-solid ${item.icon} text-[18px]`}></i>
                 </div>
-                <span className="text-[13px] font-medium truncate">{item.label}</span>
+                <span className="text-[14px] truncate">{item.label}</span>
               </button>
             ))}
-          </div>
 
-          <div className="px-6 py-6 border-t border-white/10 mt-6">
-            <button
-              onClick={onLogout}
-              className="w-full flex items-center px-4 py-3 text-slate-300 hover:bg-white/5 hover:text-white rounded-md transition-all duration-200"
-            >
-              <LogOut className="w-5 h-5 mr-4 text-slate-400" />
-              <span className="text-[13px] font-medium">Log Out</span>
-            </button>
+            <div className="px-2 py-4 border-t border-white/10 mt-4">
+              <button
+                onClick={onLogout}
+                className="w-full flex items-center px-4 py-3 text-[#bcc0cf] hover:bg-white/5 hover:text-white rounded-sm transition-all duration-200"
+              >
+                <div className="w-8 flex justify-center mr-2 text-slate-400 group-hover:text-white">
+                  <i className="fa-solid fa-sign-out-alt text-[18px]"></i>
+                </div>
+                <span className="text-[14px] font-medium">Log Out</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+      `}</style>
     </aside>
   );
 };

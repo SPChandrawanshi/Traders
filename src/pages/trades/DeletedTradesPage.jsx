@@ -27,9 +27,9 @@ const DeletedTradesPage = () => {
 
             {/* Filter Card */}
             <div className="bg-[#1f283e] p-6 rounded-lg border border-white/10 shadow-xl">
-                <div className="flex flex-col md:flex-row gap-6 items-end">
+                <div className="flex flex-col md:flex-row gap-4 items-end">
                     {/* Filter Field */}
-                    <div className="flex-1">
+                    <div className="w-full md:w-64">
                         <label className="text-slate-500 text-xs block mb-2">Username</label>
                         <input
                             type="text"
@@ -44,13 +44,13 @@ const DeletedTradesPage = () => {
                     <div className="flex gap-3 shrink-0">
                         <button
                             onClick={handleSearch}
-                            className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                            className="bg-[#4CAF50] hover:bg-[#43A047] text-white font-bold py-2 px-6 rounded uppercase tracking-wide text-xs transition-all shadow-md"
                         >
                             SEARCH
                         </button>
                         <button
                             onClick={handleReset}
-                            className="bg-[#607d8b] hover:bg-[#546e7a] text-white font-bold py-2.5 px-8 rounded uppercase tracking-wide text-xs transition-all shadow-md"
+                            className="bg-[#607d8b] hover:bg-[#546e7a] text-white font-bold py-2 px-6 rounded uppercase tracking-wide text-xs transition-all shadow-md"
                         >
                             RESET
                         </button>

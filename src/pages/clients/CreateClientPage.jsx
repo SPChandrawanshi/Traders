@@ -1,34 +1,163 @@
-import React, { useState, useEffect } from 'react';
-import { X, Save } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Save, ArrowLeft, Info, Check, Lock, Key, Settings, User, ChevronDown } from 'lucide-react';
 
-const CreateClientPage = ({ client, onClose, onSave }) => {
+const CreateClientPage = ({ client, onClose, onSave, onLogout, onNavigate }) => {
     const [formData, setFormData] = useState({
-        fullname: '',
+        // 1. Personal Details
+        fullName: client?.fullName || '',
         mobile: '',
-        username: '',
+        username: client?.username || '',
         password: '',
+        initialFunds: '0',
         city: '',
-        profit_book_interval: '120',
-        scalping_stop_loss: '0',
-        is_demo: true,
-        transaction_password: ''
+
+        // 2. Config
+        isDemoAccount: client?.demoAccount === 'Yes' || false,
+        allowFreshEntry: false,
+        allowOrdersBetweenHL: true,
+        tradeEquityUnits: false,
+        accountStatus: 'Active',
+        autoCloseTrades: false,
+        autoClosePercentage: '90',
+        notifyPercentage: '70',
+        minTimeToBookProfit: '120',
+        scalpingStopLoss: 'Disabled',
+
+        // 3. MCX Futures
+        mcxTrading: true,
+        mcxMinLot: '1',
+        mcxMaxLot: '100',
+        mcxMaxLotScrip: '1000',
+        mcxMaxSizeAll: '5000',
+        mcxBrokerageType: 'per_crore',
+        mcxBrokerage: '800',
+        mcxExposureType: 'per_turnover',
+        mcxIntradayMargin: '500',
+        mcxHoldingMargin: '100',
+        mcxLotMargins: {
+            BULLDEX: { INTRADAY: '0', HOLDING: '0' },
+            GOLD: { INTRADAY: '0', HOLDING: '0' },
+            SILVER: { INTRADAY: '0', HOLDING: '0' },
+            CRUDEOIL: { INTRADAY: '0', HOLDING: '0' },
+            'CRUDEOIL MINI': { INTRADAY: '0', HOLDING: '0' },
+            COPPER: { INTRADAY: '0', HOLDING: '0' },
+            NICKEL: { INTRADAY: '0', HOLDING: '0' },
+            ZINC: { INTRADAY: '0', HOLDING: '0' },
+            ZINCMINI: { INTRADAY: '0', HOLDING: '0' },
+            LEAD: { INTRADAY: '0', HOLDING: '0' },
+            LEADMINI: { INTRADAY: '0', HOLDING: '0' },
+            ALUMINIUM: { INTRADAY: '0', HOLDING: '0' },
+            ALUMINI: { INTRADAY: '0', HOLDING: '0' },
+            NATURALGAS: { INTRADAY: '0', HOLDING: '0' },
+            'NATURALGAS MINI': { INTRADAY: '0', HOLDING: '0' },
+            MENTHAOIL: { INTRADAY: '0', HOLDING: '0' },
+            COTTON: { INTRADAY: '0', HOLDING: '0' },
+            GOLDM: { INTRADAY: '0', HOLDING: '0' },
+            SILVERM: { INTRADAY: '0', HOLDING: '0' },
+            'SILVER MIC': { INTRADAY: '0', HOLDING: '0' }
+        },
+        mcxLotBrokerage: {
+            GOLDM: '0', SILVERM: '0', BULLDEX: '0', GOLD: '0', SILVER: '0', CRUDEOIL: '0',
+            COPPER: '0', NICKEL: '0', ZINC: '0', LEAD: '0', NATURALGAS: '0', 'NATURALGAS MINI': '0',
+            ALUMINIUM: '0', MENTHAOIL: '0', COTTON: '0', 'SILVER MIC': '0', ZINCMINI: '0',
+            ALUMINI: '0', LEADMINI: '0', 'CRUDEOIL MINI': '0'
+        },
+        bidGaps: {
+            GOLDM: '1', SILVERM: '1', BULLDEX: '1', GOLD: '1', SILVER: '1',
+            CRUDEOIL: '1', COPPER: '1', NICKEL: '1', ZINC: '1', LEAD: '1',
+            NATURALGAS: '1', 'NATURALGAS MINI': '1', ALUMINIUM: '1', MENTHAOIL: '1',
+            COTTON: '1', 'SILVER MIC': '1', ZINCMINI: '1', ALUMINI: '1',
+            LEADMINI: '1', 'CRUDEOIL MINI': '1'
+        },
+
+        // 4. Equity Futures
+        equityTrading: true,
+        equityBrokerage: '800',
+        equityMinLot: '1',
+        equityMaxLot: '100',
+        equityMinIndexLot: '1',
+        equityMaxIndexLot: '100',
+        equityMaxScrip: '500',
+        equityMaxIndexScrip: '500',
+        equityMaxSizeAll: '2000',
+        equityMaxSizeAllIndex: '2000',
+        equityIntradayMargin: '500',
+        equityHoldingMargin: '100',
+        equityOrdersAway: '5',
+
+        // 5. Options Config
+        indexOptionsTrading: true,
+        equityOptionsTrading: true,
+        mcxOptionsTrading: false,
+        optionsIndexBrokerageType: 'per_lot',
+        optionsIndexBrokerage: '20',
+        optionsEquityBrokerageType: 'per_lot',
+        optionsEquityBrokerage: '20',
+        optionsMcxBrokerageType: 'per_lot',
+        optionsMcxBrokerage: '20',
+        optionsMinBidPrice: '1',
+        optionsIndexShortSelling: 'No',
+        optionsEquityShortSelling: 'No',
+        optionsMcxShortSelling: 'No',
+        optionsEquityMinLot: '0',
+        optionsEquityMaxLot: '50',
+        optionsIndexMinLot: '0',
+        optionsIndexMaxLot: '20',
+        optionsMcxMinLot: '0',
+        optionsMcxMaxLot: '50',
+        optionsEquityMaxScrip: '200',
+        optionsIndexMaxScrip: '200',
+        optionsMcxMaxScrip: '200',
+        optionsMaxEquitySizeAll: '200',
+        optionsMaxIndexSizeAll: '200',
+        optionsMaxMcxSizeAll: '200',
+        optionsIndexIntraday: '5',
+        optionsIndexHolding: '2',
+        optionsEquityIntraday: '5',
+        optionsEquityHolding: '2',
+        optionsMcxIntraday: '5',
+        optionsMcxHolding: '2',
+        optionsOrdersAway: '10',
+
+
+        // 6. Expiry Rules
+        autoSquareOff: 'No',
+        expirySquareOffTime: '11:30',
+        allowExpiringScrip: 'No',
+        daysBeforeExpiry: '0',
+        mcxOptionsAwayPoints: {
+            MCXBULLDEX: '0', GOLD: '0', SILVER: '0', CRUDEOIL: '0', COPPER: '0',
+            NICKEL: '0', ZINC: '0', LEAD: '0', NATURALGAS: '0', MENTHAOIL: '0',
+            COTTON: '0', GOLDM: '0', SILVERM: '0', 'SILVER MIC': '0'
+        },
+
+        // 7. Other
+        notes: '',
+        broker: client?.broker || '3761 : demo001',
+        transactionPassword: ''
     });
 
+    const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+    const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+    const profileRef = useRef(null);
+
     useEffect(() => {
-        if (client) {
-            setFormData({
-                fullname: client.fullName || '',
-                mobile: client.mobile || '',
-                username: `${client.username}_copy` || '',
-                password: '',
-                city: client.city || '',
-                profit_book_interval: '120',
-                scalping_stop_loss: '0',
-                is_demo: true,
-                transaction_password: ''
-            });
-        }
-    }, [client]);
+        const timer = setInterval(() => {
+            setCurrentTime(new Date().toLocaleTimeString());
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setShowProfileDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -38,187 +167,651 @@ const CreateClientPage = ({ client, onClose, onSave }) => {
         }));
     };
 
+    const handleNestedChange = (parent, field, value, subField = null) => {
+        setFormData(prev => {
+            const newParent = { ...prev[parent] };
+            if (subField) {
+                newParent[field] = { ...newParent[field], [subField]: value };
+            } else {
+                newParent[field] = value;
+            }
+            return { ...prev, [parent]: newParent };
+        });
+    };
+
+    const ScripField = ({ label, value, onChange, hint, name }) => (
+        <div className="mb-4">
+            <label htmlFor={name} className="text-sm uppercase font-bold tracking-wider" style={{ color: '#bcc0cf' }}>{label}</label>
+            <input
+                id={name}
+                type="text"
+                value={value}
+                onChange={onChange}
+                className="w-full bg-transparent border-b border-slate-700 py-1 text-white focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+                placeholder="0"
+                style={{ color: 'white' }}
+            />
+            {hint && <p className="text-[12px] mt-1" style={{ color: '#bcc0cf' }}>{hint}</p>}
+        </div>
+    );
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         onSave(formData);
     };
 
-    const inputClass = "w-full bg-transparent border-b border-white/20 py-2 px-0 text-white focus:outline-none focus:border-[#5cb85c] transition-all text-sm autofill:bg-transparent";
-    const labelClass = "block text-xs text-slate-400 font-medium mb-1";
-    const hintClass = "text-[10px] text-slate-500 mt-1 leading-relaxed";
+    const FieldLegend = ({ title }) => (
+        <legend className="text-lg font-bold mb-4 border-none pt-4 bg-[#1a2035]/50 px-2 rounded tracking-wider" style={{ color: '#bcc0cf' }}>
+            {title}:
+        </legend>
+    );
+
+    const InputField = ({ label, name, type = "text", placeholder, hint }) => (
+        <div className="mb-4 group px-2">
+            <label htmlFor={name} className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>
+                {label}
+            </label>
+            <input
+                id={name}
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                placeholder={placeholder}
+                className="w-full bg-transparent border-b border-slate-700 py-1 text-white focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+            />
+            {hint && <p id={`${name}-hint`} className="text-sm mt-2 font-light leading-snug" style={{ color: '#bcc0cf' }}>{hint}</p>}
+        </div>
+    );
+
+    const CheckboxField = ({ label, name, checked, onChange }) => (
+        <label htmlFor={name} className="flex items-center gap-3 cursor-pointer group mb-6 px-2">
+            <div className="relative flex items-center justify-center">
+                <input
+                    id={name}
+                    type="checkbox"
+                    name={name}
+                    checked={checked}
+                    onChange={onChange}
+                    className="appearance-none w-5 h-5 border border-slate-600 rounded-sm checked:bg-[#4caf50] checked:border-[#4caf50] transition-all cursor-pointer"
+                />
+                {checked && <Check className="w-3.5 h-3.5 text-white absolute pointer-events-none" />}
+            </div>
+            <span className="text-sm group-hover:text-white transition-colors" style={{ color: '#bcc0cf' }}>{label}</span>
+        </label>
+    );
 
     return (
-        <div className="fixed inset-0 bg-[#000000d9] backdrop-blur-sm z-[60] flex items-center justify-center p-4 overflow-y-auto">
-            <div className="w-full max-w-5xl bg-[#1a2035] rounded-lg shadow-2xl relative animate-in fade-in zoom-in duration-300 border border-white/5 my-8">
-
-                {/* Header Card Style - Material Dashboard Layered Look */}
-                <div className="absolute -top-6 left-6 z-10">
-                    <div className="relative">
-                        {/* Main Green Card */}
-                        <div className="bg-gradient-to-tr from-[#43a047] to-[#66bb6a] px-8 py-4 rounded-md shadow-[0_4px_20px_0_rgba(0,0,0,0.14),0_7px_10px_-5px_rgba(76,175,80,0.4)] min-w-[280px]">
-                            <h2 className="text-base font-bold text-white uppercase tracking-tight">
-                                {client ? 'Copy Trading Client:' : 'Create Trading Client:'}
-                            </h2>
-                        </div>
-                        {/* Characteristic Offset Square behind */}
-                        <div className="absolute -bottom-2 left-[-8px] w-6 h-6 bg-[#388e3c] rounded -z-10 blur-[1px]"></div>
-                    </div>
-                </div>
-
-                <div className="flex justify-end p-4">
-                    <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
-                        <X className="w-6 h-6" />
+        <div className="fixed inset-0 bg-[#1a2035] z-50 flex flex-col overflow-hidden">
+            {/* Top Bar - Green as per screenshot */}
+            <div className="bg-[#4caf50] h-14 flex items-center justify-between px-4 shadow-md shrink-0">
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onClose}
+                        className="flex items-center gap-2 text-white hover:bg-black/10 px-3 py-1.5 rounded transition-colors"
+                    >
+                        <i className="fa-solid fa-arrow-left text-[18px]"></i>
+                        <span className="text-[14px] font-bold uppercase tracking-tight">Back</span>
                     </button>
                 </div>
+                <div className="flex items-center gap-4 text-white">
+                    <button className="hover:bg-black/10 p-1 rounded-full transition-colors">
+                        <Settings className="w-5 h-5 mx-1" />
+                    </button>
 
-                <form onSubmit={handleSubmit} className="p-8 pt-10">
-                    <div className="space-y-10">
-
-                        {/* Personal Details Section */}
-                        <section>
-                            <h3 className="text-xl font-medium text-slate-200 mb-8 border-b border-white/5 pb-2 inline-block">
-                                Personal Details:
-                            </h3>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 mt-4">
-                                <div>
-                                    <label className={labelClass}>Name</label>
-                                    <input
-                                        type="text"
-                                        name="fullname"
-                                        value={formData.fullname}
-                                        onChange={handleChange}
-                                        className={inputClass}
-                                        required
-                                    />
-                                    <p className={hintClass}>Insert Real name of the trader. Will be visible in trading App</p>
-                                </div>
-
-                                <div>
-                                    <label className={labelClass}>Mobile</label>
-                                    <input
-                                        type="text"
-                                        name="mobile"
-                                        value={formData.mobile}
-                                        onChange={handleChange}
-                                        className={inputClass}
-                                    />
-                                    <p className={hintClass}>Optional</p>
-                                </div>
-
-                                <div>
-                                    <label className={labelClass}>Username</label>
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        value={formData.username}
-                                        onChange={handleChange}
-                                        className={inputClass}
-                                        required
-                                    />
-                                    <p className={hintClass}>username for logging-in with, is not case sensitive. must be unique for every trader. should not contain symbols.</p>
-                                </div>
-
-                                <div>
-                                    <label className={labelClass}>Password</label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        className={inputClass}
-                                        placeholder="••••••••"
-                                        required={!client}
-                                    />
-                                    <p className={hintClass}>password for logging-in with, is case sensitive. Leave Blank if you want password remain unchanged.</p>
-                                </div>
-
-                                <div>
-                                    <label className={labelClass}>City</label>
-                                    <input
-                                        type="text"
-                                        name="city"
-                                        value={formData.city}
-                                        onChange={handleChange}
-                                        className={inputClass}
-                                    />
-                                    <p className={hintClass}>Optional</p>
-                                </div>
-
-                                <div>
-                                    <label className={labelClass}>Min. Time to book profit (No. of Seconds)</label>
-                                    <input
-                                        type="text"
-                                        name="profit_book_interval"
-                                        value={formData.profit_book_interval}
-                                        onChange={handleChange}
-                                        className={inputClass}
-                                    />
-                                    <p className={hintClass}>Example: 120, will hold the trade for 2 minutes before closing a trade in profit</p>
-                                </div>
-
-                                <div>
-                                    <label className={labelClass}>Scalping Stop Loss</label>
-                                    <select
-                                        name="scalping_stop_loss"
-                                        value={formData.scalping_stop_loss}
-                                        onChange={handleChange}
-                                        className={`${inputClass} bg-transparent appearance-none cursor-pointer`}
-                                    >
-                                        <option value="1" className="bg-[#1a2035]">Enabled</option>
-                                        <option value="0" className="bg-[#1a2035]">Disabled</option>
-                                    </select>
-                                    <p className={hintClass}>If Disabled, Stop Loss or Booking Loss can be done after Min. time of profit booking.</p>
-                                </div>
-                            </div>
-                        </section>
-
-                        <div className="h-[1px] bg-white/5 mx-[-2rem]"></div>
-
-                        {/* Bottom Controls */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-end">
-                            <div className="flex items-center gap-3 py-4">
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <div className="relative flex items-center justify-center">
-                                        <input
-                                            type="checkbox"
-                                            name="is_demo"
-                                            checked={formData.is_demo}
-                                            onChange={handleChange}
-                                            className="sr-only peer"
-                                        />
-                                        <div className="w-5 h-5 border-2 border-slate-500 rounded bg-transparent peer-checked:bg-[#5cb85c] peer-checked:border-[#5cb85c] transition-all"></div>
-                                        <svg className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                    </div>
-                                    <span className="text-sm text-slate-300 group-hover:text-white transition-colors">demo account?</span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <label className={labelClass}>Transaction Password</label>
-                                <input
-                                    type="password"
-                                    name="transaction_password"
-                                    value={formData.transaction_password}
-                                    onChange={handleChange}
-                                    className={inputClass}
-                                    placeholder="••••••••"
-                                />
-                            </div>
+                    {/* Profile Dropdown Container */}
+                    <div className="relative" ref={profileRef}>
+                        <div
+                            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                            className="flex items-center gap-2 font-bold uppercase text-[12px] cursor-pointer hover:bg-black/10 px-3 py-1.5 rounded transition-colors tracking-tight select-none"
+                        >
+                            <User className="w-4 h-4 text-white/80" />
+                            DEMO PANNEL
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
                         </div>
 
-                        {/* Save Button */}
-                        <div className="pt-8">
-                            <button
-                                type="submit"
-                                className="bg-[#5cb85c] hover:bg-[#4caf50] text-white px-8 py-2 rounded font-bold text-sm tracking-wide shadow-lg transition-all active:scale-95 flex items-center gap-2"
+                        {/* Dropdown Menu */}
+                        {showProfileDropdown && (
+                            <div className="absolute right-0 mt-3 w-64 bg-white rounded shadow-2xl overflow-hidden z-50 border border-gray-100 animate-in fade-in zoom-in duration-200 origin-top-right">
+                                {/* Ledger Balance Section */}
+                                <div className="px-5 py-4 border-b border-gray-100">
+                                    <p className="text-[#333] text-[14px] font-medium">
+                                        Ledger-Balance: <span className="font-bold">0</span>
+                                    </p>
+                                </div>
+
+                                {/* Action Items */}
+                                <div className="py-1">
+                                    <button
+                                        onClick={() => {
+                                            if (onNavigate) onNavigate('change-password');
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-5 py-3 text-[#333] hover:bg-gray-50 transition-colors text-[13px] font-medium text-left"
+                                    >
+                                        <Lock className="w-4 h-4 text-gray-400" />
+                                        Change Login Password
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (onNavigate) onNavigate('change-transaction-password');
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-5 py-3 text-[#333] hover:bg-gray-50 transition-colors text-[13px] font-medium text-left"
+                                    >
+                                        <Key className="w-4 h-4 text-gray-400" />
+                                        Change Transaction Password
+                                    </button>
+                                </div>
+
+                                {/* Logout Button */}
+                                <div className="p-3">
+                                    <button
+                                        onClick={() => {
+                                            if (onLogout) onLogout();
+                                            setShowProfileDropdown(false);
+                                        }}
+                                        className="w-full bg-[#f44336] hover:bg-[#d32f2f] text-white py-2.5 rounded text-[13px] font-bold uppercase transition-all shadow-md"
+                                    >
+                                        Log out
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Content Area */}
+            <div className="flex flex-1 overflow-hidden">
+                {/* Sidebar Placeholder (matches screenshot) */}
+                <div className="w-64 bg-[#1a2035] border-r border-white/5 hidden lg:flex flex-col p-4 space-y-2 shrink-0 overflow-y-auto custom-scrollbar">
+                    <div className="text-slate-400 text-sm font-bold uppercase tracking-widest pb-4 mb-2 border-b border-white/5">Dashboard</div>
+                    {[
+                        { icon: 'fa-table-columns', label: 'DashBoard' },
+                        { icon: 'fa-chart-line', label: 'Market Watch' },
+                        { icon: 'fa-bell', label: 'Notifications' },
+                        { icon: 'fa-list-ul', label: 'Action Ledger' },
+                        { icon: 'fa-briefcase', label: 'Active Positions' },
+                        { icon: 'fa-box-archive', label: 'Closed Positions' },
+                        { icon: 'fa-user-tie', label: 'Trading Clients' },
+                        { icon: 'fa-arrow-right-arrow-left', label: 'Trades' },
+                        { icon: 'fa-users-rectangle', label: 'Group Trades' },
+                        { icon: 'fa-clock-rotate-left', label: 'Closed Trades' },
+                        { icon: 'fa-trash-can', label: 'Deleted Trades' },
+                        { icon: 'fa-hourglass-half', label: 'Pending Orders' },
+                        { icon: 'fa-wallet', label: 'Trader Funds' },
+                        { icon: 'fa-users', label: 'Users' },
+                        { icon: 'fa-arrow-up-right-dots', label: 'Tickers' },
+                        { icon: 'fa-ban', label: 'Banned Limit Orders' },
+                        { icon: 'fa-building-columns', label: 'Bank Details' },
+                        { icon: 'fa-address-card', label: 'Accounts' },
+                        { icon: 'fa-network-wired', label: 'Broker Accounts' },
+                        { icon: 'fa-key', label: 'Change Login Password' },
+                        { icon: 'fa-shield-halved', label: 'Change Transaction Password' },
+                        { icon: 'fa-money-bill-transfer', label: 'Withdrawal Requests' },
+                        { icon: 'fa-file-invoice-dollar', label: 'Deposit Requests' },
+                        { icon: 'fa-right-from-bracket', label: 'Log Out' }
+                    ].map((item) => (
+                        <div
+                            key={item.label}
+                            onClick={onClose}
+                            className={`text-slate-400 text-sm flex items-center justify-between py-2 px-3 rounded hover:bg-white/5 cursor-pointer transition-colors ${item.label === 'Trading Clients' ? 'bg-[#4caf50] text-white' : ''}`}
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="w-5 h-5 flex items-center justify-center opacity-70">
+                                    <span className={`fa-solid ${item.icon} text-xs`}></span>
+                                </div>
+                                <span className="truncate">{item.label}</span>
+                            </div>
+                            {item.label === 'Market Watch' && <span className="text-[10px] opacity-60" style={{ color: '#bcc0cf' }}>{currentTime}</span>}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Form Wrapper */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-6 py-2 bg-[#1a2035]">
+                    <div className="max-w-6xl mx-auto mt-4 mb-6">
+
+                        {/* Floating Card Header (3D Ribbon Style) */}
+                        <div className="relative z-20 -mb-8 ml-4 flex flex-col items-start">
+                            <div
+                                className="px-6 py-4 rounded-md shadow-xl relative z-10"
+                                style={{ background: 'linear-gradient(60deg, rgb(40, 140, 108), rgb(78, 167, 82))' }}
                             >
-                                SAVE
-                            </button>
+                                <h2 className="text-white text-base font-normal leading-none tracking-tight">
+                                    Create Trading Client:
+                                </h2>
+                            </div>
+                            {/* The 3D fold decorator */}
+                            <div className="w-4 h-4 bg-[#388e3c] -mt-2 ml-2 rounded-sm rotate-45 relative z-0"></div>
+                        </div>
+
+                        {/* Main Card */}
+                        <div className="bg-[#202940] rounded shadow-2xl p-8 pt-16 border border-white/5">
+                            <form onSubmit={handleSubmit}>
+                                <div className="space-y-12">
+
+                                    {/* PERSONAL DETAILS */}
+                                    <fieldset className="border-none p-0 m-0">
+                                        <h3 className="text-[20px] font-normal mb-8 px-2" style={{ color: '#bcc0cf' }}>Personal Details:</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
+                                            <InputField
+                                                label="Name"
+                                                name="fullName"
+                                                placeholder=""
+                                                hint="Insert Real name of the trader. Will be visible in trading App"
+                                            />
+                                            <InputField
+                                                label="Mobile"
+                                                name="mobile"
+                                                placeholder=""
+                                                hint="Optional"
+                                            />
+                                            <InputField
+                                                label="Username"
+                                                name="username"
+                                                placeholder=""
+                                                hint="username for loggin-in with, is not case sensitive. must be unique for every trader. should not contain symbols."
+                                            />
+                                            <InputField
+                                                label="Password"
+                                                name="password"
+                                                type="text"
+                                                placeholder=""
+                                                hint="password for loggin-in with, is case sensitive. Leave Blank if you want password remain unchanged."
+                                            />
+                                            <InputField
+                                                label="City"
+                                                name="city"
+                                                placeholder=""
+                                                hint="Optional"
+                                            />
+                                            <InputField
+                                                label="Min. Time to book profit (No. of Seconds)"
+                                                name="minTimeToBookProfit"
+                                                placeholder="120"
+                                                hint="Example: 120, will hold the trade for 2 minutes before closing a trade in profit"
+                                            />
+                                            <div className="mb-8 px-2">
+                                                <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Scalping Stop Loss</label>
+                                                <select
+                                                    name="scalpingStopLoss"
+                                                    value={formData.scalpingStopLoss}
+                                                    onChange={handleChange}
+                                                    className="w-full bg-transparent border-b border-slate-700 py-1 text-white focus:outline-none focus:border-[#4caf50] transition-colors text-sm appearance-none"
+                                                    style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'white\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 4px center', backgroundSize: '16px' }}
+                                                >
+                                                    <option value="Disabled" className="bg-[#202940]">Disabled</option>
+                                                    <option value="Enabled" className="bg-[#202940]">Enabled</option>
+                                                </select>
+                                                <p className="text-[12px] mt-2 font-light leading-snug" style={{ color: '#bcc0cf' }}>If Disabled, Stop Loss or Booking Loss can be done after Min. time of profit booking.</p>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <hr className="border-white/5" />
+
+                                    {/* CONFIG */}
+                                    <fieldset className="border-none p-0 m-0">
+                                        <FieldLegend title="Config" />
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                            <div className="space-y-2">
+                                                <CheckboxField label="demo account?" name="isDemoAccount" checked={formData.isDemoAccount} onChange={handleChange} />
+                                                <CheckboxField label="Allow Fresh Entry Order above high & below low?" name="allowFreshEntry" checked={formData.allowFreshEntry} onChange={handleChange} />
+                                                <CheckboxField label="Allow Orders between High - Low?" name="allowOrdersBetweenHL" checked={formData.allowOrdersBetweenHL} onChange={handleChange} />
+                                                <CheckboxField label="Trade equity as units instead of lots." name="tradeEquityUnits" checked={formData.tradeEquityUnits} onChange={handleChange} />
+                                                <CheckboxField label="Account Status" name="accountStatus" checked={formData.accountStatus === 'Active'} onChange={(e) => setFormData(prev => ({ ...prev, accountStatus: e.target.checked ? 'Active' : 'Inactive' }))} />
+                                                <CheckboxField label="Auto Close Trades if condition met" name="autoCloseTrades" checked={formData.autoCloseTrades} onChange={handleChange} />
+                                            </div>
+                                            <div className="space-y-0">
+                                                <InputField label="auto-Close all active trades when the losses reach % of Ledger-balance" name="autoClosePercentage" placeholder="90" hint="Example: 95, will close when losses reach 95% of ledger balance" />
+                                                <InputField label="Notify client when the losses reach % of Ledger-balance" name="notifyPercentage" placeholder="70" hint="Example: 70, will send notification to customer every 5-minutes until losses cross 70% of ledger balance" />
+                                                <InputField label="Min. Time to book profit (No. of Seconds)" name="minTimeToBookProfit" placeholder="120" hint="Example: 120, will hold the trade for 2 minutes before closing a trade in profit" />
+                                                <div className="mb-4 group px-2">
+                                                    <label className="block text-sm mb-1 font-light tracking-tight group-focus-within:text-[#4caf50] transition-colors" style={{ color: '#bcc0cf' }}>
+                                                        Scalping Stop Loss
+                                                    </label>
+                                                    <select
+                                                        name="scalpingStopLoss"
+                                                        value={formData.scalpingStopLoss}
+                                                        onChange={handleChange}
+                                                        className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm"
+                                                    >
+                                                        <option value="Enabled">Enabled</option>
+                                                        <option value="Disabled">Disabled</option>
+                                                    </select>
+                                                    <p className="text-sm text-slate-400 mt-2 font-light">If Disabled, Stop Loss or Booking Loss can be done after Min. time of profit booking.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <hr className="border-white/5" />
+
+                                    {/* MCX FUTURES */}
+                                    <fieldset className="border-none p-0 m-0">
+                                        <FieldLegend title="MCX Futures" />
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                            <CheckboxField label="MCX Trading" name="mcxTrading" checked={formData.mcxTrading} onChange={handleChange} />
+                                            <InputField label="Minimum lot size required per single trade of MCX" name="mcxMinLot" placeholder="0" />
+                                            <InputField label="Maximum lot size allowed per single trade of MCX" name="mcxMaxLot" placeholder="20" />
+                                            <InputField label="Maximum lot size allowed per script of MCX to be actively open at a time" name="mcxMaxLotScrip" placeholder="50" />
+                                            <InputField label="Max Size All Commodity" name="mcxMaxSizeAll" placeholder="100" />
+
+                                            <div className="mb-8 px-2">
+                                                <label className="block text-sm mb-1 font-light tracking-tight group-focus-within:text-[#4caf50] transition-colors" style={{ color: '#bcc0cf' }}>Mcx Brokerage Type</label>
+                                                <select name="mcxBrokerageType" value={formData.mcxBrokerageType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                    <option value="per_crore">Per Crore Basis</option>
+                                                    <option value="per_lot">Per Lot Basis</option>
+                                                </select>
+                                            </div>
+                                            {formData.mcxBrokerageType === 'per_crore' && (
+                                                <InputField label="MCX brokerage" name="mcxBrokerage" placeholder="800" />
+                                            )}
+
+                                            <div className="mb-8 px-2">
+                                                <label className="block text-sm mb-1 font-light tracking-tight group-focus-within:text-[#4caf50] transition-colors" style={{ color: '#bcc0cf' }}>Exposure Mcx Type</label>
+                                                <select name="mcxExposureType" value={formData.mcxExposureType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                    <option value="per_turnover">Per Turnover Basis</option>
+                                                    <option value="per_lot">Per Lot Basis</option>
+                                                </select>
+                                            </div>
+
+                                            {formData.mcxExposureType === 'per_turnover' && (
+                                                <>
+                                                    <InputField label="Intraday Exposure/Margin MCX" name="mcxIntradayMargin" placeholder="500" hint="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade devided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade." />
+                                                    <InputField label="Holding Exposure/Margin MCX" name="mcxHoldingMargin" placeholder="100" hint="Holding Exposure auto calculates the margin money required to hold a position overnight for the next market working day. Calculation : turnover of a trade devided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and holding exposure is 800, (45000 X 100) / 80 = 56250 is required to hold position overnight. System automatically checks at a given time around market closure to check and close all trades if margin(M2M) insufficient." />
+                                                </>
+                                            )}
+                                        </div>
+
+                                        {/* MCX Lot Wise Exposure */}
+                                        {formData.mcxExposureType === 'per_lot' && (
+                                            <div className="mt-8">
+                                                <h4 className="text-sm font-normal mb-8 px-2 border-l-2 border-[#4caf50]" style={{ color: '#bcc0cf' }}>MCX Exposure Lot wise:</h4>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-2">
+                                                    {Object.keys(formData.mcxLotMargins).map((scrip) => (
+                                                        <div key={scrip} className="mb-6 grid grid-cols-2 gap-4 items-end">
+                                                            <ScripField
+                                                                label={`${scrip} Intraday`}
+                                                                name={`mcx-intraday-${scrip}`}
+                                                                value={formData.mcxLotMargins[scrip].INTRADAY}
+                                                                onChange={(e) => handleNestedChange('mcxLotMargins', scrip, e.target.value, 'INTRADAY')}
+                                                            />
+                                                            <ScripField
+                                                                label={`${scrip} Holding`}
+                                                                name={`mcx-holding-${scrip}`}
+                                                                value={formData.mcxLotMargins[scrip].HOLDING}
+                                                                onChange={(e) => handleNestedChange('mcxLotMargins', scrip, e.target.value, 'HOLDING')}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* MCX Lot Wise Brokerage */}
+                                        {formData.mcxBrokerageType === 'per_lot' && (
+                                            <div className="mt-8">
+                                                <h4 className="text-slate-300 text-sm font-normal mb-8 px-2 border-l-2 border-[#4caf50]">MCX Lot Wise Brokerage:</h4>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-2">
+                                                    {Object.keys(formData.mcxLotBrokerage).map((scrip) => (
+                                                        <ScripField
+                                                            key={scrip}
+                                                            label={`${scrip}:`}
+                                                            name={`mcx-brokerage-${scrip}`}
+                                                            value={formData.mcxLotBrokerage[scrip]}
+                                                            onChange={(e) => handleNestedChange('mcxLotBrokerage', scrip, e.target.value)}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Bid Gaps */}
+                                        <div className="mt-8">
+                                            <h4 className="text-sm font-normal mb-8 px-2 border-l-2 border-[#4caf50]" style={{ color: '#bcc0cf' }}>Orders to be away by points in each scrip MCX:</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-2">
+                                                {Object.keys(formData.bidGaps).map((commodity) => (
+                                                    <ScripField
+                                                        key={commodity}
+                                                        label={`${commodity.replace('MCX', '')}:`}
+                                                        name={`bidgap-${commodity}`}
+                                                        value={formData.bidGaps[commodity]}
+                                                        onChange={(e) => handleNestedChange('bidGaps', commodity, e.target.value)}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <hr className="border-white/5" />
+
+                                    {/* EQUITY FUTURES */}
+                                    <fieldset className="border-none p-0 m-0">
+                                        <FieldLegend title="Equity Futures" />
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                            <CheckboxField label="Equity Trading" name="equityTrading" checked={formData.equityTrading} onChange={handleChange} />
+                                            <InputField label="Equity Brokerage Per Crore" name="equityBrokerage" placeholder="800" />
+                                            <InputField label="Minimum lot size required per single trade of Equity" name="equityMinLot" placeholder="0" />
+                                            <InputField label="Maximum lot size allowed per single trade of Equity" name="equityMaxLot" placeholder="50" />
+                                            <InputField label="Minimum lot size required per single trade of Equity INDEX" name="equityMinIndexLot" placeholder="0" />
+                                            <InputField label="Maximum lot size allowed per single trade of Equity INDEX" name="equityMaxIndexLot" placeholder="20" />
+                                            <InputField label="Maximum lot size allowed per script of Equity to be actively open at a time" name="equityMaxScrip" placeholder="100" />
+                                            <InputField label="Maximum lot size allowed per script of Equity INDEX to be actively open at a time" name="equityMaxIndexScrip" placeholder="100" />
+                                            <InputField label="Max Size All Equity" name="equityMaxSizeAll" placeholder="100" />
+                                            <InputField label="Max Size All Index" name="equityMaxSizeAllIndex" placeholder="100" />
+                                            <InputField label="Intraday Exposure/Margin Equity" name="equityIntradayMargin" placeholder="500" hint="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade devided by Exposure is required margin. eg. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade." />
+                                            <InputField label="Holding Exposure/Margin Equity" name="equityHoldingMargin" placeholder="100" hint="Holding Exposure auto calculates the margin money required to hold a position overnight for the next market working day. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lot size of 100 is trading @ 45000 and holding exposure is 800, (45000 X 100) / 80 = 56250 is required to hold position overnight. System automatically checks at a given time around market closure to check and close all trades if margin(M2M) insufficient." />
+                                            <InputField label="Orders to be away by % from current price Equity" name="equityOrdersAway" placeholder="5" />
+                                        </div>
+                                    </fieldset>
+
+                                    <hr className="border-white/5" />
+
+                                    {/* OPTIONS CONFIG */}
+                                    <fieldset className="border-none p-0 m-0">
+                                        <FieldLegend title="Options Config" />
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 px-2">
+                                            <CheckboxField label="Index Options Trading" name="indexOptionsTrading" checked={formData.indexOptionsTrading} onChange={handleChange} />
+                                            <CheckboxField label="Equity Options Trading" name="equityOptionsTrading" checked={formData.equityOptionsTrading} onChange={handleChange} />
+                                            <CheckboxField label="MCX Options Trading" name="mcxOptionsTrading" checked={formData.mcxOptionsTrading} onChange={handleChange} />
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-2">
+                                            {/* Column 1 */}
+                                            <div className="space-y-0">
+                                                <div className="mb-8 group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options Index Brokerage Type</label>
+                                                    <select name="optionsIndexBrokerageType" value={formData.optionsIndexBrokerageType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                        <option value="per_lot">Per Lot Basis</option>
+                                                        <option value="per_crore">Per Crore Basis</option>
+                                                    </select>
+                                                </div>
+                                                <InputField label="Options Index brokerage" name="optionsIndexBrokerage" placeholder="20" />
+                                                <InputField label="Options Equity brokerage" name="optionsEquityBrokerage" placeholder="20" />
+                                                <InputField label="Options MCX brokerage" name="optionsMcxBrokerage" placeholder="20" />
+
+                                                <div className="mb-8 group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options Index Short Selling Allowed (Sell First and Buy later)</label>
+                                                    <select name="optionsIndexShortSelling" value={formData.optionsIndexShortSelling} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                        <option value="No">No</option>
+                                                        <option value="Yes">Yes</option>
+                                                    </select>
+                                                </div>
+
+                                                <div className="mb-8 group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>MCX Options Short Selling Allowed (Sell First and Buy later)</label>
+                                                    <select name="optionsMcxShortSelling" value={formData.optionsMcxShortSelling} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                        <option value="No">No</option>
+                                                        <option value="Yes">Yes</option>
+                                                    </select>
+                                                </div>
+
+                                                <InputField label="Maximum lot size allowed per single trade of Equity Options" name="optionsEquityMaxLot" placeholder="50" />
+                                                <InputField label="Maximum lot size allowed per single trade of Equity INDEX Options" name="optionsIndexMaxLot" placeholder="20" />
+                                                <InputField label="Maximum lot size allowed per single trade of MCX Options" name="optionsMcxMaxLot" placeholder="50" />
+                                                <InputField label="Max Size All Equity Options" name="optionsMaxEquitySizeAll" placeholder="200" />
+                                                <InputField label="Max Size All MCX Options" name="optionsMaxMcxSizeAll" placeholder="200" />
+
+                                                <InputField
+                                                    label="Holding Exposure/Margin Options Index"
+                                                    name="optionsIndexHolding"
+                                                    placeholder="2"
+                                                    hint="Holding Exposure auto calculates the margin money required to hold a position overnight for the next market working day. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lot size of 100 is trading @ 45000 and holding exposure is 800, (45000 X 100) / 80 = 56250 is required to hold position overnight. System automatically checks at a given time around market closure to check and close all trades if margin(M2M) insufficient."
+                                                />
+                                                <InputField
+                                                    label="Holding Exposure/Margin Options Equity"
+                                                    name="optionsEquityHolding"
+                                                    placeholder="2"
+                                                    hint="Holding Exposure auto calculates the margin money required to hold a position overnight for the next market working day. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lot size of 100 is trading @ 45000 and holding exposure is 800, (45000 X 100) / 80 = 56250 is required to hold position overnight. System automatically checks at a given time around market closure to check and close all trades if margin(M2M) insufficient."
+                                                />
+                                                <InputField
+                                                    label="Holding Exposure/Margin Options MCX"
+                                                    name="optionsMcxHolding"
+                                                    placeholder="2"
+                                                    hint="Holding Exposure auto calculates the margin money required to hold a position overnight for the next market working day. Calculation : turnover of a trade divided by Exposure is required margin. eg. if gold having lot size of 100 is trading @ 45000 and holding exposure is 800, (45000 X 100) / 80 = 56250 is required to hold position overnight. System automatically checks at a given time around market closure to check and close all trades if margin(M2M) insufficient."
+                                                />
+                                            </div>
+
+                                            {/* Column 2 */}
+                                            <div className="space-y-0">
+                                                <div className="mb-8 group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options Equity Brokerage Type</label>
+                                                    <select name="optionsEquityBrokerageType" value={formData.optionsEquityBrokerageType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                        <option value="per_lot">Per Lot Basis</option>
+                                                        <option value="per_crore">Per Crore Basis</option>
+                                                    </select>
+                                                </div>
+
+                                                <div className="mb-8 group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options MCX Brokerage Type</label>
+                                                    <select name="optionsMcxBrokerageType" value={formData.optionsMcxBrokerageType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                        <option value="per_lot">Per Lot Basis</option>
+                                                        <option value="per_crore">Per Crore Basis</option>
+                                                    </select>
+                                                </div>
+
+                                                <InputField label="Options Min. Bid Price" name="optionsMinBidPrice" placeholder="1" />
+
+                                                <div className="mb-8 group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options Equity Short Selling Allowed (Sell First and Buy later)</label>
+                                                    <select name="optionsEquityShortSelling" value={formData.optionsEquityShortSelling} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
+                                                        <option value="No">No</option>
+                                                        <option value="Yes">Yes</option>
+                                                    </select>
+                                                </div>
+
+                                                <InputField label="Minimum lot size required per single trade of Equity Options" name="optionsEquityMinLot" placeholder="0" />
+                                                <InputField label="Minimum lot size required per single trade of Equity INDEX Options" name="optionsIndexMinLot" placeholder="0" />
+                                                <InputField label="Minimum lot size required per single trade of MCX Options" name="optionsMcxMinLot" placeholder="0" />
+                                                <InputField label="Maximum lot size allowed per scrip of Equity Options to be actively open at a time" name="optionsEquityMaxScrip" placeholder="200" />
+                                                <InputField label="Maximum lot size allowed per scrip of Equity INDEX Options to be actively open at a time" name="optionsIndexMaxScrip" placeholder="200" />
+                                                <InputField label="Maximum lot size allowed per scrip of MCX Options to be actively open at a time" name="optionsMcxMaxScrip" placeholder="200" />
+                                                <InputField label="Max Size All Index Options" name="optionsMaxIndexSizeAll" placeholder="200" />
+
+                                                <InputField
+                                                    label="Intraday Exposure/Margin Options Index"
+                                                    name="optionsIndexIntraday"
+                                                    placeholder="5"
+                                                    hint="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade divided by Exposure is required margin. e.g. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade."
+                                                />
+                                                <InputField
+                                                    label="Intraday Exposure/Margin Options Equity"
+                                                    name="optionsEquityIntraday"
+                                                    placeholder="5"
+                                                    hint="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade divided by Exposure is required margin. e.g. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade."
+                                                />
+                                                <InputField
+                                                    label="Intraday Exposure/Margin Options MCX"
+                                                    name="optionsMcxIntraday"
+                                                    placeholder="5"
+                                                    hint="Exposure auto calculates the margin money required for any new trade entry. Calculation : turnover of a trade divided by Exposure is required margin. e.g. if gold having lotsize of 100 is trading @ 45000 and exposure is 200, (45000 X 100) / 200 = 22500 is required to initiate the trade."
+                                                />
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    {/* OTHER SECTION */}
+                                    <fieldset className="border-none p-0 m-0 pb-10">
+                                        <h3 className="text-[20px] font-normal mb-8 px-2" style={{ color: '#bcc0cf' }}>Other:</h3>
+                                        <div className="space-y-8 px-2">
+                                            {/* Row 1: Notes and Broker */}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                                                <div className="group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Notes</label>
+                                                    <input
+                                                        type="text"
+                                                        name="notes"
+                                                        value={formData.notes}
+                                                        onChange={handleChange}
+                                                        className="w-full bg-transparent border-b border-white/10 py-1 text-white focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+                                                    />
+                                                </div>
+                                                <div className="group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Broker</label>
+                                                    <select
+                                                        name="broker"
+                                                        value={formData.broker}
+                                                        onChange={handleChange}
+                                                        className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm"
+                                                    >
+                                                        <option value="">Select User</option>
+                                                        <option value="3761 : demo001">3761 : demo001</option>
+                                                        <option value="3762 : demo002">3762 : demo002</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            {/* Row 2: Transaction Password */}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 items-end">
+                                                <div className="group">
+                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Transaction Password</label>
+                                                    <input
+                                                        type="password"
+                                                        name="transactionPassword"
+                                                        value={formData.transactionPassword}
+                                                        onChange={handleChange}
+                                                        className="w-full bg-transparent border-b border-white/10 py-1 text-white focus:outline-none focus:border-[#4caf50] transition-colors text-sm"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Save Button */}
+                                            <div className="pt-4">
+                                                <button
+                                                    type="submit"
+                                                    className="px-10 py-2.5 text-white rounded font-bold text-sm uppercase transition-all shadow-md active:scale-95 hover:bg-[#43a047]"
+                                                    style={{ background: '#5cb85c' }}
+                                                >
+                                                    SAVE
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
+
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                }
+            `}</style>
         </div>
     );
 };
