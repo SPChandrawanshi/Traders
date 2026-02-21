@@ -18,22 +18,19 @@ body {
   font-size: 14px;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+/* Hide Scrollbars globally but keep functionality */
+* {
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--color-main-bg);
+*::-webkit-scrollbar {
+  display: none !important;
+  /* Chrome, Safari and Opera */
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
 
 /* Material Design Card Styles */
 .card {
@@ -120,16 +117,4 @@ body {
 html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Hide scrollbar but keep functionality */
-*::-webkit-scrollbar {
-  display: none !important;
-}
-
-* {
-  -ms-overflow-style: none !important;
-  /* IE and Edge */
-  scrollbar-width: none !important;
-  /* Firefox */
 }

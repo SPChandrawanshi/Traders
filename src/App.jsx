@@ -14,6 +14,8 @@ import BankDetailsPage from './pages/bank/BankDetailsPage';
 import TradesPage from './pages/trades/TradesPage';
 import TickersPage from './pages/tickers/TickersPage';
 import LiveM2MPage from './pages/dashboard/LiveM2MPage';
+import LiveM2MDetailPage from './pages/dashboard/LiveM2MDetailPage';
+import ClientActivePositionsPage from './pages/dashboard/ClientActivePositionsPage';
 import BrokerM2MPage from './pages/dashboard/BrokerM2MPage';
 import ActivePositionsPage from './pages/positions/ActivePositionsPage';
 import TraderFundsPage from './pages/funds/TraderFundsPage';
@@ -160,7 +162,28 @@ function App() {
       case 'tickers':
         return <TickersPage />;
       case 'live-m2m':
-        return <LiveM2MPage />;
+        return <LiveM2MPage onNavigate={(view, client) => {
+          if (client) setSelectedClient(client);
+          setView(view);
+        }} />;
+      case 'live-m2m-detail':
+        return <LiveM2MDetailPage
+          selectedClient={selectedClient}
+          onBack={() => setView('live-m2m')}
+          onClientClick={(client) => {
+            setSelectedClient(client);
+            setView('client-active-positions');
+          }}
+        />;
+      case 'client-active-positions':
+        return <ClientActivePositionsPage
+          client={selectedClient}
+          onBack={() => setView('live-m2m-detail')}
+          onNavigateToAccount={(client) => {
+            setSelectedClient(client);
+            setView('client-details');
+          }}
+        />;
       case 'broker-m2m':
         return <BrokerM2MPage />;
       case 'active-positions':
@@ -196,7 +219,12 @@ function App() {
       case 'create-fund-withdraw':
         return <CreateFundForm onBack={() => setView('users')} onSave={(data) => { console.log('Withdraw Saved:', data); setView('users'); }} mode="withdraw" initialUser={selectedClient} />;
       case 'client-details':
-        return <ClientDetailPage onClose={() => setView('users')} />;
+        return <ClientDetailPage
+          client={selectedClient}
+          onClose={() => setView('users')}
+          onNavigate={setView}
+          onLogout={handleLogout}
+        />;
       case 'trading-clients':
         return <UsersPage onNavigate={setView} />;
       case 'new-client-bank':

@@ -119,9 +119,28 @@ const CreateClientPage = ({ client, onClose, onSave, onLogout, onNavigate }) => 
         optionsMcxHolding: '2',
         optionsOrdersAway: '10',
 
+        // 5.1 Comex, Forex & Crypto (Merged from Settings)
+        comexTrading: false,
+        comexBrokerage: '800',
+        comexIntradayMargin: '500',
+        comexHoldingMargin: '100',
+        comexMaxLot: '50',
+
+        forexTrading: false,
+        forexBrokerage: '500',
+        forexIntradayMargin: '1000',
+        forexHoldingMargin: '200',
+        forexMaxLot: '100',
+
+        cryptoTrading: false,
+        cryptoBrokerage: '1000',
+        cryptoIntradayMargin: '200',
+        cryptoHoldingMargin: '50',
+        cryptoMaxLot: '10',
 
         // 6. Expiry Rules
         autoSquareOff: 'No',
+
         expirySquareOffTime: '11:30',
         allowExpiringScrip: 'No',
         daysBeforeExpiry: '0',
@@ -241,6 +260,32 @@ const CreateClientPage = ({ client, onClose, onSave, onLogout, onNavigate }) => 
             <span className="text-sm group-hover:text-white transition-colors" style={{ color: '#bcc0cf' }}>{label}</span>
         </label>
     );
+
+    const SelectField = ({ label, name, options, value, onChange, hint }) => (
+        <div className="mb-8 group px-2">
+            <label htmlFor={name} className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>
+                {label}
+            </label>
+            <div className="relative">
+                <select
+                    id={name}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    className="w-full bg-white border border-slate-200 py-3 px-4 text-black font-extrabold outline-none rounded shadow-sm appearance-none focus:ring-2 focus:ring-[#4caf50]/20 transition-all text-sm uppercase tracking-wider"
+                >
+                    {options.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-[#4caf50] transition-colors">
+                    <ChevronDown className="w-4 h-4" />
+                </div>
+            </div>
+            {hint && <p className="text-[12px] mt-2 font-light leading-snug" style={{ color: '#8b8f9a' }}>{hint}</p>}
+        </div>
+    );
+
 
     return (
         <div className="fixed inset-0 bg-[#1a2035] z-50 flex flex-col overflow-hidden">
@@ -500,24 +545,30 @@ const CreateClientPage = ({ client, onClose, onSave, onLogout, onNavigate }) => 
                                             <InputField label="Maximum lot size allowed per script of MCX to be actively open at a time" name="mcxMaxLotScrip" placeholder="50" />
                                             <InputField label="Max Size All Commodity" name="mcxMaxSizeAll" placeholder="100" />
 
-                                            <div className="mb-8 px-2">
-                                                <label className="block text-sm mb-1 font-light tracking-tight group-focus-within:text-[#4caf50] transition-colors" style={{ color: '#bcc0cf' }}>Mcx Brokerage Type</label>
-                                                <select name="mcxBrokerageType" value={formData.mcxBrokerageType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
-                                                    <option value="per_crore">Per Crore Basis</option>
-                                                    <option value="per_lot">Per Lot Basis</option>
-                                                </select>
-                                            </div>
+                                            <SelectField
+                                                label="Mcx Brokerage Type"
+                                                name="mcxBrokerageType"
+                                                value={formData.mcxBrokerageType}
+                                                onChange={handleChange}
+                                                options={[
+                                                    { value: 'per_crore', label: 'Per Crore Basis' },
+                                                    { value: 'per_lot', label: 'Per Lot Basis' }
+                                                ]}
+                                            />
                                             {formData.mcxBrokerageType === 'per_crore' && (
                                                 <InputField label="MCX brokerage" name="mcxBrokerage" placeholder="800" />
                                             )}
 
-                                            <div className="mb-8 px-2">
-                                                <label className="block text-sm mb-1 font-light tracking-tight group-focus-within:text-[#4caf50] transition-colors" style={{ color: '#bcc0cf' }}>Exposure Mcx Type</label>
-                                                <select name="mcxExposureType" value={formData.mcxExposureType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
-                                                    <option value="per_turnover">Per Turnover Basis</option>
-                                                    <option value="per_lot">Per Lot Basis</option>
-                                                </select>
-                                            </div>
+                                            <SelectField
+                                                label="Exposure Mcx Type"
+                                                name="mcxExposureType"
+                                                value={formData.mcxExposureType}
+                                                onChange={handleChange}
+                                                options={[
+                                                    { value: 'per_turnover', label: 'Per Turnover Basis' },
+                                                    { value: 'per_lot', label: 'Per Lot Basis' }
+                                                ]}
+                                            />
 
                                             {formData.mcxExposureType === 'per_turnover' && (
                                                 <>
@@ -677,31 +728,41 @@ const CreateClientPage = ({ client, onClose, onSave, onLogout, onNavigate }) => 
 
                                             {/* Column 2 */}
                                             <div className="space-y-0">
-                                                <div className="mb-8 group">
-                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options Equity Brokerage Type</label>
-                                                    <select name="optionsEquityBrokerageType" value={formData.optionsEquityBrokerageType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
-                                                        <option value="per_lot">Per Lot Basis</option>
-                                                        <option value="per_crore">Per Crore Basis</option>
-                                                    </select>
-                                                </div>
+                                                <SelectField
+                                                    label="Options Equity Brokerage Type"
+                                                    name="optionsEquityBrokerageType"
+                                                    value={formData.optionsEquityBrokerageType}
+                                                    onChange={handleChange}
+                                                    options={[
+                                                        { value: 'per_lot', label: 'Per Lot Basis' },
+                                                        { value: 'per_crore', label: 'Per Crore Basis' }
+                                                    ]}
+                                                />
 
-                                                <div className="mb-8 group">
-                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options MCX Brokerage Type</label>
-                                                    <select name="optionsMcxBrokerageType" value={formData.optionsMcxBrokerageType} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
-                                                        <option value="per_lot">Per Lot Basis</option>
-                                                        <option value="per_crore">Per Crore Basis</option>
-                                                    </select>
-                                                </div>
+                                                <SelectField
+                                                    label="Options MCX Brokerage Type"
+                                                    name="optionsMcxBrokerageType"
+                                                    value={formData.optionsMcxBrokerageType}
+                                                    onChange={handleChange}
+                                                    options={[
+                                                        { value: 'per_lot', label: 'Per Lot Basis' },
+                                                        { value: 'per_crore', label: 'Per Crore Basis' }
+                                                    ]}
+                                                />
 
                                                 <InputField label="Options Min. Bid Price" name="optionsMinBidPrice" placeholder="1" />
 
-                                                <div className="mb-8 group">
-                                                    <label className="block text-sm mb-1 font-light" style={{ color: '#bcc0cf' }}>Options Equity Short Selling Allowed (Sell First and Buy later)</label>
-                                                    <select name="optionsEquityShortSelling" value={formData.optionsEquityShortSelling} onChange={handleChange} className="w-full bg-white border border-slate-200 py-2.5 px-3 text-black font-bold outline-none rounded-sm text-sm">
-                                                        <option value="No">No</option>
-                                                        <option value="Yes">Yes</option>
-                                                    </select>
-                                                </div>
+                                                <SelectField
+                                                    label="Options Equity Short Selling Allowed"
+                                                    name="optionsEquityShortSelling"
+                                                    value={formData.optionsEquityShortSelling}
+                                                    onChange={handleChange}
+                                                    hint="(Sell First and Buy later)"
+                                                    options={[
+                                                        { value: 'No', label: 'No' },
+                                                        { value: 'Yes', label: 'Yes' }
+                                                    ]}
+                                                />
 
                                                 <InputField label="Minimum lot size required per single trade of Equity Options" name="optionsEquityMinLot" placeholder="0" />
                                                 <InputField label="Minimum lot size required per single trade of Equity INDEX Options" name="optionsIndexMinLot" placeholder="0" />
@@ -733,7 +794,94 @@ const CreateClientPage = ({ client, onClose, onSave, onLogout, onNavigate }) => 
                                         </div>
                                     </fieldset>
 
+                                    <hr className="border-white/5" />
+
+                                    {/* COMEX, FOREX & CRYPTO SEGMENTS */}
+                                    <fieldset className="border-none p-0 m-0">
+                                        <FieldLegend title="International Segments (Comex, Forex, Crypto)" />
+
+                                        <div className="space-y-12 mb-12">
+                                            {/* Comex Section */}
+                                            <div className="bg-[#151c2c]/30 p-8 rounded-lg border border-white/10 shadow-inner">
+                                                <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                                                    <div>
+                                                        <h4 className="text-[#4caf50] text-xl font-bold uppercase tracking-widest flex items-center gap-2">
+                                                            <div className="w-2 h-6 bg-[#4caf50]"></div> COMEX COMMODITIES
+                                                        </h4>
+                                                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1 tracking-widest">Global Commodity Exchange Settings</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4 bg-[#1a2035] px-6 py-3 rounded-lg border border-white/5">
+                                                        <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Status</span>
+                                                        <CheckboxField label="" name="comexTrading" checked={formData.comexTrading} onChange={handleChange} />
+                                                        <span className={`text-xs font-black uppercase tracking-widest ${formData.comexTrading ? 'text-[#4caf50]' : 'text-slate-600'}`}>{formData.comexTrading ? 'ENABLED' : 'DISABLED'}</span>
+                                                    </div>
+                                                </div>
+                                                {formData.comexTrading && (
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 animate-in fade-in slide-in-from-top-2 duration-500">
+                                                        <InputField label="Comex Brokerage (Per Crore)" name="comexBrokerage" placeholder="800" hint="Universal brokerage applied to all Comex scripts" />
+                                                        <InputField label="Max Lot Size Per Script" name="comexMaxLot" placeholder="50" hint="Maximum allowed lots per position" />
+                                                        <InputField label="Intraday Margin % / Exposure" name="comexIntradayMargin" placeholder="500" hint="Leverage for intraday executions" />
+                                                        <InputField label="Holding Margin % / Exposure" name="comexHoldingMargin" placeholder="100" hint="Leverage for overnight positions" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Forex Section */}
+                                            <div className="bg-[#151c2c]/30 p-8 rounded-lg border border-white/10 shadow-inner">
+                                                <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                                                    <div>
+                                                        <h4 className="text-[#01B4EA] text-xl font-bold uppercase tracking-widest flex items-center gap-2">
+                                                            <div className="w-2 h-6 bg-[#01B4EA]"></div> FOREX / CURRENCY
+                                                        </h4>
+                                                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1 tracking-widest">Universal Currency Trading Parameters</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4 bg-[#1a2035] px-6 py-3 rounded-lg border border-white/5">
+                                                        <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Status</span>
+                                                        <CheckboxField label="" name="forexTrading" checked={formData.forexTrading} onChange={handleChange} />
+                                                        <span className={`text-xs font-black uppercase tracking-widest ${formData.forexTrading ? 'text-[#01B4EA]' : 'text-slate-600'}`}>{formData.forexTrading ? 'ENABLED' : 'DISABLED'}</span>
+                                                    </div>
+                                                </div>
+                                                {formData.forexTrading && (
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 animate-in fade-in slide-in-from-top-2 duration-500">
+                                                        <InputField label="Forex Brokerage (Per Crore)" name="forexBrokerage" placeholder="500" hint="Brokerage for all Currency/Forex pairs" />
+                                                        <InputField label="Max Lot Size Per Scrip" name="forexMaxLot" placeholder="100" />
+                                                        <InputField label="Intraday Margin / Exposure" name="forexIntradayMargin" placeholder="1000" />
+                                                        <InputField label="Holding Margin / Exposure" name="forexHoldingMargin" placeholder="200" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Crypto Section */}
+                                            <div className="bg-[#151c2c]/30 p-8 rounded-lg border border-white/10 shadow-inner">
+                                                <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                                                    <div>
+                                                        <h4 className="text-orange-500 text-xl font-bold uppercase tracking-widest flex items-center gap-2">
+                                                            <div className="w-2 h-6 bg-orange-500"></div> CRYPTO (BITCOIN/ETH)
+                                                        </h4>
+                                                        <p className="text-[10px] text-slate-500 font-bold uppercase mt-1 tracking-widest">Cryptocurrency Asset Execution Hub</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-4 bg-[#1a2035] px-6 py-3 rounded-lg border border-white/5">
+                                                        <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none">Status</span>
+                                                        <CheckboxField label="" name="cryptoTrading" checked={formData.cryptoTrading} onChange={handleChange} />
+                                                        <span className={`text-xs font-black uppercase tracking-widest ${formData.cryptoTrading ? 'text-orange-500' : 'text-slate-600'}`}>{formData.cryptoTrading ? 'ENABLED' : 'DISABLED'}</span>
+                                                    </div>
+                                                </div>
+                                                {formData.cryptoTrading && (
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 animate-in fade-in slide-in-from-top-2 duration-500">
+                                                        <InputField label="Crypto Brokerage (Per Crore)" name="cryptoBrokerage" placeholder="1000" hint="Global brokerage for digital assets" />
+                                                        <InputField label="Max Lot Size Per Scrip" name="cryptoMaxLot" placeholder="10" />
+                                                        <InputField label="Intraday Margin / Exposure" name="cryptoIntradayMargin" placeholder="200" />
+                                                        <InputField label="Holding Margin / Exposure" name="cryptoHoldingMargin" placeholder="50" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <hr className="border-white/5" />
+
                                     {/* OTHER SECTION */}
+
                                     <fieldset className="border-none p-0 m-0 pb-10">
                                         <h3 className="text-[20px] font-normal mb-8 px-2" style={{ color: '#bcc0cf' }}>Other:</h3>
                                         <div className="space-y-8 px-2">

@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const LiveM2MPage = () => {
-  const [selectedClient, setSelectedClient] = useState(null);
-
+const LiveM2MPage = ({ onNavigate }) => {
   const clients = [
     { id: '323 : rk002', activePL: '-22678.11', activeTrades: '50', margin: '47999.42' },
     { id: '324 : rr001', activePL: '9018', activeTrades: '11', margin: '2157.13' },
@@ -59,14 +57,14 @@ const LiveM2MPage = () => {
             style={{ background: 'linear-gradient(60deg, #288c6c, #4ea752)' }}
           >
             <h2 className="text-white text-base font-bold uppercase tracking-tight">
-              Live M2M under: {selectedClient ? selectedClient.id.split(' : ')[1] : 'Demo pannel'}
+              Live M2M under: RK002
             </h2>
           </div>
 
           <div className="px-6 py-4 overflow-x-auto">
             <table className="w-full text-left border-collapse whitespace-nowrap">
               <thead className="border-b border-white/5">
-                <tr className="text-[#4caf50] text-[12px] font-bold uppercase tracking-widest">
+                <tr className="text-white text-[12px] font-bold uppercase tracking-widest">
                   <th className="px-4 py-4">User ID</th>
                   <th className="px-4 py-4">Active Profit/Loss</th>
                   <th className="px-4 py-4">Active Trades</th>
@@ -77,18 +75,15 @@ const LiveM2MPage = () => {
                 {clients.map((client, index) => (
                   <tr
                     key={index}
-                    className={`border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer ${selectedClient?.id === client.id ? 'bg-white/5' : ''}`}
-                    onClick={() => setSelectedClient(client)}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
                   >
                     <td className="px-4 py-3">
-                      <div className={`
-                        inline-block px-4 py-1 rounded-full text-[11px] font-bold text-white transition-all duration-200
-                        ${selectedClient?.id === client.id
-                          ? 'bg-[#4caf50] shadow-[0_4px_10px_rgba(76,175,80,0.4)]'
-                          : 'bg-[#4caf50]/80 hover:bg-[#4caf50]'}
-                      `}>
+                      <button
+                        onClick={() => onNavigate('live-m2m-detail', client)}
+                        className="inline-block px-4 py-1 rounded-full text-[11px] font-bold text-white bg-[#4caf50] shadow-[0_4px_10px_rgba(76,175,80,0.4)] hover:shadow-[0_4px_20px_rgba(76,175,80,0.6)] transition-all cursor-pointer border border-white/10"
+                      >
                         {client.id}
-                      </div>
+                      </button>
                     </td>
                     <td className={`px-4 py-4 font-bold ${parseFloat(client.activePL) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                       {client.activePL}
@@ -98,10 +93,10 @@ const LiveM2MPage = () => {
                   </tr>
                 ))}
                 <tr className="bg-black/10 font-bold text-white uppercase text-[11px] tracking-widest">
-                  <td className="px-4 py-4">Total</td>
-                  <td className="px-4 py-4">0</td>
-                  <td className="px-4 py-4">0</td>
-                  <td className="px-4 py-4">0</td>
+                  <td className="px-4 py-4 uppercase">Total</td>
+                  <td className="px-4 py-4 text-green-500">2,46,654</td>
+                  <td className="px-4 py-4">115</td>
+                  <td className="px-4 py-4">1,80,924</td>
                 </tr>
               </tbody>
             </table>
@@ -114,30 +109,30 @@ const LiveM2MPage = () => {
         <StatCard
           title="Buy Turnover"
           data={[
-            { label: "Mcx", value: `${selectedClient ? (Math.random() * 10).toFixed(2) : '0'} Lakhs` },
-            { label: "NSE Futures", value: `${selectedClient ? (Math.random() * 5).toFixed(2) : '0'} Lakhs` },
+            { label: "Mcx", value: "12.45 Lakhs" },
+            { label: "NSE Futures", value: "8.20 Lakhs" },
             { label: "NSE Spot", value: "0 Lakhs" },
-            { label: "Options", value: `${selectedClient ? (Math.random() * 20).toFixed(2) : '0'} Lakhs` },
+            { label: "Options", value: "45.12 Lakhs" },
             { label: "COMEX", value: "0 Lakhs" },
           ]}
         />
         <StatCard
           title="Sell Turnover"
           data={[
-            { label: "Mcx", value: `${selectedClient ? (Math.random() * 10).toFixed(2) : '0'} Lakhs` },
-            { label: "NSE Future", value: `${selectedClient ? (Math.random() * 5).toFixed(2) : '0'} Lakhs` },
+            { label: "Mcx", value: "10.15 Lakhs" },
+            { label: "NSE Future", value: "7.45 Lakhs" },
             { label: "NSE Spot", value: "0 Lakhs" },
-            { label: "Options", value: `${selectedClient ? (Math.random() * 20).toFixed(2) : '0'} Lakhs` },
+            { label: "Options", value: "32.88 Lakhs" },
             { label: "COMEX", value: "0 Lakhs" },
           ]}
         />
         <StatCard
           title="Total Turnover"
           data={[
-            { label: "Mcx", value: `${selectedClient ? (Math.random() * 20).toFixed(2) : '0'} Lakhs` },
-            { label: "NSE Future", value: `${selectedClient ? (Math.random() * 10).toFixed(2) : '0'} Lakhs` },
+            { label: "Mcx", value: "22.60 Lakhs" },
+            { label: "NSE Future", value: "15.65 Lakhs" },
             { label: "NSE Spot", value: "0 Lakhs" },
-            { label: "Options", value: `${selectedClient ? (Math.random() * 40).toFixed(2) : '0'} Lakhs` },
+            { label: "Options", value: "78.00 Lakhs" },
             { label: "COMEX", value: "0 Lakhs" },
           ]}
         />
@@ -148,47 +143,64 @@ const LiveM2MPage = () => {
         <StatCard
           title="Active Users"
           data={[
-            { label: "Mcx", value: selectedClient ? "1" : "0" },
-            { label: "NSE Future", value: selectedClient ? "1" : "0" },
+            { label: "Mcx", value: "9" },
+            { label: "NSE Future", value: "9" },
             { label: "NSE Spot", value: "-" },
-            { label: "Options", value: selectedClient ? "1" : "0" },
+            { label: "Options", value: "9" },
             { label: "COMEX", value: "0" },
           ]}
         />
         <StatCard
           title="Profit / Loss"
           data={[
-            { label: "Mcx", value: selectedClient ? (Math.random() * 1000 - 500).toFixed(0) : "0" },
-            { label: "NSE Future", value: selectedClient ? (Math.random() * 1000 - 500).toFixed(0) : "0" },
+            { label: "Mcx", value: "48,250" },
+            { label: "NSE Future", value: "-12,400" },
             { label: "NSE Spot", value: "0" },
-            { label: "Options", value: selectedClient ? (Math.random() * 5000 - 2500).toFixed(0) : "0" },
+            { label: "Options", value: "1,85,600" },
             { label: "COMEX", value: "0" },
           ]}
         />
         <StatCard
           title="Brokerage"
           data={[
-            { label: "Mcx", value: selectedClient ? (Math.random() * 100).toFixed(0) : "0" },
-            { label: "NSE Future", value: selectedClient ? (Math.random() * 100).toFixed(0) : "0" },
+            { label: "Mcx", value: "4,500" },
+            { label: "NSE Future", value: "2,100" },
             { label: "NSE Spot", value: "0" },
-            { label: "Options", value: selectedClient ? (Math.random() * 500).toFixed(0) : "0" },
+            { label: "Options", value: "18,400" },
+            { label: "COMEX", value: "0" },
+          ]}
+        />
+      </div>
+
+      {/* 4. Active Positions Rows */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10">
+        <StatCard
+          title="Active Buy"
+          data={[
+            { label: "Mcx", value: "0" },
+            { label: "NSE Future", value: "0" },
+            { label: "NSE Spot", value: "0" },
+            { label: "Options", value: "0" },
+            { label: "COMEX", value: "0" },
+          ]}
+        />
+        <StatCard
+          title="Active Sell"
+          data={[
+            { label: "Mcx", value: "0" },
+            { label: "NSE Future", value: "0" },
+            { label: "NSE Spot", value: "0" },
+            { label: "Options", value: "0" },
             { label: "COMEX", value: "0" },
           ]}
         />
       </div>
 
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 10px;
-        }
-      `}</style>
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 0px;
+                }
+            `}</style>
     </div>
   );
 };
